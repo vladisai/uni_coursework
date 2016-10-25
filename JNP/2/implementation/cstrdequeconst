@@ -1,0 +1,5 @@
+namespace jnp1 {
+    extern "C" {
+        #include "strdequeconst.h"
+    }
+}

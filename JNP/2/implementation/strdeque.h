@@ -1,10 +1,10 @@
-#include "stdlib.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-unsigned long strdeque_new();
+typedef unsigned long int size_t;
+
+size_t strdeque_new();
 
 void strdeque_delete(unsigned long id);
 
