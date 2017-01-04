@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <future>
 
 #define F first
 #define S second
@@ -8,69 +9,114 @@
 
 using namespace std;
 
-const int N = 1111;
+using deltaT = map<int, double>;
 
-map<int, vector<int>> edges, p;
-map<int, int> d;
-set<int> v;
-map<int, double> delta, sigma, bc;
+map<int, vector<int>> edges;
+set<int> vertices;
+deltaT bc;
 
-int main() {
-    freopen("input.txt", "r", stdin);
+
+map<int, double> processVertex(int s) {
+    map<int, vector<int>> p;
+    deltaT delta, sigma;
+    map<int, int> d;
+    stack<int> st;
+
+    for (auto w : vertices) {
+        sigma[w] = 0;
+        d[w] = -1;
+        delta[w] = 0;
+        p[w] = vector<int>();
+    }
+    sigma[s] = 1;
+    d[s] = 0;
+    queue<int> q;
+    q.push(s);
+    while (!q.empty()) {
+        auto t = q.front();
+        q.pop();
+        st.push(t);
+        for (auto x : edges[t]) {
+            if (d[x] < 0) {
+                q.push(x);
+                d[x] = d[t] + 1;
+            }
+            if (d[x] == d[t] + 1) {
+                sigma[x] += sigma[t];
+                p[x].push_back(t);
+            }
+        }
+    }
+    while (!st.empty()) {
+        auto w = st.top();
+        st.pop();
+        for (auto t : p[w]) {
+            delta[t] += (sigma[t] / sigma[w]) * (1 + delta[w]);
+        }
+    }
+    delta[s] = 0;
+    return delta;
+}
+
+map<int, double> processBatch(vector<int> batch) {
+    map<int, double> result;
+    for (auto v : batch) {
+        auto res = processVertex(v);
+        for (auto e : res) {
+            int key = e.first;
+            double value = e.second;
+            result[key] += value;
+        }
+    }
+    return result;
+}
+
+int main(int argc, char *argv[]) {
+
+    assert(argc == 4);
+
+    int threadsNumber = atoi(argv[1]);
+
+    freopen(argv[2], "r", stdin);
+    freopen(argv[3], "w", stdout);
+
+    cerr << threadsNumber << endl;
 
     int x, y;
     while (cin >> x >> y) {
-        v.insert(x);
-        v.insert(y);
+        vertices.insert(x);
+        vertices.insert(y);
         edges[x].push_back(y);
         edges[y].push_back(x);
     }
 
-    for (auto e : v) {
-        bc[e] = 0;
-    }
+    vector<future<deltaT>> futures;
 
-    for (auto s : v) {
-        stack<int> st;
-        for (auto w : v) {
-            sigma[w] = 0;
-            d[w] = -1;
-            delta[w] = 0;
-        }
-        sigma[s] = 1;
-        d[s] = 0;
-        queue<int> q;
-        q.push(s);
-        while (!q.empty()) {
-            auto t = q.front();
-            q.pop();
-            st.push(t);
-            for (auto x : edges[t]) {
-                if (d[x] < 0) {
-                    q.push(x);
-                    d[x] = d[t] + 1;
-                }
-                if (d[x] == d[t] + 1) {
-                    sigma[x] += sigma[t];
-                    p[x].push_back(t);
-                }
-            }
-        }
-        while (!st.empty()) {
-            auto w = st.top();
-            st.pop();
-            for (auto t : p[w]) {
-                delta[t] += (sigma[t] / sigma[w]) * (1 + delta[w]);
-            }
-            if (w != s) {
-                bc[w] += delta[w];
-            }
+    vector<int> nextBatch;
+    size_t amountPerBatch = (vertices.size() + threadsNumber - 1) / threadsNumber;
+    for (auto v : vertices) {
+        nextBatch.push_back(v);
+        if (nextBatch.size() == amountPerBatch) {
+            futures.push_back(async(launch::async, processBatch, nextBatch));
+            nextBatch.clear();
         }
     }
 
-    for (auto e : v) {
+    if (nextBatch.size() > 0) {
+        futures.push_back(async(launch::async, processBatch, nextBatch));
+    }
+
+    for (size_t i = 0; i < futures.size(); i++) {
+        auto resultDelta = futures[i].get();
+        for (auto e : resultDelta) {
+            int key = e.first;
+            double value = e.second;
+            bc[key] += value;
+        }
+    }
+
+    for (auto e : vertices)
         cout << e << " " << bc[e] << endl;
-    }
 
     return 0;
 }
