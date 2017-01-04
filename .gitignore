@@ -27,3 +27,38 @@
 *.exe
 *.out
 *.app
+
+# Vim backups
+*~
+*_
+*.swp
+
+# Java
+*.class
+
+# CMakeShit
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+
+# Archives
+*.zip
+*.tar
+
+# idea
+out
+build
+.idea
+.gradle
+
+# idea
+.svn
+
+# svn
+grupa2
+common
