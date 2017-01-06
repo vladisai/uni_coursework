@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <future>
 
 #define F first
 #define S second
@@ -9,17 +8,16 @@
 
 using namespace std;
 
-using deltaT = map<int, double>;
+using deltaT = unordered_map<int, double>;
 
-map<int, vector<int>> edges;
+unordered_map<int, vector<int>> edges;
 set<int> vertices;
 deltaT bc;
 
-
-map<int, double> processVertex(int s) {
-    map<int, vector<int>> p;
+unordered_map<int, double> processVertex(int s) {
+    unordered_map<int, vector<int>> p;
     deltaT delta, sigma;
-    map<int, int> d;
+    unordered_map<int, int> d;
     stack<int> st;
 
     for (auto w : vertices) {
@@ -58,8 +56,28 @@ map<int, double> processVertex(int s) {
     return delta;
 }
 
-map<int, double> processBatch(vector<int> batch) {
-    map<int, double> result;
+unordered_map<int, double> processBatch(vector<int> batch) {
+    unordered_map<int, double> result;
+    unordered_map<int, double> compensation;
+    for (auto v : batch) {
+        auto res = processVertex(v);
+        for (auto e : res) {
+            int key = e.first;
+            double addedValue = e.second;
+            double &currentValue = result[key];
+            double &currentCompensation = compensation[key];
+            double y = addedValue - currentCompensation;
+            double t = currentValue + y;
+            currentCompensation = (t - currentValue) - y;
+            currentValue = t;
+        }
+    }
+    return result;
+}
+
+/*unordered_map<int, double> processBatch(vector<int> batch) {
+    unordered_map<int, double> result;
+    unordered_map<int, double> error;
     for (auto v : batch) {
         auto res = processVertex(v);
         for (auto e : res) {
@@ -69,7 +87,7 @@ map<int, double> processBatch(vector<int> batch) {
         }
     }
     return result;
-}
+}*/
 
 int main(int argc, char *argv[]) {
 
