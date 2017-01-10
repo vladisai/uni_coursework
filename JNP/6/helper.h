@@ -1,34 +1,56 @@
+#ifndef HELPER_H
+#define HELPER_H
+
 using HealthPoints = int;
 using Age = int;
 using AttackPower = int; // change this, should be general
 
-class _LivingEntity {
+class _EntityWithHealth {
   public:
-    _LivingEntity(HealthPoints health);
+    virtual HealthPoints getHealth() = 0;
+    virtual void takeDamage(AttackPower attackPower) = 0;
+};
 
-    HealthPoints getHealth();
+class _LivingEntity : public virtual _EntityWithHealth {
+  public:
+    _LivingEntity(HealthPoints health = 0);
 
-    void takeDamage(AttackPower damage);
+    virtual HealthPoints getHealth() override;
+
+    virtual void takeDamage(AttackPower damage) override;
 
   private:
     HealthPoints health;
 };
 
-class _AgeingEntity {
+class _EntityWithAge {
   public:
-    _AgeingEntity(Age age);
+    virtual Age getAge() = 0;
+};
 
-    Age getAge();
+class _AgeingEntity : public virtual _EntityWithAge {
+  public:
+    _AgeingEntity(Age age = 0);
+
+    virtual Age getAge() override;
 
   private:
+    virtual bool checkAge(Age age) = 0;
     Age age;
 };
 
-class _AttackingEntity {
+class _EntityWithAttackPower {
   public:
-    _AttackingEntity(AttackPower attackPower);
-    AttackPower getAttackPower();
+    virtual AttackPower getAttackPower() = 0;
+};
+
+class _AttackingEntity : public virtual _EntityWithAttackPower {
+  public:
+    _AttackingEntity(AttackPower attackPower = 0);
+    virtual AttackPower getAttackPower() override;
 
   private:
     AttackPower attackPower;
 };
+
+#endif // HELPER_H
