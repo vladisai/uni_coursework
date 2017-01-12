@@ -61,15 +61,10 @@ GroupOfMonsters::GroupOfMonsters(
     const initializer_list<shared_ptr<SingleMonster>> &monsters)
     : monsters(monsters.begin(), monsters.end()) {}
 
+const string GroupOfMonsters::CreatureName = "GroupOfMonsters";
+
 string GroupOfMonsters::getName() {
-    string ret = "Group{ ";
-    for (auto monster : monsters) {
-        ret += monster->getName();
-        ret += " ,";
-    }
-    ret.pop_back(); // delete the last comma
-    ret += "}";
-    return ret;
+    return GroupOfMonsters::CreatureName;
 }
 
 void GroupOfMonsters::takeDamage(AttackPower attackPower) {

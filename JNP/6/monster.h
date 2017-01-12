@@ -73,6 +73,7 @@ class GroupOfMonsters : public Monster {
     HealthPoints getHealth() override;
 
   private:
+    static const string CreatureName;
     const set<shared_ptr<SingleMonster>> monsters;
 };
 
