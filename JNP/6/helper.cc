@@ -14,3 +14,5 @@ _AttackingEntity::_AttackingEntity(AttackPower attackPower)
     : attackPower(attackPower) {}
 
 AttackPower _AttackingEntity::getAttackPower() { return attackPower; }
+
+AttackPower _PeacefulEntity::getAttackPower() { return 0; }

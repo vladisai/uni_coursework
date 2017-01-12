@@ -47,10 +47,15 @@ class _EntityWithAttackPower {
 class _AttackingEntity : public virtual _EntityWithAttackPower {
   public:
     _AttackingEntity(AttackPower attackPower = 0);
-    virtual AttackPower getAttackPower() override;
+    virtual AttackPower getAttackPower() override final;
 
   private:
     AttackPower attackPower;
+};
+
+class _PeacefulEntity : public virtual _EntityWithAttackPower {
+    public:
+        virtual AttackPower getAttackPower() override final;
 };
 
 #endif // HELPER_H

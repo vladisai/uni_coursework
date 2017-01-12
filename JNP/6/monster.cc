@@ -1,5 +1,12 @@
 #include "monster.h"
 
+using std::make_shared;
+
+void Monster::attack(shared_ptr<Citizen> citizen) {
+    citizen->takeDamage(this->getAttackPower());
+    this->takeDamage(citizen->getAttackPower());
+}
+
 SingleMonster::SingleMonster(HealthPoints health, AttackPower attackPower)
     : _LivingEntity(health), _AttackingEntity(attackPower) {}
 
@@ -24,23 +31,34 @@ const string Mummy::CreatureName = "Mummy";
 
 string Mummy::getName() { return Mummy::CreatureName; }
 
-Zombie *createZombie(HealthPoints health, AttackPower attackPower) {
-    return new Zombie(health, attackPower);
+shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attackPower) {
+    return make_shared<Zombie>(health, attackPower);
 }
 
-Vampire *createVampire(HealthPoints health, AttackPower attackPower) {
-    return new Vampire(health, attackPower);
+shared_ptr<Vampire> createVampire(HealthPoints health,
+                                  AttackPower attackPower) {
+    return make_shared<Vampire>(health, attackPower);
 }
 
-Mummy *createMummy(HealthPoints health, AttackPower attackPower) {
-    return new Mummy(health, attackPower);
+shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower) {
+    return make_shared<Mummy>(health, attackPower);
 }
 
-GroupOfMonsters::GroupOfMonsters(const vector<SingleMonster *> monsters)
+shared_ptr<GroupOfMonsters>
+createGroupOfMonsters(const vector<shared_ptr<SingleMonster>> &monsters) {
+    return make_shared<GroupOfMonsters>(monsters);
+}
+
+shared_ptr<GroupOfMonsters>
+createGroupOfMonsters(const initializer_list<shared_ptr<SingleMonster>> &monsters) {
+    return make_shared<GroupOfMonsters>(monsters);
+}
+
+GroupOfMonsters::GroupOfMonsters(const vector<shared_ptr<SingleMonster>> &monsters)
     : monsters(monsters.begin(), monsters.end()) {}
 
 GroupOfMonsters::GroupOfMonsters(
-    const initializer_list<SingleMonster *> monsters)
+    const initializer_list<shared_ptr<SingleMonster>> &monsters)
     : monsters(monsters.begin(), monsters.end()) {}
 
 string GroupOfMonsters::getName() {
@@ -74,5 +92,4 @@ AttackPower GroupOfMonsters::getAttackPower() {
         result += monster->getAttackPower();
     }
     return result;
-
 }

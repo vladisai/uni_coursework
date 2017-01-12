@@ -2,7 +2,9 @@
 #define MONSTER_H
 
 #include "helper.h"
+#include "citizen.h"
 #include <initializer_list>
+#include <memory>
 #include <set>
 #include <string>
 #include <vector>
@@ -11,13 +13,19 @@ using std::vector;
 using std::initializer_list;
 using std::string;
 using std::set;
+using std::shared_ptr;
 
-class Monster : public virtual _EntityWithHealth, public virtual _EntityWithAttackPower {
+class Monster : public virtual _EntityWithHealth,
+                public virtual _EntityWithAttackPower {
   public:
     virtual string getName() = 0;
+
+    void attack(shared_ptr<Citizen> citizen);
 };
 
-class SingleMonster : public virtual Monster, public virtual _LivingEntity, public virtual _AttackingEntity {
+class SingleMonster : public virtual Monster,
+                      public virtual _LivingEntity,
+                      public virtual _AttackingEntity {
   public:
     SingleMonster(HealthPoints health, AttackPower attackPower);
 };
@@ -49,17 +57,12 @@ class Mummy : public virtual SingleMonster {
     static const string CreatureName;
 };
 
-Zombie *createZombie(HealthPoints health, AttackPower attackPower);
-
-Vampire *createVampire(HealthPoints health, AttackPower attackPower);
-
-Mummy *createMummy(HealthPoints health, AttackPower attackPower);
-
 class GroupOfMonsters : public Monster {
   public:
-    GroupOfMonsters(const vector<SingleMonster *> monsters);
+    GroupOfMonsters(const vector<shared_ptr<SingleMonster>> &monsters);
 
-    GroupOfMonsters(const initializer_list<SingleMonster *> monsters);
+    GroupOfMonsters(
+        const initializer_list<shared_ptr<SingleMonster>> &monsters);
 
     string getName() override;
 
@@ -70,7 +73,19 @@ class GroupOfMonsters : public Monster {
     HealthPoints getHealth() override;
 
   private:
-    const set<SingleMonster *> monsters;
+    const set<shared_ptr<SingleMonster>> monsters;
 };
+
+shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attackPower);
+
+shared_ptr<Vampire> createVampire(HealthPoints health, AttackPower attackPower);
+
+shared_ptr<Mummy> createMummy(HealthPoints health, AttackPower attackPower);
+
+shared_ptr<GroupOfMonsters>
+createGroupOfMonsters(const vector<shared_ptr<SingleMonster>> &monsters);
+
+shared_ptr<GroupOfMonsters> createGroupOfMonsters(
+    const initializer_list<shared_ptr<SingleMonster>> &monsters);
 
 #endif // MONSTER_H
