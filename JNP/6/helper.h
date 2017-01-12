@@ -13,7 +13,7 @@ class _EntityWithHealth {
 
 class _LivingEntity : public virtual _EntityWithHealth {
   public:
-    _LivingEntity(HealthPoints health = 0);
+    _LivingEntity(HealthPoints health);
 
     virtual HealthPoints getHealth() override;
 
@@ -30,7 +30,7 @@ class _EntityWithAge {
 
 class _AgeingEntity : public virtual _EntityWithAge {
   public:
-    _AgeingEntity(Age age = 0);
+    _AgeingEntity(Age age);
 
     virtual Age getAge() override;
 
@@ -46,7 +46,7 @@ class _EntityWithAttackPower {
 
 class _AttackingEntity : public virtual _EntityWithAttackPower {
   public:
-    _AttackingEntity(AttackPower attackPower = 0);
+    _AttackingEntity(AttackPower attackPower);
     virtual AttackPower getAttackPower() override final;
 
   private:

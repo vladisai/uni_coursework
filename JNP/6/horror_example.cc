@@ -6,32 +6,23 @@
 //  Copyright (c) 2016 Patrycja Wegrzynowicz. All rights reserved.
 //
 
+#include <bits/stdc++.h>
+
 #include "citizen.h"
 #include "monster.h"
 #include "smalltown.h"
 
-int main(int argc, const char * argv[]) {
-    auto groupOfMonsters = createGroupOfMonsters({
-        createMummy(90, 1),
-        createZombie(20, 1),
-        createVampire(30, 1)
-    });
-    auto smallTown = SmallTown::Builder()
-        .monster(groupOfMonsters)
-        .startTime(3)
-        .maxTime(27)
-        .citizen(createSheriff(100, 35, 20))
-        .citizen(createAdult(100, 21))
-        .citizen(createTeenager(50, 14))
-        .build();
+using namespace std;
 
-    smallTown.tick(18);
-    smallTown.tick(3);
+int main() {
+    shared_ptr<Adult> s = make_shared<Adult>(50, 50);
+    shared_ptr<Mummy> m = createMummy(50, 50);
+    cout << s->getHealth() << " " << s->getAttackPower() << endl;
+    cout << m->getHealth() << " " << m->getAttackPower() << endl;
 
-    auto status = smallTown.getStatus();
-    assert(status.getMonsterName() == "GroupOfMonsters");
-    assert(status.getMonsterHealth() == 80);
-    assert(status.getAliveCitizens() == 3);
+    m->attack(s);
 
+    cout << s->getHealth() << endl;
+    cout << m->getHealth() << endl;
     return 0;
 }

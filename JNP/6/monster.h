@@ -1,8 +1,8 @@
 #ifndef MONSTER_H
 #define MONSTER_H
 
-#include "helper.h"
 #include "citizen.h"
+#include "helper.h"
 #include <initializer_list>
 #include <memory>
 #include <set>
@@ -23,14 +23,14 @@ class Monster : public virtual _EntityWithHealth,
     void attack(shared_ptr<Citizen> citizen);
 };
 
-class SingleMonster : public virtual Monster,
-                      public virtual _LivingEntity,
-                      public virtual _AttackingEntity {
+class SingleMonster : public Monster,
+                      public _LivingEntity,
+                      public _AttackingEntity {
   public:
     SingleMonster(HealthPoints health, AttackPower attackPower);
 };
 
-class Zombie : public virtual SingleMonster {
+class Zombie : public SingleMonster {
   public:
     Zombie(HealthPoints health, AttackPower attackPower);
     string getName() override;
@@ -39,7 +39,7 @@ class Zombie : public virtual SingleMonster {
     static const string CreatureName;
 };
 
-class Vampire : public virtual SingleMonster {
+class Vampire : public SingleMonster {
   public:
     Vampire(HealthPoints health, AttackPower attackPower);
     string getName() override;
@@ -48,7 +48,7 @@ class Vampire : public virtual SingleMonster {
     static const string CreatureName;
 };
 
-class Mummy : public virtual SingleMonster {
+class Mummy : public SingleMonster {
   public:
     Mummy(HealthPoints health, AttackPower attackPower);
     string getName() override;

@@ -1,10 +1,14 @@
 #include "helper.h"
 #include <cassert>
+#include <algorithm>
+#include <iostream>
+
+using std::max;
 
 _LivingEntity::_LivingEntity(HealthPoints health) : health(health) {}
 
 HealthPoints _LivingEntity::getHealth() { return health; }
-void _LivingEntity::takeDamage(AttackPower damage) { health -= damage; }
+void _LivingEntity::takeDamage(AttackPower damage) { health = max(0, health - damage); }
 
 _AgeingEntity::_AgeingEntity(Age age) : age(age) {}
 
