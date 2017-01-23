@@ -21,9 +21,6 @@ node_ptr createEmptyNode() {
     ret->operation = 0;
     ret->receivedVals = 0;
     ret->isProcessed = 0;
-    int temp = 0;
-    createPipe(&temp, &ret->mainWriteDescriptor);
-    addInt(&ret->inputDescriptors, temp);
     allNodes[nodesCount++] = ret;
     return ret;
 }
@@ -32,6 +29,9 @@ node_ptr createValueNode(long value) {
     node_ptr ret = createEmptyNode();
     ret->type = VALUE_NODE;
     ret->val = value;
+    int temp = 0;
+    createPipe(&temp, &ret->mainWriteDescriptor);
+    addInt(&ret->inputDescriptors, temp);
     return ret;
 }
 
@@ -60,6 +60,9 @@ node_ptr createVariableNode(int id) {
     ret->operation = 'x';
     ret->val = id;
     ret->isProcessed = (int *)calloc(MAX_OPS, sizeof(int));
+    int temp = 0;
+    createPipe(&temp, &ret->mainWriteDescriptor);
+    addInt(&ret->inputDescriptors, temp);
     return ret;
 }
 
@@ -104,7 +107,10 @@ void dispatchConsts(int init_id) {
 
 void killAllProcesses() {
     for (int i = 0; i < nodesCount; i++) {
-        sendMessage(allNodes[i], createExitMessage());
+        if (allNodes[i]->type == VALUE_NODE ||
+            allNodes[i]->type == VARIABLE_NODE) {
+            sendMessage(allNodes[i], createExitMessage());
+        }
     }
     for (int i = 0; i < nodesCount; i++) {
         wait(0);
@@ -116,11 +122,15 @@ void valueNodeLoop(node_ptr node) {
     while (1) {
         message_ptr in = readFromAll(node->inputDescriptors);
         switch (in->type) {
-        case EXIT_MESSAGE:
+        case EXIT_MESSAGE: {
             deleteMessage(in);
+            message_ptr out = createExitMessage();
+            writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             deleteNode(node);
             exit(0);
             break;
+        }
         case START_MESSAGE: {
             message_ptr out = createResultMessage(in->init_id, node->val);
             writeToAll(node->outputDescriptors, out);
@@ -199,10 +209,15 @@ void unaryOperationNodeLoop(node_ptr node) {
     while (1) {
         message_ptr in = readFromAll(node->inputDescriptors);
         switch (in->type) {
-        case EXIT_MESSAGE:
+        case EXIT_MESSAGE: {
+            deleteMessage(in);
+            message_ptr out = createExitMessage();
+            writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             deleteNode(node);
             exit(0);
             break;
+        }
         case RESULT_MESSAGE: {
             message_ptr out = createResultMessage(in->init_id, -1 * in->value);
             writeToAll(node->outputDescriptors, out);
@@ -229,10 +244,15 @@ void variableNodeLoop(node_ptr node) {
         fprintf(stderr, "var %ld read:\n", node->val);
         printMessage(in);
         switch (in->type) {
-        case EXIT_MESSAGE:
+        case EXIT_MESSAGE: {
+            deleteMessage(in);
+            message_ptr out = createExitMessage();
+            writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             deleteNode(node);
             exit(0);
             break;
+        }
         case START_MESSAGE:
             if (node->isProcessed[in->init_id] != 0) {
                 break; // this id was processed already, ignoring
