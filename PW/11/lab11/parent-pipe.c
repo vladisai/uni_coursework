@@ -13,7 +13,7 @@ typedef struct message {
     int init_id; // id of the initialization
 } message_t, *message_ptr;
 
-message_ptr createMessage(int type, int init_id, int value) {
+message_ptr createMessage(int type, int init_id, long value) {
     message_ptr ret = (message_ptr)malloc(sizeof(message_t));
     ret->init_id = init_id;
     ret->value = value;
@@ -96,10 +96,16 @@ void writeInt(int writeDescriptor, int value) {
     }
 }
 
+void writeLong(int writeDescriptor, long value) {
+    if (write(writeDescriptor, &value, sizeof(long)) != sizeof(long)) {
+        syserr("write %ld to %d\n", value, writeDescriptor);
+    }
+}
+
 void writeMessage(int writeDescriptor, message_ptr m) {
-    writeInt(writeDescriptor, m->type);
-    writeInt(writeDescriptor, m->init_id);
-    writeInt(writeDescriptor, m->value);
+    if (write(writeDescriptor, &m, sizeof(m)) != sizeof(m)) {
+        syserr("write %ld to %d\n", 1, writeDescriptor);
+    }
 }
 
 int readInt(int readDescriptor) {
@@ -110,12 +116,20 @@ int readInt(int readDescriptor) {
     return *value;
 }
 
+long readLong(int readDescriptor) {
+    long *value = (long *)malloc(sizeof(long));
+    if (read(readDescriptor, value, sizeof(long)) != sizeof(long)) {
+        syserr("read from %d\n", readDescriptor);
+    }
+    return *value;
+}
+
 message_ptr readMessage(int readDescriptor) {
-    int type, init_id, value;
-    type = readInt(readDescriptor);
-    init_id = readInt(readDescriptor);
-    value = readInt(readDescriptor);
-    return createMessage(type, init_id, value);
+    message_ptr *value = (message_ptr *)malloc(sizeof(message_ptr));
+    if (read(readDescriptor, value, sizeof(message_ptr)) != sizeof(message_ptr)) {
+        syserr("read from %d\n", readDescriptor);
+    }
+    return *value;
 }
 
 message_ptr readFromAll(list_ptr descriptors) {
@@ -150,28 +164,27 @@ void writeToAll(list_ptr descriptors, message_ptr m) {
 
 int main() {
     int read, write;
-    int read2, write2;
     createPipe(&read, &write);
-    createPipe(&read2, &write2);
 
+    int ok = 1;
+    long huge = 1LL << 60;
+    printf("%ld\n", huge);
     switch (fork()) {
     case -1:
         syserr("Error in fork\n");
 
     case 0: {
-        list_ptr c = createEmptyList();
-        addInt(&c, read);
-        addInt(&c, read2);
-        message_ptr rd = readFromAll(c);
-        printf("%d %ld %d", rd->init_id, rd->value, rd->type);
-        rd = readFromAll(c);
-        printf("%d %ld %d", rd->init_id, rd->value, rd->type);
+
+        message_ptr rd = readMessage(read);
+        printf("read %d %ld %d\n", rd->init_id, rd->value, rd->type);
         break;
     }
-    default:
-        writeMessage(write, createMessage(1, 1, 1));
-        writeMessage(write2, createMessage(4, 4, 4));
+    default: {
+        message_ptr rd = createMessage(ok, ok, huge);
+        printf("write %d %ld %d\n", rd->init_id, rd->value, rd->type);
+        writeMessage(write, rd);
         exit(0);
+    }
     }
     return 0;
 }

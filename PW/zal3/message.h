@@ -10,19 +10,18 @@
 typedef struct message {
     int type;
     long value;
-    int isValueUndefined;
     int init_id; // id of the initialization
 } message_t, *message_ptr;
 
-message_ptr createMessage(int type, int init_id, int value);
+message_ptr createMessage(int type, int init_id, long value);
 
 message_ptr createStartMessage(int init_id);
 
 message_ptr createExitMessage();
 
-message_ptr createStartWithValMessage(int init_id, int value);
+message_ptr createStartWithValMessage(int init_id, long value);
 
-message_ptr createResultMessage(int init_id, int value);
+message_ptr createResultMessage(int init_id, long value);
 
 message_ptr createUndefinedResultMessage(int init_id);
 

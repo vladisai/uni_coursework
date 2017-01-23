@@ -5,8 +5,8 @@
 
 #define MAX_VARS 1000
 #define MAX_NODES 10000
-#define EXPR_LEN 2000
-#define MAX_OPS 1000
+#define EXPR_LEN 10000
+#define MAX_OPS 10000
 #define LINF (1L << 60)
 
 struct message;
@@ -25,8 +25,6 @@ int dfs(int x);
 int checkCycles();
 
 long *parseValues(char *str);
-
-//int checkReachability(long *vals, int x);
 
 int checkExistence(long *vals, int len);
 

@@ -65,23 +65,43 @@ int checkCycles() {
     return 0;
 }
 
+void shiftToNumber(char *str, int len, int *ind) {
+    while (*ind < len && !isdigit(str[*ind])) (*ind)++;
+}
+
 long *parseValues(char *str) {
     int len = strlen(str);
     long *ret = (long*)malloc(sizeof(long) * MAX_VARS);
-    for (int i = 0; i < MAX_VARS; i++)
+    for (int i = 0; i < MAX_VARS; i++) {
         ret[i] = LINF;
+    }
 
     for (int i = 0; i < len; i++) {
-        i += 2;
-        long var = parseNumber(str, &i);
-        i += 3;
-        long val = parseNumber(str, &i);
-        i++;
-        if (ret[var] != LINF) {
-            free(ret);
-            return 0;
+        while (i < len && str[i] != 'x') {
+            i++;
         }
-        ret[var] = val;
+        if (i < len) {
+            shiftToNumber(str, len, &i);
+            if (i >= len) {
+                free(ret);
+                return 0;
+            }
+            long var = parseNumber(str, &i);
+            i++;
+            shiftToNumber(str, len, &i);
+            if (i >= len) {
+                free(ret);
+                return 0;
+            }
+            long val = parseNumber(str, &i);
+            i++;
+            fprintf(stderr, "%ld %ld parsed\n", var, val);
+            if (ret[var] != LINF) {
+                free(ret);
+                return 0;
+            }
+            ret[var] = val;
+        }
     }
     return ret;
 }
@@ -119,6 +139,7 @@ void createPipe(int *read, int *write) {
     if (pipe(desc) == -1) {
         // error log message
     }
+    fprintf(stderr, "created pipe from %d to %d\n", desc[0], desc[1]);
     *read = desc[0];
     *write = desc[1];
 }
@@ -138,7 +159,7 @@ void writeLong(int writeDescriptor, long value) {
 void writeMessage(int writeDescriptor, message_ptr m) {
     writeInt(writeDescriptor, m->type);
     writeInt(writeDescriptor, m->init_id);
-    writeInt(writeDescriptor, m->value);
+    writeLong(writeDescriptor, m->value);
 }
 
 int readInt(int readDescriptor) {
@@ -158,10 +179,11 @@ long readLong(int readDescriptor) {
 }
 
 message_ptr readMessage(int readDescriptor) {
-    int type, init_id, value;
+    int type, init_id;
+    long value;
     type = readInt(readDescriptor);
     init_id = readInt(readDescriptor);
-    value = readInt(readDescriptor);
+    value = readLong(readDescriptor);
     return createMessage(type, init_id, value);
 }
 
@@ -251,7 +273,7 @@ node_ptr build(char *str) {
                 }
                 ops = popInt(ops);
             } else if (isdigit(str[i])) {
-                int x = parseNumber(str, &i);
+                long x = parseNumber(str, &i);
                 addNode(&vals, createValueNode(x));
             } else if (str[i] == 'x') {
                 i += 2;
@@ -265,4 +287,10 @@ node_ptr build(char *str) {
         performOne(&vals, &ops);
     }
     return popAndGetNode(&vals);
+}
+
+void deleteGraph() {
+    for (int i = 0; i < MAX_VARS; i++) {
+        deleteListOfInts(graph[i]);
+    }
 }

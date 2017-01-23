@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 
-message_ptr createMessage(int type, int init_id, int value) {
+message_ptr createMessage(int type, int init_id, long value) {
     message_ptr ret = (message_ptr)malloc(sizeof(message_t));
     ret->init_id = init_id;
     ret->value = value;
@@ -21,12 +21,12 @@ message_ptr createExitMessage() {
     return ret;
 }
 
-message_ptr createStartWithValMessage(int init_id, int value) {
+message_ptr createStartWithValMessage(int init_id, long value) {
     message_ptr ret = createMessage(START_WITH_VAL_MESSAGE, init_id, value); 
     return ret;
 }
 
-message_ptr createResultMessage(int init_id, int value) {
+message_ptr createResultMessage(int init_id, long value) {
     message_ptr ret = createMessage(RESULT_MESSAGE, init_id, value);
     return ret;
 }

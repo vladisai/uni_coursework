@@ -94,10 +94,10 @@ void dispatchInitialValues(int id, long *vals, int *isInCirciut) {
     fprintf(stderr, "finished dispatching\n");
 }
 
-void dispatchConsts(int inits_count) {
+void dispatchConsts(int init_id) {
     for (int i = 0; i < nodesCount; i++) {
         if (allNodes[i]->type == VALUE_NODE) {
-            sendMessage(allNodes[i], createStartMessage(inits_count));
+            sendMessage(allNodes[i], createStartMessage(init_id));
         }
     }
 }
@@ -122,10 +122,9 @@ void valueNodeLoop(node_ptr node) {
             exit(0);
             break;
         case START_MESSAGE: {
-            for (int i = 0; i < in->init_id; i++) {
-                writeToAll(node->outputDescriptors,
-                           createResultMessage(i, node->val));
-            }
+            message_ptr out = createResultMessage(in->init_id, node->val);
+            writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             break;
         }
         default:
@@ -152,8 +151,9 @@ void binaryOperationNodeLoop(node_ptr node) {
                 break; // already processed this, ignoring
             }
             node->isProcessed[in->init_id] = 1;
-            writeToAll(node->outputDescriptors,
-                       createUndefinedResultMessage(in->init_id));
+            message_ptr out = createUndefinedResultMessage(in->init_id);
+            writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             deleteMessage(node->receivedVals[in->init_id]);
             node->receivedVals[in->init_id] = 0;
             deleteMessage(in);
@@ -175,8 +175,9 @@ void binaryOperationNodeLoop(node_ptr node) {
                 } else {
                     syserr("operator %c not supported", node->operation);
                 }
-                writeToAll(node->outputDescriptors,
-                           createResultMessage(in->init_id, res));
+                message_ptr out = createResultMessage(in->init_id, res);
+                writeToAll(node->outputDescriptors, out);
+                deleteMessage(out);
                 node->isProcessed[in->init_id] = 1;
                 deleteMessage(node->receivedVals[in->init_id]);
                 node->receivedVals[in->init_id] = 0;
@@ -205,11 +206,13 @@ void unaryOperationNodeLoop(node_ptr node) {
         case RESULT_MESSAGE: {
             message_ptr out = createResultMessage(in->init_id, -1 * in->value);
             writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             break;
         }
         case UNDEFINED_RESULT_MESSAGE: {
             message_ptr out = createUndefinedResultMessage(in->init_id);
             writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             break;
         }
         default:
@@ -238,8 +241,9 @@ void variableNodeLoop(node_ptr node) {
                 // we didn't get an initial value, so we should just send
                 // undefined
                 fprintf(stderr, "sending 0\n");
-                writeToAll(node->outputDescriptors,
-                           createUndefinedResultMessage(in->init_id));
+                message_ptr out = createUndefinedResultMessage(in->init_id);
+                writeToAll(node->outputDescriptors, out);
+                deleteMessage(out);
                 node->isProcessed[in->init_id] = 1;
             }
             break;
@@ -257,6 +261,7 @@ void variableNodeLoop(node_ptr node) {
                 out = createResultMessage(in->init_id, in->value);
             }
             writeToAll(node->outputDescriptors, out);
+            deleteMessage(out);
             node->isProcessed[in->init_id] = 1;
             break;
         }
@@ -292,11 +297,11 @@ void nodeLoop(node_ptr node) {
 void startProcess(node_ptr node) {
     switch (fork()) {
     case -1:
-        // error message
+        syserr("fork failed");
         break;
     case 0:
         if (close(node->mainWriteDescriptor) == -1) {
-            syserr("close mainWriteDescriptor");
+            syserr("close mainWriteDescriptor %d", node->mainWriteDescriptor);
         }
         nodeLoop(node);
         exit(0);
@@ -309,6 +314,7 @@ void startProcess(node_ptr node) {
 void startProcessesForAllNodes() {
     fprintf(stderr, "starting %d processes\n", nodesCount);
     for (int i = 0; i < nodesCount; i++) {
+        fprintf(stderr, "starting process %i\n", i);
         startProcess(allNodes[i]);
     }
 }
