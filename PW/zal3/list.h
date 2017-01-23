@@ -9,7 +9,6 @@ typedef struct list {
     struct list *tail;
 } list_t, *list_ptr;
 
-
 void addInt(list_ptr *l, int e);
 
 void addNode(list_ptr *l, struct node *e);
@@ -18,7 +17,9 @@ int getTopInt(list_ptr l);
 
 struct node *getTopNode(list_ptr l);
 
-list_ptr pop(list_ptr l);
+list_ptr popInt(list_ptr l);
+
+list_ptr popNode(list_ptr l);
 
 int popAndGetInt(list_ptr *l);
 
@@ -33,5 +34,9 @@ int isEmpty(list_ptr p);
 int getLen(list_ptr p);
 
 list_ptr createEmptyList();
+
+void deleteListOfInts(list_ptr p);
+
+void deleteListOfNodes(list_ptr p);
 
 #endif // LIST_H

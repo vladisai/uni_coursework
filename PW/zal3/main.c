@@ -9,17 +9,23 @@
 
 int main() {
     freopen("input.txt", "r", stdin);
-    freopen("/dev/null", "w", stderr);
+    //freopen("/dev/null", "w", stderr);
 
     int n, k, v;
     scanf("%d%d%d\n", &n, &k, &v);
+
+    fprintf(stderr, "starting\n");
 
     for (int i = 1; i <= k; i++) {
         char currentExpression[EXPR_LEN];
         printf("%d ", i);
         int currentIndex, variable;
         scanf("%d x[%d] = ", &currentIndex, &variable);
-        isInCircuit[variable] = 1;
+        if (isInCircuit[variable] == 2) {
+            printf("%d F\n", i);
+            return 0;
+        }
+        isInCircuit[variable] = 2;
         fgets(currentExpression, EXPR_LEN, stdin);
         addEdges(variable, currentExpression);
         if (checkCycles()) {
@@ -56,10 +62,13 @@ int main() {
         int currentIndex;
         scanf("%d ", &currentIndex);
         fgets(currentExpression, EXPR_LEN, stdin);
-        int *vals = parseValues(currentExpression);
-
+        long *vals = parseValues(currentExpression);
+        if (vals == 0) {
+            printf("%d F\n", i);
+            continue;
+        }
         for (int i = 0; i < v; i++) {
-            fprintf(stderr, "%d=%d ", i, vals[i] == INF ? -1 : vals[i]);
+            fprintf(stderr, "%d=%ld ", i, vals[i] == LINF ? -1 : vals[i]);
         }
         fprintf(stderr, "\n");
 

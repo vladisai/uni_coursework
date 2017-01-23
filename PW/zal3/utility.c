@@ -65,29 +65,33 @@ int checkCycles() {
     return 0;
 }
 
-int *parseValues(char *str) {
+long *parseValues(char *str) {
     int len = strlen(str);
-    int *ret = (int *)malloc(sizeof(int) * MAX_VARS);
+    long *ret = (long*)malloc(sizeof(long) * MAX_VARS);
     for (int i = 0; i < MAX_VARS; i++)
-        ret[i] = INF;
+        ret[i] = LINF;
 
     for (int i = 0; i < len; i++) {
         i += 2;
-        int var = parseNumber(str, &i);
+        long var = parseNumber(str, &i);
         i += 3;
-        int val = parseNumber(str, &i);
+        long val = parseNumber(str, &i);
         i++;
+        if (ret[var] != LINF) {
+            free(ret);
+            return 0;
+        }
         ret[var] = val;
     }
     return ret;
 }
 
-int checkReachability(int *vals, int x) {
-    if (vals[x] != INF) {
+int checkReachability(long *vals, int x) {
+    if (vals[x] != LINF) {
         return 1;
     }
     list_ptr cur = graph[x];
-    if (cur == 0 && vals[x] == INF) {
+    if (cur == 0 && vals[x] == LINF) {
         fprintf(stderr, "reached %d, it's not evaluated\n", x);
         return 0;
     }
@@ -100,9 +104,9 @@ int checkReachability(int *vals, int x) {
     return 1;
 }
 
-int checkExistence(int *vals, int len) {
+int checkExistence(long *vals, int len) {
     for (int i = 0; i < len; i++) {
-        if (vals[i] != INF && isInCircuit[i] == 0) {
+        if (vals[i] != LINF && isInCircuit[i] == 0) {
             fprintf(stderr, "%d isn't in the circuit but is evaluated\n", i);
             return 0;
         }
@@ -245,7 +249,7 @@ node_ptr build(char *str) {
                 while (getTopInt(ops) != '(') {
                     performOne(&vals, &ops);
                 }
-                ops = pop(ops);
+                ops = popInt(ops);
             } else if (isdigit(str[i])) {
                 int x = parseNumber(str, &i);
                 addNode(&vals, createValueNode(x));

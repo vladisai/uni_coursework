@@ -14,8 +14,8 @@ void sendMessage(node_ptr node, message_ptr m) {
 
 node_ptr createEmptyNode() {
     node_ptr ret = (node_ptr)malloc(sizeof(node_t));
-    ret->val = INF;
-    ret->type = INF;
+    ret->val = LINF;
+    ret->type = -1;
     ret->inputDescriptors = createEmptyList();
     ret->outputDescriptors = createEmptyList();
     ret->operation = 0;
@@ -78,11 +78,11 @@ void tieNodes(node_ptr sender,
     addInt(&receiver->inputDescriptors, read);
 }
 
-void dispatchInitialValues(int id, int *vals, int *isInCirciut) {
+void dispatchInitialValues(int id, long *vals, int *isInCirciut) {
     for (int i = 0; i < MAX_VARS; i++) {
         if (isInCirciut[i]) {
-            if (vals[i] != INF) {
-                fprintf(stderr, "dispatching to %d value %d\n", i, vals[i]);
+            if (vals[i] != LINF) {
+                fprintf(stderr, "dispatching to %d value %ld\n", i, vals[i]);
                 sendMessage(getOrCreateVariableNode(i),
                             createStartWithValMessage(id, vals[i]));
             } else {
@@ -117,6 +117,8 @@ void valueNodeLoop(node_ptr node) {
         message_ptr in = readFromAll(node->inputDescriptors);
         switch (in->type) {
         case EXIT_MESSAGE:
+            deleteMessage(in);
+            deleteNode(node);
             exit(0);
             break;
         case START_MESSAGE: {
@@ -129,7 +131,7 @@ void valueNodeLoop(node_ptr node) {
         default:
             syserr("unsupported message %d", in->type);
         }
-        free(in);
+        deleteMessage(in);
     }
 }
 
@@ -137,10 +139,12 @@ void binaryOperationNodeLoop(node_ptr node) {
     while (1) {
         fprintf(stderr, "binop waiting\n");
         message_ptr in = readFromAll(node->inputDescriptors);
-        fprintf(stderr, "bin read:\n"); 
+        fprintf(stderr, "bin read:\n");
         printMessage(in);
         switch (in->type) {
         case EXIT_MESSAGE:
+            deleteMessage(in);
+            deleteNode(node);
             exit(0);
             break;
         case UNDEFINED_RESULT_MESSAGE: {
@@ -150,6 +154,9 @@ void binaryOperationNodeLoop(node_ptr node) {
             node->isProcessed[in->init_id] = 1;
             writeToAll(node->outputDescriptors,
                        createUndefinedResultMessage(in->init_id));
+            deleteMessage(node->receivedVals[in->init_id]);
+            node->receivedVals[in->init_id] = 0;
+            deleteMessage(in);
             break;
         }
         case RESULT_MESSAGE: {
@@ -171,6 +178,9 @@ void binaryOperationNodeLoop(node_ptr node) {
                 writeToAll(node->outputDescriptors,
                            createResultMessage(in->init_id, res));
                 node->isProcessed[in->init_id] = 1;
+                deleteMessage(node->receivedVals[in->init_id]);
+                node->receivedVals[in->init_id] = 0;
+                deleteMessage(in);
             } else {
                 node->receivedVals[in->init_id] = in;
             }
@@ -178,9 +188,9 @@ void binaryOperationNodeLoop(node_ptr node) {
         }
         default:
             syserr("unsupported operation %d", in->type);
+            deleteMessage(in);
             break;
         }
-        free(in);
     }
 }
 
@@ -189,6 +199,7 @@ void unaryOperationNodeLoop(node_ptr node) {
         message_ptr in = readFromAll(node->inputDescriptors);
         switch (in->type) {
         case EXIT_MESSAGE:
+            deleteNode(node);
             exit(0);
             break;
         case RESULT_MESSAGE: {
@@ -204,7 +215,7 @@ void unaryOperationNodeLoop(node_ptr node) {
         default:
             syserr("unsupported message %d", in->type);
         }
-        free(in);
+        deleteMessage(in);
     }
 }
 
@@ -212,9 +223,13 @@ void variableNodeLoop(node_ptr node) {
     fprintf(stderr, "LOOP var %ld\n", node->val);
     while (1) {
         message_ptr in = readFromAll(node->inputDescriptors);
-        fprintf(stderr, "var %ld read:\n", node->val); 
+        fprintf(stderr, "var %ld read:\n", node->val);
         printMessage(in);
         switch (in->type) {
+        case EXIT_MESSAGE:
+            deleteNode(node);
+            exit(0);
+            break;
         case START_MESSAGE:
             if (node->isProcessed[in->init_id] != 0) {
                 break; // this id was processed already, ignoring
@@ -227,9 +242,6 @@ void variableNodeLoop(node_ptr node) {
                            createUndefinedResultMessage(in->init_id));
                 node->isProcessed[in->init_id] = 1;
             }
-            break;
-        case EXIT_MESSAGE:
-            exit(0);
             break;
         case UNDEFINED_RESULT_MESSAGE: // fall through
         case RESULT_MESSAGE:           // fall through
@@ -249,10 +261,11 @@ void variableNodeLoop(node_ptr node) {
             break;
         }
         default:
-            syserr("var %d received unsupported message %d", node->val, in->type);
+            syserr("var %d received unsupported message %d", node->val,
+                   in->type);
             break;
         }
-        free(in);
+        deleteMessage(in);
     }
 }
 
@@ -298,4 +311,20 @@ void startProcessesForAllNodes() {
     for (int i = 0; i < nodesCount; i++) {
         startProcess(allNodes[i]);
     }
+}
+
+void deleteNode(node_ptr n) {
+    if (n == 0) {
+        return;
+    }
+    deleteListOfInts(n->inputDescriptors);
+    deleteListOfInts(n->outputDescriptors);
+    free(n->isProcessed);
+    if (n->receivedVals != 0) {
+        for (int i = 0; i < MAX_OPS; i++) {
+            deleteMessage(n->receivedVals[i]);
+        }
+        free(n->receivedVals);
+    }
+    free(n);
 }

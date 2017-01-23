@@ -1,8 +1,11 @@
 all: node list utility err message
-	gcc -Wall err.o message.o list.o utility.o node.o main.c -o main
+	gcc -g -Wall err.o message.o list.o utility.o node.o main.c -o main
 
 run:
 	./main
+
+debug:
+	gdb main
 
 list: list.h list.c
 	gcc -c list.c

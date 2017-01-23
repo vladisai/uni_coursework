@@ -27,7 +27,14 @@ int getTopInt(list_ptr l) { return *((int*)l->element); }
 
 node_ptr getTopNode(list_ptr l) { return *((node_ptr*)l->element); }
 
-list_ptr pop(list_ptr l) {
+list_ptr popInt(list_ptr l) {
+    list_t *ret = l->tail;
+    free(l->element);
+    free(l);
+    return ret;
+}
+
+list_ptr popNode(list_ptr l) {
     list_t *ret = l->tail;
     free(l);
     return ret;
@@ -35,13 +42,13 @@ list_ptr pop(list_ptr l) {
 
 int popAndGetInt(list_ptr *l) {
     int val = getTopInt(*l);
-    *l = pop(*l);
+    *l = popInt(*l);
     return val;
 }
 
 node_ptr popAndGetNode(list_ptr *l) {
     node_ptr val = getTopNode(*l);
-    *l = pop(*l);
+    *l = popNode(*l);
     return val;
 }
 
@@ -77,3 +84,20 @@ list_ptr createEmptyList() {
     return 0;
 }
 
+void deleteListOfInts(list_ptr p) {
+    while (p != 0) {
+        free(p->element);
+        list_ptr nxt = p->tail;
+        free(p);
+        p = nxt;
+    }
+}
+
+void deleteListOfNodes(list_ptr p) {
+    while (p != 0) {
+        deleteNode((node_ptr)p->element);
+        list_ptr nxt = p->tail;
+        free(p);
+        p = nxt;
+    }
+}

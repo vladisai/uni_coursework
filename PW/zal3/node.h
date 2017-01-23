@@ -39,7 +39,7 @@ node_ptr getOrCreateVariableNode(int id);
 
 void tieNodes(node_ptr sender, node_ptr receiver); // creates a pipe between the two
 
-void dispatchInitialValues(int id, int *vals, int *isInCirciut);
+void dispatchInitialValues(int id, long *vals, int *isInCirciut);
 
 void dispatchConsts(int inits_count);
 
@@ -50,5 +50,7 @@ void killAllProcesses();
 void startProcessesForAllNodes();
 
 int getLastId();
+
+void deleteNode(node_ptr n);
 
 #endif // NODE_H

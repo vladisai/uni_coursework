@@ -7,7 +7,7 @@
 #define MAX_NODES 10000
 #define EXPR_LEN 2000
 #define MAX_OPS 1000
-#define INF (1 << 30)
+#define LINF (1L << 60)
 
 struct message;
 
@@ -24,11 +24,11 @@ int dfs(int x);
 
 int checkCycles();
 
-int *parseValues(char *str);
+long *parseValues(char *str);
 
-int checkReachability(int *vals, int x);
+//int checkReachability(long *vals, int x);
 
-int checkExistence(int *vals, int len);
+int checkExistence(long *vals, int len);
 
 void createPipe(int *read, int *write);
 
