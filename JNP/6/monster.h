@@ -3,6 +3,7 @@
 
 #include "citizen.h"
 #include "helper.h"
+
 #include <initializer_list>
 #include <memory>
 #include <set>
@@ -18,9 +19,11 @@ using std::shared_ptr;
 class Monster : public virtual _EntityWithHealth,
                 public virtual _EntityWithAttackPower {
   public:
-    virtual string getName() = 0;
+    virtual string getName() const = 0;
 
     void attack(shared_ptr<Citizen> citizen);
+
+    virtual ~Monster() = default;
 };
 
 class SingleMonster : public Monster,
@@ -28,12 +31,17 @@ class SingleMonster : public Monster,
                       public _AttackingEntity {
   public:
     SingleMonster(HealthPoints health, AttackPower attackPower);
+
+    virtual ~SingleMonster() = default;
 };
 
 class Zombie : public SingleMonster {
   public:
     Zombie(HealthPoints health, AttackPower attackPower);
-    string getName() override;
+
+    string getName() const override;
+
+    virtual ~Zombie() = default;
 
   private:
     static const string CreatureName;
@@ -42,7 +50,10 @@ class Zombie : public SingleMonster {
 class Vampire : public SingleMonster {
   public:
     Vampire(HealthPoints health, AttackPower attackPower);
-    string getName() override;
+
+    string getName() const override;
+
+    virtual ~Vampire() = default;
 
   private:
     static const string CreatureName;
@@ -51,7 +62,10 @@ class Vampire : public SingleMonster {
 class Mummy : public SingleMonster {
   public:
     Mummy(HealthPoints health, AttackPower attackPower);
-    string getName() override;
+
+    string getName() const override;
+
+    virtual ~Mummy() = default;
 
   private:
     static const string CreatureName;
@@ -64,17 +78,20 @@ class GroupOfMonsters : public Monster {
     GroupOfMonsters(
         const initializer_list<shared_ptr<SingleMonster>> &monsters);
 
-    string getName() override;
+    string getName() const override ;
 
     virtual void takeDamage(AttackPower attackPower) override;
 
-    virtual AttackPower getAttackPower() override;
+    virtual AttackPower getAttackPower() const override ;
 
-    HealthPoints getHealth() override;
+    HealthPoints getHealth() const override ;
+
+    virtual ~GroupOfMonsters() = default;
 
   private:
     static const string CreatureName;
-    const set<shared_ptr<SingleMonster>> monsters;
+
+    vector<shared_ptr<SingleMonster>> monsters;
 };
 
 shared_ptr<Zombie> createZombie(HealthPoints health, AttackPower attackPower);

@@ -19,26 +19,26 @@ int substitute(int desc, int target) {
         syserr("Error in dup");
     }
     if (close(target) == -1) {
-        syserr("Error in close target");    
+        syserr("Error in close target");
     }
     if (dup2(desc, target) == -1) {
         syserr("Error in dup2");
     }
     if (close(desc) == -1) {
-        syserr("Error in close desc");    
+        syserr("Error in close desc");
     }
     return k;
 }
 
 void replace(int desc, int target) {
     if (close(target) == -1) {
-        syserr("Error in close target");    
+        syserr("Error in close target");
     }
     if (dup2(desc, target) == -1) {
         syserr("Error in dup2");
     }
     if (close(desc) == -1) {
-        syserr("Error in close desc");    
+        syserr("Error in close desc");
     }
 }
 
@@ -46,7 +46,8 @@ void readAndPrint() {
     char buff[300];
     while (fgets(buff, sizeof(buff), stdin)) {
         buff[strlen(buff) - 1] = '\0'; // the newline symbol must be removed
-        if (strlen(buff) == 0) break;
+        if (strlen(buff) == 0)
+            break;
         puts(buff);
     }
 }
@@ -101,4 +102,3 @@ int main() {
     printOrBranch(NR_PROC, -1);
     return 0;
 }
-

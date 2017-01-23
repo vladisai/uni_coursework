@@ -7,106 +7,20 @@
 #include "utility.h"
 #include "node.h"
 
-int n, k, v;
-
-// reverse polish notation
-
-int isOperation(char c) {
-    if (c == '*')
-        return 1;
-    else if (c == '+')
-        return 1;
-    else if (c == '-')
-        return 1;
-    else if (c == 'x')
-        return 1;
-    return 0;
-}
-
-int getPriority(char c) {
-    if (c == '*')
-        return 2;
-    else if (c == '+')
-        return 1;
-    else if (c == '-')
-        return 3;
-    else if (c == 'x')
-        return 4;
-    else
-        return -1;
-}
-
-void performOne(list_ptr *vals, list_ptr *ops) {
-    char c = popAndGetInt(ops);
-    if (c == '-') {
-        node_ptr val = popAndGetNode(vals);
-        addNode(vals, createUnaryOperationNode('-', val));
-    } else if (c == '*') {
-        node_ptr valA = popAndGetNode(vals);
-        node_ptr valB = popAndGetNode(vals);
-        addNode(vals, createBinaryOperationNode('*', valA, valB));
-    } else if (c == '+') {
-        node_ptr valA = popAndGetNode(vals);
-        node_ptr valB = popAndGetNode(vals);
-        addNode(vals, createBinaryOperationNode('+', valA, valB));
-    } 
-}
-
-node_ptr build(char *str) {
-    int len = strlen(str);
-    list_ptr vals = createEmptyList();
-    list_ptr ops = createEmptyList();
-    for (int i = 0; i < len; i++) {
-        if (!isspace(str[i])) {
-            if (isOperation(str[i])) {
-                while (ops != 0 &&
-                       getPriority(getTopInt(ops)) > getPriority(str[i])) {
-                    performOne(&vals, &ops);
-                }
-                addInt(&ops, str[i]);
-            } else if (str[i] == '(') {
-                addInt(&ops, str[i]);
-            } else if (str[i] == ')') {
-                while (getTopInt(ops) != '(') {
-                    performOne(&vals, &ops);
-                }
-                ops = pop(ops);
-            } else if (isdigit(str[i])) {
-                int x = parseNumber(str, &i);
-                addNode(&vals, createValueNode(x));
-            } else if (str[i] == 'x') {
-                i += 2;
-                int x = parseNumber(str, &i);
-                i++;
-                addNode(&vals, createVariableNode(x));
-            }
-        }
-    }
-    while (ops != 0) {
-        performOne(&vals, &ops);
-    }
-    return popAndGetNode(&vals);
-}
-
 int main() {
     freopen("input.txt", "r", stdin);
-    /*freopen("/dev/null", "w", stderr);*/
+    freopen("/dev/null", "w", stderr);
 
-    scanf("%d%d%d", &n, &k, &v);
+    int n, k, v;
+    scanf("%d%d%d\n", &n, &k, &v);
 
     for (int i = 1; i <= k; i++) {
         char currentExpression[EXPR_LEN];
         printf("%d ", i);
         int currentIndex, variable;
         scanf("%d x[%d] = ", &currentIndex, &variable);
-        /*if (isInCircuit[variable]) {*/
-        /*    printf("F\n");*/
-        /*    exit(0);*/
-        /*}*/
         isInCircuit[variable] = 1;
         fgets(currentExpression, EXPR_LEN, stdin);
-        /*printf("\nFound expression number %d for %d which is:\n%s \n",*/
-        /*       currentIndex, variable, currentExpression);*/
         addEdges(variable, currentExpression);
         if (checkCycles()) {
             printf("F");
@@ -119,9 +33,6 @@ int main() {
         }
         printf("\n");
     }
-
-    isInCircuit[0] = 1; // 0 is always in the circuit, even if it wasn't
-                        // mentioned in the input
 
     for (int i = 0; i < v; i++) {
         if (isInCircuit[i]) {
@@ -136,10 +47,12 @@ int main() {
 
     fflush(stdout);
     startProcessesForAllNodes();
+    dispatchConsts(n - k);
+
+    int correctInputs = 0;
 
     for (int i = k + 1; i <= n; i++) {
         char currentExpression[EXPR_LEN];
-        printf("%d ", i);
         int currentIndex;
         scanf("%d ", &currentIndex);
         fgets(currentExpression, EXPR_LEN, stdin);
@@ -151,24 +64,31 @@ int main() {
         fprintf(stderr, "\n");
 
         if (!checkExistence(vals, v)) {
-            printf("F");
+            printf("%d F\n", i);
             fprintf(stderr, "Check existence\n");
-        } else if (!checkReachability(vals, 0)) {
-            printf("F");
-            fprintf(stderr, "check reachability\n");
         } else {
-            printf("P ");
+            correctInputs++;
             fprintf(stderr, "dispatching\n");
-            dispatchInitialValues(vals);
+            dispatchInitialValues(i - k - 1, vals, isInCircuit);
             fprintf(stderr, "starting\n");
-            startAll();
             fprintf(stderr, "Supposed to be computing right now\n");
-            int val;
-            readInt(readRoot, &val);
-            printf("%d", val);
         }
         free(vals);
-        printf("\n");
+    }
+
+    fprintf(stderr, "%d correct inputs expected\n", correctInputs);
+    for (int i = 0; i < correctInputs; i++) {
+        message_ptr res = readMessage(readRoot);
+        switch (res->type) {
+            case RESULT_MESSAGE:
+                printf("%d P %ld\n", res->init_id + k + 1, res->value);
+                break;
+            case UNDEFINED_RESULT_MESSAGE:
+                printf("%d F\n", res->init_id + k + 1);
+                break;
+            default:
+                break;
+        }
     }
 
     killAllProcesses();

@@ -5,6 +5,7 @@
 //using namespace std;
 
 int main() {
+    auto s = Sheriff<int>(30, 10, 30);
 	auto smallTown = SmallTown<Mummy<float>, int, 0, 23, Sheriff<int>, Adult<int>, Teenager<long>>(
 		Mummy<float>(100.0f, 1.0f),
 		Sheriff<int>(100, 35, 1),

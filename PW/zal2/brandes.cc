@@ -1,35 +1,45 @@
+#include "coordinate_compressor.h"
 #include <bits/stdc++.h>
-
-#define F first
-#define S second
-#define pb push_back
-#define INF (1 << 30)
-#define SQR(a) ((a) * (a))
 
 using namespace std;
 
-using deltaT = unordered_map<int, double>;
+using deltaT = vector<double>;
 
-unordered_map<int, vector<int>> edges;
-set<int> vertices;
+CoordinateCompressor compressor;
+
+vector<vector<int>> edges;
+vector<int> vertices;
+vector<int>
+    importantVertices; // vertices that have at least one edge starting from it
+vector<int> originalImportantVertices; // original (not compressed) indices of
+                                       // important vertices
+size_t nextVertex = 0;
 deltaT bc;
+mutex nextVertexMutex, bcMutex;
 
-unordered_map<int, double> processVertex(int s) {
-    unordered_map<int, vector<int>> p;
-    deltaT delta, sigma;
-    unordered_map<int, int> d;
-    stack<int> st;
-
-    for (auto w : vertices) {
-        sigma[w] = 0;
-        d[w] = -1;
-        delta[w] = 0;
-        p[w] = vector<int>();
+size_t getNextVertexIndex() {
+    nextVertexMutex.lock();
+    int ret = nextVertex;
+    if (nextVertex < importantVertices.size()) {
+        nextVertex++;
     }
+    nextVertexMutex.unlock();
+    return ret;
+}
+
+void processVertex(int s, deltaT &result) {
+    vector<vector<int>> p(compressor.size());
+    deltaT delta(compressor.size(), 0);
+    deltaT sigma(compressor.size(), 0);
+    vector<int> d(compressor.size(), -1);
+
+    stack<int> st;
+    queue<int> q;
+
     sigma[s] = 1;
     d[s] = 0;
-    queue<int> q;
     q.push(s);
+
     while (!q.empty()) {
         auto t = q.front();
         q.pop();
@@ -45,96 +55,75 @@ unordered_map<int, double> processVertex(int s) {
             }
         }
     }
+
     while (!st.empty()) {
         auto w = st.top();
         st.pop();
         for (auto t : p[w]) {
             delta[t] += (sigma[t] / sigma[w]) * (1 + delta[w]);
         }
+        if (w != s)
+            result[w] += delta[w];
     }
-    delta[s] = 0;
-    return delta;
 }
 
-unordered_map<int, double> processBatch(vector<int> batch) {
-    unordered_map<int, double> result;
-    unordered_map<int, double> compensation;
-    for (auto v : batch) {
-        auto res = processVertex(v);
-        for (auto e : res) {
-            int key = e.first;
-            double addedValue = e.second;
-            double &currentValue = result[key];
-            double &currentCompensation = compensation[key];
-            double y = addedValue - currentCompensation;
-            double t = currentValue + y;
-            currentCompensation = (t - currentValue) - y;
-            currentValue = t;
-        }
+void verticesProcessor() {
+    deltaT result(compressor.size());
+    size_t nextVertexIndex;
+    while ((nextVertexIndex = getNextVertexIndex()) <
+           importantVertices.size()) {
+        processVertex(importantVertices[nextVertexIndex], result);
     }
-    return result;
+    bcMutex.lock();
+    for (size_t i = 0; i < result.size(); i++) {
+        bc[i] += result[i];
+    }
+    bcMutex.unlock();
 }
 
-/*unordered_map<int, double> processBatch(vector<int> batch) {
-    unordered_map<int, double> result;
-    unordered_map<int, double> error;
-    for (auto v : batch) {
-        auto res = processVertex(v);
-        for (auto e : res) {
-            int key = e.first;
-            double value = e.second;
-            result[key] += value;
-        }
-    }
-    return result;
-}*/
+void sortAndDeleteDuplicates(vector<int> &v) {
+    sort(v.begin(), v.end());
+    v.erase(unique(v.begin(), v.end()), v.end());
+}
 
 int main(int argc, char *argv[]) {
-
-    assert(argc == 4);
-
+    // assert(argc == 4);
     int threadsNumber = atoi(argv[1]);
 
     freopen(argv[2], "r", stdin);
     freopen(argv[3], "w", stdout);
 
-    cerr << threadsNumber << endl;
-
     int x, y;
     while (cin >> x >> y) {
-        vertices.insert(x);
-        vertices.insert(y);
+        originalImportantVertices.push_back(x);
+        x = compressor.compress(x);
+        y = compressor.compress(y);
+        vertices.push_back(x);
+        vertices.push_back(y);
+        if ((int)edges.size() <= x)
+            edges.resize(x + 1);
         edges[x].push_back(y);
-        edges[y].push_back(x);
+        importantVertices.push_back(x);
     }
 
-    vector<future<deltaT>> futures;
+    bc.resize(compressor.size());
 
-    vector<int> nextBatch;
-    size_t amountPerBatch = (vertices.size() + threadsNumber - 1) / threadsNumber;
-    for (auto v : vertices) {
-        nextBatch.push_back(v);
-        if (nextBatch.size() == amountPerBatch) {
-            futures.push_back(async(launch::async, processBatch, nextBatch));
-            nextBatch.clear();
-        }
+    sortAndDeleteDuplicates(vertices);
+    sortAndDeleteDuplicates(importantVertices);
+    sortAndDeleteDuplicates(originalImportantVertices);
+
+    vector<thread> threads;
+    for (int i = 0; i < threadsNumber; i++) {
+        threads.push_back(thread(verticesProcessor));
     }
 
-    if (nextBatch.size() > 0) {
-        futures.push_back(async(launch::async, processBatch, nextBatch));
+    for (auto &thread : threads) {
+        thread.join();
     }
 
-    for (size_t i = 0; i < futures.size(); i++) {
-        auto resultDelta = futures[i].get();
-        for (auto e : resultDelta) {
-            int key = e.first;
-            double value = e.second;
-            bc[key] += value;
-        }
+    for (auto e : originalImportantVertices) {
+        cout << e << " " << bc[compressor.compress(e)] << endl;
     }
-
-    for (auto e : vertices)
-        cout << e << " " << bc[e] << endl;
 
     return 0;
 }

@@ -1,5 +1,5 @@
-all: node list utility err
-	gcc -Wall err.o list.o utility.o node.o main.c -o main
+all: node list utility err message
+	gcc -Wall err.o message.o list.o utility.o node.o main.c -o main
 
 run:
 	./main
@@ -15,3 +15,6 @@ node: list node.h node.c
 
 err: err.h err.c
 	gcc -c err.c
+
+message: message.h message.c
+	gcc -c message.c

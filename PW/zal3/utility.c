@@ -1,16 +1,18 @@
 #include "utility.h"
-#include "list.h"
 #include "err.h"
+#include "list.h"
+#include "message.h"
+#include "node.h"
 
+#include <ctype.h>
+#include <poll.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 #include <unistd.h>
 
-
-int parseNumber(char *str, int *ind) {
-    int val = 0;
+long parseNumber(char *str, int *ind) {
+    long val = 0;
     int l = strlen(str);
     while (*ind < l && isdigit(str[*ind])) {
         val *= 10;
@@ -52,7 +54,6 @@ int dfs(int x) {
 int checkCycles() {
     memset(isVisited, 0, sizeof(int) * MAX_VARS);
     memset(isInStack, 0, sizeof(int) * MAX_VARS);
-    time = 1;
 
     for (int i = 0; i < MAX_VARS; i++) {
         if (isInCircuit[i] && !isVisited[i]) {
@@ -124,8 +125,140 @@ void writeInt(int writeDescriptor, int value) {
     }
 }
 
-void readInt(int readDescriptor, int *value) {
+void writeLong(int writeDescriptor, long value) {
+    if (write(writeDescriptor, &value, sizeof(long)) != sizeof(long)) {
+        syserr("write %ld to %d\n", value, writeDescriptor);
+    }
+}
+
+void writeMessage(int writeDescriptor, message_ptr m) {
+    writeInt(writeDescriptor, m->type);
+    writeInt(writeDescriptor, m->init_id);
+    writeInt(writeDescriptor, m->value);
+}
+
+int readInt(int readDescriptor) {
+    int *value = (int *)malloc(sizeof(int));
     if (read(readDescriptor, value, sizeof(int)) != sizeof(int)) {
         syserr("read from %d\n", readDescriptor);
     }
+    return *value;
+}
+
+long readLong(int readDescriptor) {
+    long *value = (long *)malloc(sizeof(long));
+    if (read(readDescriptor, value, sizeof(long)) != sizeof(long)) {
+        syserr("read from %d\n", readDescriptor);
+    }
+    return *value;
+}
+
+message_ptr readMessage(int readDescriptor) {
+    int type, init_id, value;
+    type = readInt(readDescriptor);
+    init_id = readInt(readDescriptor);
+    value = readInt(readDescriptor);
+    return createMessage(type, init_id, value);
+}
+
+message_ptr readFromAll(list_ptr descriptors) {
+    int len = getLen(descriptors);
+    struct pollfd entries[len];
+    for (int i = 0; i < len; i++) {
+        entries[i].events = POLLIN;
+        entries[i].fd = getTopInt(descriptors);
+        entries[i].revents = 0;
+        shift(&descriptors);
+    }
+    int ret;
+    if ((ret = poll(entries, len, -1)) == -1) {
+        syserr("Error in poll\n");
+    } else if (ret > 0) {
+        for (int i = 0; i < len; ++i) {
+            if (entries[i].revents & (POLLIN | POLLERR)) {
+                return readMessage(entries[i].fd);
+            }
+        }
+    }
+    return 0;
+}
+
+void writeToAll(list_ptr descriptors, message_ptr m) {
+    while (descriptors != 0) {
+        writeMessage(getTopInt(descriptors), m);
+        shift(&descriptors);
+    }
+}
+
+int isOperation(char c) {
+    if (c == '*')
+        return 1;
+    else if (c == '+')
+        return 1;
+    else if (c == '-')
+        return 1;
+    return 0;
+}
+
+int getPriority(char c) {
+    if (c == '*')
+        return 2;
+    else if (c == '+')
+        return 1;
+    else if (c == '-')
+        return 3;
+    else
+        return -1;
+}
+
+void performOne(list_ptr *vals, list_ptr *ops) {
+    char c = popAndGetInt(ops);
+    if (c == '-') {
+        node_ptr val = popAndGetNode(vals);
+        addNode(vals, createUnaryOperationNode('-', val));
+    } else if (c == '*') {
+        node_ptr valA = popAndGetNode(vals);
+        node_ptr valB = popAndGetNode(vals);
+        addNode(vals, createBinaryOperationNode('*', valA, valB));
+    } else if (c == '+') {
+        node_ptr valA = popAndGetNode(vals);
+        node_ptr valB = popAndGetNode(vals);
+        addNode(vals, createBinaryOperationNode('+', valA, valB));
+    }
+}
+
+node_ptr build(char *str) {
+    int len = strlen(str);
+    list_ptr vals = createEmptyList();
+    list_ptr ops = createEmptyList();
+    for (int i = 0; i < len; i++) {
+        if (!isspace(str[i])) {
+            if (isOperation(str[i])) {
+                while (ops != 0 &&
+                       getPriority(getTopInt(ops)) > getPriority(str[i])) {
+                    performOne(&vals, &ops);
+                }
+                addInt(&ops, str[i]);
+            } else if (str[i] == '(') {
+                addInt(&ops, str[i]);
+            } else if (str[i] == ')') {
+                while (getTopInt(ops) != '(') {
+                    performOne(&vals, &ops);
+                }
+                ops = pop(ops);
+            } else if (isdigit(str[i])) {
+                int x = parseNumber(str, &i);
+                addNode(&vals, createValueNode(x));
+            } else if (str[i] == 'x') {
+                i += 2;
+                int x = parseNumber(str, &i);
+                i++;
+                addNode(&vals, getOrCreateVariableNode(x));
+            }
+        }
+    }
+    while (ops != 0) {
+        performOne(&vals, &ops);
+    }
+    return popAndGetNode(&vals);
 }

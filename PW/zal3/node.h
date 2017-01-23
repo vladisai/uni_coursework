@@ -3,25 +3,24 @@
 
 #include "utility.h"
 #include "list.h"
+#include "message.h"
 
-#define START_CMD INF
-#define EXIT_CMD -INF
-
-#define UNDEFINED (-INF + 1)
-
-#define VALUE_NODE 0
+#define VALUE_NODE 4
 #define BINARY_OPERATION_NODE 1
 #define UNARY_OPERATION_NODE 2
 #define VARIABLE_NODE 3
 
+struct message;
+
 typedef struct node {
-    int mainReadDescriptor;
     int mainWriteDescriptor;
     list_ptr inputDescriptors;
     list_ptr outputDescriptors;
     char operation;
-    int val;
+    long val;
     int type;
+    struct message **receivedVals;
+    int *isProcessed;
 } node_t, *node_ptr;
 
 node_ptr variables[MAX_VARS];
@@ -30,19 +29,19 @@ int nodesCount;
 
 void createPipe(int *read, int *write);
 
-node_ptr createValueNode(int value);
+node_ptr createValueNode(long value);
 
 node_ptr createBinaryOperationNode(char operation, node_ptr in1, node_ptr in2);
 
 node_ptr createUnaryOperationNode(char operation, node_ptr in);
 
-node_ptr createVariableNode(int id);
-
 node_ptr getOrCreateVariableNode(int id);
 
 void tieNodes(node_ptr sender, node_ptr receiver); // creates a pipe between the two
 
-void dispatchInitialValues(int *vals);
+void dispatchInitialValues(int id, int *vals, int *isInCirciut);
+
+void dispatchConsts(int inits_count);
 
 void startAll();
 

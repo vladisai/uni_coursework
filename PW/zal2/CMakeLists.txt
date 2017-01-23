@@ -1,10 +1,10 @@
 cmake_minimum_required (VERSION 3.1)
-project (MIMUW-CPCPP-lab1 CXX)
+project (brandes CXX)
 
 find_package ( Threads REQUIRED )
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "-g -Wall -O0")
+set(CMAKE_CXX_FLAGS "-Wall -O2 -s -DNDEBUG")
 
 # http://stackoverflow.com/questions/10555706/
 macro (add_executable _name)

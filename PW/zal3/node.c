@@ -1,28 +1,34 @@
 #include "node.h"
 
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include "err.h"
+#include "message.h"
 
-void sendMessage(node_ptr node, int value) {
-    writeInt(node->mainWriteDescriptor, value);
+void sendMessage(node_ptr node, message_ptr m) {
+    writeMessage(node->mainWriteDescriptor, m);
 }
 
 node_ptr createEmptyNode() {
     node_ptr ret = (node_ptr)malloc(sizeof(node_t));
     ret->val = INF;
+    ret->type = INF;
     ret->inputDescriptors = createEmptyList();
     ret->outputDescriptors = createEmptyList();
     ret->operation = 0;
-    createPipe(&ret->mainReadDescriptor, &ret->mainWriteDescriptor);
+    ret->receivedVals = 0;
+    ret->isProcessed = 0;
+    int temp = 0;
+    createPipe(&temp, &ret->mainWriteDescriptor);
+    addInt(&ret->inputDescriptors, temp);
     allNodes[nodesCount++] = ret;
     return ret;
 }
 
-node_ptr createValueNode(int value) {
+node_ptr createValueNode(long value) {
     node_ptr ret = createEmptyNode();
     ret->type = VALUE_NODE;
     ret->val = value;
@@ -33,6 +39,8 @@ node_ptr createBinaryOperationNode(char operation, node_ptr in1, node_ptr in2) {
     node_ptr ret = createEmptyNode();
     ret->type = BINARY_OPERATION_NODE;
     ret->operation = operation;
+    ret->receivedVals = (message_ptr *)calloc(MAX_OPS, sizeof(message_ptr));
+    ret->isProcessed = (int *)calloc(MAX_OPS, sizeof(int));
     tieNodes(in1, ret);
     tieNodes(in2, ret);
     return ret;
@@ -51,6 +59,7 @@ node_ptr createVariableNode(int id) {
     ret->type = VARIABLE_NODE;
     ret->operation = 'x';
     ret->val = id;
+    ret->isProcessed = (int *)calloc(MAX_OPS, sizeof(int));
     return ret;
 }
 
@@ -69,124 +78,181 @@ void tieNodes(node_ptr sender,
     addInt(&receiver->inputDescriptors, read);
 }
 
-void dispatchInitialValues(int *vals) {
+void dispatchInitialValues(int id, int *vals, int *isInCirciut) {
     for (int i = 0; i < MAX_VARS; i++) {
-        if (vals[i] != INF) {
-            fprintf(stderr, "dispatching to %d value %d\n", i, vals[i]);
-            sendMessage(getOrCreateVariableNode(i), vals[i]);
+        if (isInCirciut[i]) {
+            if (vals[i] != INF) {
+                fprintf(stderr, "dispatching to %d value %d\n", i, vals[i]);
+                sendMessage(getOrCreateVariableNode(i),
+                            createStartWithValMessage(id, vals[i]));
+            } else {
+                fprintf(stderr, "dispatching to %d undefined value\n", i);
+                sendMessage(getOrCreateVariableNode(i), createStartMessage(id));
+            }
         }
     }
     fprintf(stderr, "finished dispatching\n");
 }
 
-void startAll() {
+void dispatchConsts(int inits_count) {
     for (int i = 0; i < nodesCount; i++) {
-        sendMessage(allNodes[i], START_CMD);
+        if (allNodes[i]->type == VALUE_NODE) {
+            sendMessage(allNodes[i], createStartMessage(inits_count));
+        }
     }
 }
 
 void killAllProcesses() {
     for (int i = 0; i < nodesCount; i++) {
-        sendMessage(allNodes[i], EXIT_CMD);
+        sendMessage(allNodes[i], createExitMessage());
+    }
+    for (int i = 0; i < nodesCount; i++) {
         wait(0);
     }
 }
 
-void sendToAll(list_ptr descriptors, int value) {
-    while (descriptors != 0) {
-        writeInt(getTopInt(descriptors), value);
-        descriptors = descriptors->tail;
-    }
-}
-
 void valueNodeLoop(node_ptr node) {
-    int val;
+    fprintf(stderr, "value node loop %ld\n", node->val);
     while (1) {
-        readInt(node->mainReadDescriptor, &val);
-        if (val == EXIT_CMD) {
-            exit(0); // close pipes?
-        } else {
-            sendToAll(node->outputDescriptors, val);
+        message_ptr in = readFromAll(node->inputDescriptors);
+        switch (in->type) {
+        case EXIT_MESSAGE:
+            exit(0);
+            break;
+        case START_MESSAGE: {
+            for (int i = 0; i < in->init_id; i++) {
+                writeToAll(node->outputDescriptors,
+                           createResultMessage(i, node->val));
+            }
+            break;
         }
+        default:
+            syserr("unsupported message %d", in->type);
+        }
+        free(in);
     }
 }
 
 void binaryOperationNodeLoop(node_ptr node) {
-    int val;
     while (1) {
-        readInt(node->mainReadDescriptor, &val);
-        if (val == EXIT_CMD) {
-            exit(0); // close pipes?
-        } else {
-            int a, b;
-            list_ptr input = node->inputDescriptors;
-            readInt(getTopInt(input), &a);
-            shift(&input);
-            readInt(getTopInt(input), &b);
-
-            int res = 0;
-            if (a == UNDEFINED || b == UNDEFINED) {
-                res = UNDEFINED;
-            } else if (node->operation == '*') {
-                res = a * b;
-            } else if (node->operation == '+') {
-                res = a + b;
+        fprintf(stderr, "binop waiting\n");
+        message_ptr in = readFromAll(node->inputDescriptors);
+        fprintf(stderr, "bin read:\n"); 
+        printMessage(in);
+        switch (in->type) {
+        case EXIT_MESSAGE:
+            exit(0);
+            break;
+        case UNDEFINED_RESULT_MESSAGE: {
+            if (node->isProcessed[in->init_id]) {
+                break; // already processed this, ignoring
             }
-
-            sendToAll(node->outputDescriptors, res);
+            node->isProcessed[in->init_id] = 1;
+            writeToAll(node->outputDescriptors,
+                       createUndefinedResultMessage(in->init_id));
+            break;
         }
+        case RESULT_MESSAGE: {
+            if (node->isProcessed[in->init_id] != 0) {
+                break; // already processed this, ignoring
+            }
+            fprintf(stderr, "end\n");
+            if (node->receivedVals[in->init_id] != 0) {
+                long a = in->value;
+                long b = node->receivedVals[in->init_id]->value;
+                long res = 0;
+                if (node->operation == '+') {
+                    res = a + b;
+                } else if (node->operation == '*') {
+                    res = a * b;
+                } else {
+                    syserr("operator %c not supported", node->operation);
+                }
+                writeToAll(node->outputDescriptors,
+                           createResultMessage(in->init_id, res));
+                node->isProcessed[in->init_id] = 1;
+            } else {
+                node->receivedVals[in->init_id] = in;
+            }
+            break;
+        }
+        default:
+            syserr("unsupported operation %d", in->type);
+            break;
+        }
+        free(in);
     }
 }
 
 void unaryOperationNodeLoop(node_ptr node) {
-    int val;
-    while (0) {
-        readInt(node->mainReadDescriptor, &val);
-        if (val == EXIT_CMD) {
-            exit(0); // close pipes?
-        } else {
-            int a;
-            int desc = getTopInt(node->inputDescriptors);
-            readInt(desc, &a);
-
-            int res = 0;
-            if (a == UNDEFINED) {
-                res = UNDEFINED;
-            } else if (node->operation == '-') {
-                res = -a;
-            } 
-            sendToAll(node->outputDescriptors, res);
+    while (1) {
+        message_ptr in = readFromAll(node->inputDescriptors);
+        switch (in->type) {
+        case EXIT_MESSAGE:
+            exit(0);
+            break;
+        case RESULT_MESSAGE: {
+            message_ptr out = createResultMessage(in->init_id, -1 * in->value);
+            writeToAll(node->outputDescriptors, out);
+            break;
         }
+        case UNDEFINED_RESULT_MESSAGE: {
+            message_ptr out = createUndefinedResultMessage(in->init_id);
+            writeToAll(node->outputDescriptors, out);
+            break;
+        }
+        default:
+            syserr("unsupported message %d", in->type);
+        }
+        free(in);
     }
 }
 
 void variableNodeLoop(node_ptr node) {
-    int val;
-    fprintf(stderr, "LOOP var %d\n", node->val);
-    while (0) {
-        readInt(node->mainReadDescriptor, &val);
-        fprintf(stderr, "I just read %d\n", val);
-        if (val == EXIT_CMD) {
-            exit(0); // close pipes?
-        } else {
-            if (val != START_CMD) {
-                int tmp;
-                readInt(node->mainReadDescriptor, &tmp); // don't need that
+    fprintf(stderr, "LOOP var %ld\n", node->val);
+    while (1) {
+        message_ptr in = readFromAll(node->inputDescriptors);
+        fprintf(stderr, "var %ld read:\n", node->val); 
+        printMessage(in);
+        switch (in->type) {
+        case START_MESSAGE:
+            if (node->isProcessed[in->init_id] != 0) {
+                break; // this id was processed already, ignoring
             }
-            int a;
-            int desc = getTopInt(node->inputDescriptors);
-            readInt(desc, &a);
-
-            int res = 0;
-            if (a == UNDEFINED && val == START_CMD) {
-                res = UNDEFINED;
-            } else if (a == UNDEFINED && val != START_CMD) {
-                res = val;
-            } else if (a != UNDEFINED && val == START_CMD) {
-                res = a;
+            if (getLen(node->inputDescriptors) == 1) { // only main input
+                // we didn't get an initial value, so we should just send
+                // undefined
+                fprintf(stderr, "sending 0\n");
+                writeToAll(node->outputDescriptors,
+                           createUndefinedResultMessage(in->init_id));
+                node->isProcessed[in->init_id] = 1;
             }
-            sendToAll(node->outputDescriptors, res);
+            break;
+        case EXIT_MESSAGE:
+            exit(0);
+            break;
+        case UNDEFINED_RESULT_MESSAGE: // fall through
+        case RESULT_MESSAGE:           // fall through
+        case START_WITH_VAL_MESSAGE: { // this message always comes before the
+                                       // results from parent nodes
+            if (node->isProcessed[in->init_id] != 0) {
+                break; // this id was processed already, ignoring
+            }
+            message_ptr out = 0;
+            if (in->type == UNDEFINED_RESULT_MESSAGE) {
+                out = createUndefinedResultMessage(in->init_id);
+            } else {
+                out = createResultMessage(in->init_id, in->value);
+            }
+            writeToAll(node->outputDescriptors, out);
+            node->isProcessed[in->init_id] = 1;
+            break;
         }
+        default:
+            syserr("var %d received unsupported message %d", node->val, in->type);
+            break;
+        }
+        free(in);
     }
 }
 
@@ -205,7 +271,7 @@ void nodeLoop(node_ptr node) {
         variableNodeLoop(node);
         break;
     default:
-        // error, unknown node type
+        syserr("unknown node type %d", node->type);
         break;
     }
 }
@@ -223,14 +289,12 @@ void startProcess(node_ptr node) {
         exit(0);
         break;
     default:
-        if (close(node->mainReadDescriptor) == -1) {
-            syserr("close mainWriteDescriptor");
-        }
         break;
     }
 }
 
 void startProcessesForAllNodes() {
+    fprintf(stderr, "starting %d processes\n", nodesCount);
     for (int i = 0; i < nodesCount; i++) {
         startProcess(allNodes[i]);
     }

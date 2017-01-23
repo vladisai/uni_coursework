@@ -30,6 +30,8 @@ void shift(list_ptr *p);
 
 int isEmpty(list_ptr p);
 
+int getLen(list_ptr p);
+
 list_ptr createEmptyList();
 
 #endif // LIST_H

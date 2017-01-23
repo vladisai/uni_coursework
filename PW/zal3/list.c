@@ -64,6 +64,15 @@ int isEmpty(list_ptr p) {
     return p == 0;
 }
 
+int getLen(list_ptr p) {
+    int res = 0;
+    while (p != 0) {
+        res++;
+        shift(&p);
+    }
+    return res;
+}
+
 list_ptr createEmptyList() {
     return 0;
 }
