@@ -85,16 +85,16 @@ void dispatchInitialValues(int id, long *vals, int *isInCirciut) {
     for (int i = 0; i < MAX_VARS; i++) {
         if (isInCirciut[i]) {
             if (vals[i] != LINF) {
-                fprintf(stderr, "dispatching to %d value %ld\n", i, vals[i]);
-                sendMessage(getOrCreateVariableNode(i),
-                            createStartWithValMessage(id, vals[i]));
+                message_ptr msg = createStartWithValMessage(id, vals[i]);
+                sendMessage(getOrCreateVariableNode(i), msg);
+                deleteMessage(msg);
             } else {
-                fprintf(stderr, "dispatching to %d undefined value\n", i);
+                message_ptr msg = createStartMessage(id);
                 sendMessage(getOrCreateVariableNode(i), createStartMessage(id));
+                deleteMessage(msg);
             }
         }
     }
-    fprintf(stderr, "finished dispatching\n");
 }
 
 void dispatchConsts(int init_id) {
@@ -118,7 +118,6 @@ void killAllProcesses() {
 }
 
 void valueNodeLoop(node_ptr node) {
-    fprintf(stderr, "value node loop %ld\n", node->val);
     while (1) {
         message_ptr in = readFromAll(node->inputDescriptors);
         switch (in->type) {
@@ -146,9 +145,7 @@ void valueNodeLoop(node_ptr node) {
 
 void binaryOperationNodeLoop(node_ptr node) {
     while (1) {
-        fprintf(stderr, "binop waiting\n");
         message_ptr in = readFromAll(node->inputDescriptors);
-        fprintf(stderr, "bin read:\n");
         printMessage(in);
         switch (in->type) {
         case EXIT_MESSAGE:
@@ -173,7 +170,6 @@ void binaryOperationNodeLoop(node_ptr node) {
             if (node->isProcessed[in->init_id] != 0) {
                 break; // already processed this, ignoring
             }
-            fprintf(stderr, "end\n");
             if (node->receivedVals[in->init_id] != 0) {
                 long a = in->value;
                 long b = node->receivedVals[in->init_id]->value;
@@ -238,10 +234,8 @@ void unaryOperationNodeLoop(node_ptr node) {
 }
 
 void variableNodeLoop(node_ptr node) {
-    fprintf(stderr, "LOOP var %ld\n", node->val);
     while (1) {
         message_ptr in = readFromAll(node->inputDescriptors);
-        fprintf(stderr, "var %ld read:\n", node->val);
         printMessage(in);
         switch (in->type) {
         case EXIT_MESSAGE: {
@@ -260,7 +254,6 @@ void variableNodeLoop(node_ptr node) {
             if (getLen(node->inputDescriptors) == 1) { // only main input
                 // we didn't get an initial value, so we should just send
                 // undefined
-                fprintf(stderr, "sending 0\n");
                 message_ptr out = createUndefinedResultMessage(in->init_id);
                 writeToAll(node->outputDescriptors, out);
                 deleteMessage(out);
@@ -332,9 +325,7 @@ void startProcess(node_ptr node) {
 }
 
 void startProcessesForAllNodes() {
-    fprintf(stderr, "starting %d processes\n", nodesCount);
     for (int i = 0; i < nodesCount; i++) {
-        fprintf(stderr, "starting process %i\n", i);
         startProcess(allNodes[i]);
     }
 }

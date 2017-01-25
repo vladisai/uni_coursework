@@ -95,7 +95,6 @@ long *parseValues(char *str) {
             }
             long val = parseNumber(str, &i);
             i++;
-            fprintf(stderr, "%ld %ld parsed\n", var, val);
             if (ret[var] != LINF) {
                 free(ret);
                 return 0;
@@ -112,7 +111,6 @@ int checkReachability(long *vals, int x) {
     }
     list_ptr cur = graph[x];
     if (cur == 0 && vals[x] == LINF) {
-        fprintf(stderr, "reached %d, it's not evaluated\n", x);
         return 0;
     }
     while (cur != 0) {
@@ -127,7 +125,6 @@ int checkReachability(long *vals, int x) {
 int checkExistence(long *vals, int len) {
     for (int i = 0; i < len; i++) {
         if (vals[i] != LINF && isInCircuit[i] == 0) {
-            fprintf(stderr, "%d isn't in the circuit but is evaluated\n", i);
             return 0;
         }
     }
@@ -139,7 +136,6 @@ void createPipe(int *read, int *write) {
     if (pipe(desc) == -1) {
         // error log message
     }
-    fprintf(stderr, "created pipe from %d to %d\n", desc[0], desc[1]);
     *read = desc[0];
     *write = desc[1];
 }
@@ -167,7 +163,9 @@ int readInt(int readDescriptor) {
     if (read(readDescriptor, value, sizeof(int)) != sizeof(int)) {
         syserr("read from %d\n", readDescriptor);
     }
-    return *value;
+    int ret = *value;
+    free(value);
+    return ret;
 }
 
 long readLong(int readDescriptor) {
@@ -175,7 +173,9 @@ long readLong(int readDescriptor) {
     if (read(readDescriptor, value, sizeof(long)) != sizeof(long)) {
         syserr("read from %d\n", readDescriptor);
     }
-    return *value;
+    long ret = *value;
+    free(value);
+    return ret;
 }
 
 message_ptr readMessage(int readDescriptor) {

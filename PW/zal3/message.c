@@ -49,6 +49,7 @@ int getId(message_ptr m) {
 }
 
 void printMessage(message_ptr m) {
+#ifdef DEBUG
     fprintf(stderr, "-------------message-----------");
     switch (m->type) {
         case START_MESSAGE:
@@ -69,6 +70,7 @@ void printMessage(message_ptr m) {
     }
     fprintf(stderr, "id %d type %d val %ld\n", m->init_id, m->type, m->value);
     fprintf(stderr, "-------------message-----------\n\n");
+#endif
 }
 
 void deleteMessage(message_ptr m) {
