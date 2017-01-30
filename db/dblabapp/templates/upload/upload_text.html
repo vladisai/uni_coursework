@@ -1,0 +1,12 @@
+<h1>Paste your log here</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'dblabapp:process_upload_text' %}" method="post" id="form">
+{% csrf_token %}
+    <p> Log: </p>
+    <textarea form="form" cols="180" rows="40" name="log_text" id="log_text"></textarea>
+    <p> Comment: </p>
+    <input type="text" name="comment" id="comment" value="" />
+    <input type="submit" value="Send" />
+</form>
