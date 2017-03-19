@@ -1,0 +1,242 @@
+
+process reader[i : 1..M] {
+    send lib.wantToRead(i)
+    receive readPerm()
+    read()
+    if (changing) {
+        send shiftToWrite(i)
+        receive(writePerm)
+        write()
+        send lib.finishedWriting
+    } else {
+        send lib.finishedReading
+    }
+}
+
+process writer[i : 1..M] {
+    send lib.wantToWrite(i)
+    receive writePerm()
+    write()
+    if (changing) {
+        send shiftToRead(i)
+        receive readPerm;
+        read()
+        send lib.finshedReading;
+   } else {
+        send lib.finishedWriting;
+    }
+}
+
+void waitForEmpty(readers) {
+    while (readers > 0) {
+        select
+            on finishedReading:
+                readers--;
+            on shiftToWrite:
+                readers--
+                waitForEmpty(readers)
+                send writePerm
+                receive finishedWriting
+    }
+}
+
+process lib {
+    int readers = 0
+    while (true) {
+       select :
+           on wantToWrite(i):
+                waitForEmpty()
+                send writer[i].writePerm()
+                select
+                    on shiftToRead:
+                        send readPerm
+                    on finishedWriting:
+                        writers--;
+
+           on wantToRead(i):
+                readers++
+                send reader[i].readPerm()
+
+           on finishedReading;
+                readers--
+
+           on shiftToWrite:
+                waitForEmpty()
+                send readPerm
+                receive finishedWriting
+    }
+}
+
+---------------------
+pholosophers with lackey
+
+process philosopher[i: 1..N]
+{
+    while (true) {
+        think();
+        tsRead("pozwolenie");
+        tsRead("fork %d", i - 1);
+        tsRead("fork %d", i);
+
+        eat();
+
+        tsPut("fork %d", i - 1);
+        tsPut("fork %d", i);
+        tsPut("Pozwolenie");
+    }
+}
+
+---------------------------
+sorting table
+
+process P[id : 1..N] {
+    int x;
+    put(x);
+    x = getMin(id);
+}
+
+void put(x) {
+    send q[1].put(x);
+}
+
+int getMin(){ 
+    send q[1].get();
+    receive q[1].res(x);
+    return x;
+}
+
+process q[id: 1..M] {
+    int val = -1
+    select {
+       on put(x):
+        if (noval)
+            val = x
+        else if (val > x)
+            send qnext.put(val)
+            val = x
+        else
+            send qnext.put(x)
+      on get:
+        send val;
+    }
+}
+
+----------------------
+process Client(id) {
+    while (true) {
+        send firm.query()
+        receive first;
+        send first.my_work;
+        receive finished;
+    }
+}
+
+process Employee(id) {
+    while (true) {
+        send firm.readyToWork(id, skill);
+        receive next;
+        receive work;
+        do_work(work);
+        send next.work(work);
+    }
+}
+
+process Firm() {
+    while (true) {
+        receive query()
+        cskill = 0
+        last = -1
+        while (cskill < P) {
+            receive readyToWork(id, skill); 
+            cskill += skill
+            if last == -1:
+                client.send(id)
+            else:
+                last.send(id)
+            last = id
+        }
+        last.send(client)
+    }
+}
+
+----------
+----------
+----------
+
+process worker[id : 1..N] {
+    while (true) {
+        portion p;
+        produce(p);
+        send helper[id].trade(p);
+        receive p;
+        consume(p);
+    }
+}
+
+process helper[id : 1..N] {
+    int mval = -1;
+    bool sent = 0;
+    bool token = (id % 2);
+    send next.token();
+    while (true) {
+       select 
+            on trade(p):
+                mval = p;
+                mtype = type(p)
+            on chg(p):
+                if (p == mtype && pid != id)
+                    send worker[id].p
+                else if (mval == 0)
+                    send next.chg(p)
+                else
+                    send next.chp(mval)
+                    mval = p
+
+             on token:
+                if (mval == 0)
+                    send next.token()
+                else
+                    send next.chg(mval)
+                    mval = 0
+    }
+}
+
+
+----------------
+---exchangers---
+----------------
+
+precess Producer[i] {
+    while (true) {
+        produce(p);
+        send buffer[i].put(p)
+    }
+}
+
+process consumer[i] {
+    while (true) {
+        send buffer[i].get
+        receive x
+        consume(x);
+    }
+}
+
+process chgr[i] {
+    while (true) {
+        noncs();
+        send buf[i].getc() 
+        receive buf[i].vala
+        send buf[i + 1].getc()
+        receive buf[i + 1].valb
+        if (vala && valb) != -1)
+            a = buf[i].geta()
+            b = buf[i].getb()
+            buf[i].put(valb)
+            buf[i + 1].put(vala)
+        else
+            if (vala != -1)
+                buf[i].put(vala)
+            if (valb != -1)
+                buf[i].put(valb)
+    }
+}

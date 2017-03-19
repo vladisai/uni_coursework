@@ -1,0 +1,17 @@
+In file included from horror_example.cc:1:
+./citizen.h:80:45: error: nested name specifier 'Citizen<T, minAge, maxAge, canAttack>::' for declaration does not refer into a class, class template or class template partial specialization
+void Citizen<T, minAge, maxAge, canAttack>::takeDamage(T damage)
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+./citizen.h:82:5: error: use of undeclared identifier 'health'
+    health -= damage;
+    ^
+./citizen.h:82:15: error: use of undeclared identifier 'damage'
+    health -= damage;
+              ^
+./citizen.h:83:5: error: use of undeclared identifier 'health'
+    health = max(health, 0);
+    ^
+./citizen.h:83:18: error: use of undeclared identifier 'health'
+    health = max(health, 0);
+                 ^
+5 errors generated.

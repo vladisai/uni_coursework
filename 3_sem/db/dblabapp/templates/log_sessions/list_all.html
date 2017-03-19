@@ -1,0 +1,29 @@
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<style type="text/css">
+td
+{
+    padding:0 25px 0 15px;
+}
+</style>
+
+<h1>List of all recorded sessions:</h1>
+
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Comment</th>
+        <th>Link</th>
+        <th>Delete</th>
+    </tr>
+    {% for session in sessions_list %}
+    <tr>
+        <td> {{session.date|date:'d M Y'}} </td>
+        <td> {{session.comment}} </td>
+        <td> <a href="{% url 'dblabapp:list_log_entries' session.id %}">link</a></td>
+        <td> <a href="{% url 'dblabapp:delete_session' session.id %}">delete</a></td>
+    </tr>
+    {% endfor %}
+
+</table>
+

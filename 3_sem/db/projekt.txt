@@ -1,0 +1,7 @@
+Funkcje aplikacji, analizującej dmesg
+    - Wyświetlenie wiadomości otrzymanych w określonym okresie czasu.
+    - Wyświetlenie wiadomości otrzymanych od określonego sterownika.
+    - Wyszukiwanie po nazwie nadawcy oraz po treści wiadomości.
+    - Zapisywanie wiadomości.
+    - Możliwość zapisywania pliku logów, oraz porównywania dwóch plików (pliki
+      się porównuje wiadomość po wiadomości od najwcześniejszych do najpóźniejszych).

@@ -1,0 +1,171 @@
+This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016/Arch Linux) (preloaded format=xelatex 2016.12.1)  9 MAR 2017 10:56
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**/home/vlad/studia/uni_coursework/3_sem/PW/zal2/raport/raport.tex
+(/home/vlad/studia/uni_coursework/3_sem/PW/zal2/raport/raport.tex
+LaTeX2e <2016/03/31> patch level 3
+Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
+(/usr/share/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2014/09/29 v1.4h Standard LaTeX document class
+(/usr/share/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2016/06/19 v1.99m Standard LaTeX package
+
+(/usr/share/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2016/06/19 v1.99m Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
+(/usr/share/texmf-dist/tex/latex/polski/polski.sty
+Package: polski 2008/02/24 v1.3.3 Polish language package
+
+Document language package `polski' v1.3.3 <2008/02/24>
+) (/usr/share/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2015/03/17 v1.2c Input encoding file
+\inpenc@prehook=\toks14
+\inpenc@posthook=\toks15
+
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+) (/usr/share/texmf-dist/tex/latex/microtype/microtype.sty
+Package: microtype 2016/05/14 v2.6a Micro-typographical refinements (RS)
+
+(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+)
+\MT@toks=\toks17
+\MT@count=\count87
+LaTeX Info: Redefining \textls on input line 774.
+\MT@outer@kern=\dimen103
+LaTeX Info: Redefining \textmicrotypecontext on input line 1310.
+\MT@listname@count=\count88
+
+(/usr/share/texmf-dist/tex/latex/microtype/microtype-xetex.def
+File: microtype-xetex.def 2016/05/14 v2.6a Definitions specific to xetex (RS)
+LaTeX Info: Redefining \lsstyle on input line 255.
+)
+Package microtype Info: Loading configuration file microtype.cfg.
+
+(/usr/share/texmf-dist/tex/latex/microtype/microtype.cfg
+File: microtype.cfg 2016/05/14 v2.6a microtype main configuration file (RS)
+)) (./raport.aux)
+\openout1 = `raport.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 11.
+LaTeX Font Info:    ... okay on input line 11.
+LaTeX Info: Redefining \microtypecontext on input line 11.
+Package microtype Info: Character protrusion enabled (level 2).
+Package microtype Info: Using default protrusion set `alltext'.
+Package microtype Info: No adjustment of tracking.
+Package microtype Info: No adjustment of spacing.
+Package microtype Info: No adjustment of kerning.
+
+(/usr/share/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
+(RS)
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 12.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 12.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 12.
+Missing character: There is no ż in font ecbx1440!
+Missing character: There is no ł in font ecbx1200!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ż in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ś in font ecrm1000!
+Missing character: There is no ć in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ę in font ecrm1000!
+Missing character: There is no ż in font ecrm1000!
+Missing character: There is no ż in font ecrm1000!
+Missing character: There is no ć in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ę in font ecrm1000!
+Missing character: There is no ł in font ecbx1200!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ć in font ecrm1000!
+Missing character: There is no ś in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ń in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ż in font ecrm1000!
+Missing character: There is no ż in font ecrm1000!
+Missing character: There is no ć in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ę in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ę in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no Ż in font ecrm1000!
+Missing character: There is no ć in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ę in font ecrm1000!
+Missing character: There is no ć in font ecrm1000!
+Missing character: There is no ń in font ecrm1000!
+Missing character: There is no ń in font ecrm1000!
+Missing character: There is no ł in font ecrm1000!
+Missing character: There is no ę in font ecrm1000!
+Missing character: There is no ń in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+Missing character: There is no ś in font ecrm1000!
+Missing character: There is no ż in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 35.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 35.
+Missing character: There is no ś in font ecrm1000!
+Missing character: There is no ć in font ecrm1000!
+Missing character: There is no ą in font ecrm1000!
+
+Underfull \hbox (badness 10000) in paragraph at lines 32--51
+
+ []
+
+[1
+
+] (./raport.aux) ) 
+Here is how much of TeX's memory you used:
+ 1877 strings out of 493589
+ 30169 string characters out of 6148800
+ 112607 words of memory out of 5000000
+ 5327 multiletter control sequences out of 15000+600000
+ 10990 words of font info for 29 fonts, out of 8000000 for 9000
+ 1347 hyphenation exceptions out of 8191
+ 31i,6n,38p,258b,198s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on raport.pdf (1 page).

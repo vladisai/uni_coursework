@@ -1,0 +1,60 @@
+process server() {
+    a[N][N]
+    read(a)
+    for i in 1..N;
+        for j in 1..N:
+            ids[i][j] = id
+            receive ready(id)
+
+    for i in 1..N;
+        for j in 1..N:
+            send do(id, i, j, neighbours)
+
+    res[N][N]
+    for i in 1..N:
+        for j in 1..N:
+            receive ready(x, y, val)
+            res[x][y] = val
+
+    write(res)
+}
+
+process helper[id : 1..K] {
+    while (true) {
+        noncs();
+        send ready;
+        receive x, y, neighbors;
+        if (x == 0)
+            send sumRow(nx, y, val)
+        if (y == 0)
+            send sumCol(x, ny, val)
+
+        while (!colSum or !rowSum) {
+            select {
+                if (x > 0)
+                    on sumCol(val):
+                        if (x < N -1)
+                            send sumCol(nx, val + mval)
+                        else
+                            colSum = val + mval
+                            send readySumCol(px, colSum)
+                if (y > 0)
+                    on sumRow(val):
+                        if (y < N -1 )
+                            send sumRow(ny, val + mval)
+                        else
+                            rowSum = val + mval
+                            send readySumRow(py, rowSum)
+                if (y < N - 1)
+                    on readySumRow(sum)
+                        rowSum = sum
+                        send readySumRow(py, rowSum)
+                if (x < N - 1)
+                    on readySumCol(sum)
+                        rowCol = sum
+                        send readySumCol(py, colSum)
+            }
+        }
+        send ready(x, y, rowSum * colSum)
+    }
+}

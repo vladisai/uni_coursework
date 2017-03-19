@@ -1,0 +1,53 @@
+\documentclass[a4paper]{article}
+\author{Uladzislau Sobal ws374078}
+\title{Raport dla zadania zaliczeniowego}
+\usepackage[T1]{fontenc}
+\usepackage{polski}
+\usepackage[utf8x]{inputenc}
+\usepackage{microtype}
+%\usepackage{polyglossia}
+%\setdefaultlanguage[babelshorthands]{polish}
+%\usepackage[Ligatures=TeX]{fontspec}
+\begin{document}
+\maketitle
+\section*{Implementacja i używane optymalizacje}
+
+\subsection*{Kompresja wierzchołków}
+Za pomocą hash mapy kompresowane są indeksy wszystkich wierzchołków żeby 
+onie były w przedziale od 0 do N - 1, gdzie N - ilość wierzchołków. Dzięki 
+tej kompresji, można używać zwykłych wektorów zamiast map 
+przy obliczaniu. Za kompresję jest odpowiedzialna klasa CoordinateCompressor.
+
+\subsection*{Podział pracy}
+Wierzchołki dla których trzeba obliczyć wartości są przechowywane w wektorze importantVertices, z którego procesy biorą 
+indeksy kiedy kończą swoje poprzednie zadanie za pomocą funkcji getNextVertexIndex.
+
+\subsection*{Przekazywanie wyników}
+Każdy proces wykonuje funkcje verticesProcessor. Ta funkcja dopóki może probuje otrzymać wierzchołek dla obrobienia, dla którego wywołuje funkcję processVertex, która wykonuje jedną iterację 
+algorytma Brandesa dla danego wierzchołka. Żeby 
+przyspieszyć działanie, ta funkcja przyjmuje jako argument wektor, do którego ona będzie dodawać wyniki.
+W końcu, kiedy proces skończył pracę, on blokuje wektor wynika końcowego bc za pomocą muteksa bcMutex i zapisuje do bc swoje obliczone wartości.
+
+\section*{Wyniki optymalizacji}
+W tabeli poniżej podane są czasy wykonania oraz przyspieszenie na danych z wikipedii na komputerze students:
+\\
+\\
+\begin{tabular}{|c|c|c|}
+    \hline
+    Ilość wątków & Czas (sekundy) & Przyspieszenie \\
+    \hline
+    1 & 12.7 & 1\\
+    2 & 7.3 & 1.74\\
+    3 & 4.33 & 2.933\\
+    4 & 3.73 & 3.405\\
+    5 & 3.16 & 4.019\\
+    6 & 2.78 & 4.568\\
+    7 & 2.19 & 5.799\\
+    8 & 1.73 & 7.341\\
+\hline
+
+
+\end{tabular}
+
+\end{document}
+

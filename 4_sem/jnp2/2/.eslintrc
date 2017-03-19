@@ -1,0 +1,15 @@
+{
+  "parserOptions": {
+      "ecmaVersion": 6, // Włącz rozpoznawanie składni EcmaScript 6 (let, const, arrow functions itd.)
+      "sourceType": "module"  // Załoz że analizowane programy to moduły (zezwalaj na konstrukcje związane z modularyzacją)
+    },
+  "env": {
+    "node": true  // Założ uruchomienie programu w środowisku node.js (dostępność wbudowanych obiektow, np. process)
+    },
+  "extends": "eslint:recommended",  // Używaj rekomendowanego zbioru reguł ESLint (http://eslint.org/docs/rules/) ...
+  "rules": {
+    "no-console": "off",  // ... z wyłączeniem reguły 'no-console'
+    "eqeqeq": 2,  // Wymuszaj korzystanie z operatorów === i !== do porównań
+    "no-eval": 2  // Zakaż korzystania z funkcji eval
+    }
+}

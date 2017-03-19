@@ -1,0 +1,67 @@
+
+process Writer[id] {
+    while (true) {
+        send Library.wantToWrite(id)
+        receive canWrite
+        write()
+        send Library.finishedWriting(id)
+    }
+}
+
+process Reader[id] {
+    while (true) {
+        send Library.wantToRead(id)
+        receive Library.canRead(id)
+        read()
+        send Library.finishedReading(id)
+    }
+}
+
+void waitForEmpty(reading) {
+    while (reading > 0) {
+        select
+            for i in [0..readers] on finishedReading(i) {
+                reading--
+            }
+    }
+}
+
+process Library {
+    reading = 0
+    writing = 0
+    wantToWrite = 0
+    while (true) {
+        select 
+            on wantToRead(id) {
+                send reader[id].canRead()
+            }
+            on wantToWrite(id) {
+                waitForEmpty()
+                send writer[id].canWrite()
+                receive finishedWriting(id)
+            }
+    }
+}
+
+process Philosopher[id] {
+    while (true) {
+        send Waiter.hungry(id);
+        receive eat()
+        eat()
+        send Waiter.finished(id);
+    }
+}
+
+process Waiter {
+    while (true) {
+        select 
+        for i in (1..N):
+            if (free[i] && free[(i + 1) % N]) on hungry(i):
+                free[i] = 0
+                free[id + 1] = 0
+                send Philosopher[id].canEat()
+            on finished(id):
+                free[id] = 1
+                free[id + 1] = 1
+    }
+}

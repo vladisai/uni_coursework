@@ -1,0 +1,8 @@
+create or replace trigger driver_cleanup
+after delete
+on dblabapp_logentry
+begin
+delete from dblabapp_driverentry where id not in 
+(select driver_id from dblabapp_logentry);
+end;
+/
