@@ -1,31 +1,42 @@
 from django.db import models
 
+
 class Wojewodztwo(models.Model):
-    name = models.CharField(max_length = 200)
+    name = models.CharField(max_length=200)
+    voters = models.IntegerField(default=0)
+    ballots = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
+
 
 class Powiat(models.Model):
     wojewodztwo = models.ForeignKey(Wojewodztwo)
-    name = models.CharField(max_length = 200)
+    name = models.CharField(max_length=200)
+    ballots = models.IntegerField(default=0)
+    voters = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
+
 
 class Gmina(models.Model):
     powiat = models.ForeignKey(Powiat)
-    name = models.CharField(max_length = 200)
+    name = models.CharField(max_length=200)
     code = models.IntegerField()
+    ballots = models.IntegerField(default=0)
+    voters = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name
+
 
 class Candidate(models.Model):
-    name = models.CharField(max_length = 200)
+    name = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
+
 
 class Vote(models.Model):
     wojewodztwo = models.ForeignKey(Wojewodztwo)
@@ -35,9 +46,8 @@ class Vote(models.Model):
     votes = models.IntegerField()
 
     def __str__(self):
-        return 'In {0}, {1}, {2}, {3} people voted for {4}'.format(self.wojewodztwo, 
-                self.gmina,
-                self.powiat, 
-                self.votes, 
-                self.candidate)
-
+        return 'In {0}, {1}, {2}, {3} people voted for {4}'.format(self.wojewodztwo,
+                                                                   self.gmina,
+                                                                   self.powiat,
+                                                                   self.votes,
+                                                                   self.candidate)

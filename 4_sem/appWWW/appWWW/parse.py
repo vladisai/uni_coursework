@@ -16,7 +16,6 @@ if __name__ == "__main__":
         print(i, c)
         i += 1
 
-    import pdb; pdb.set_trace()  # XXX BREAKPOINT
     mx = 0
     for r in rows:
         mx = max(mx, int(r[5]))

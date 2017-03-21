@@ -15,6 +15,15 @@ def clean():
     Wojewodztwo.objects.all().delete()
     Candidate.objects.all().delete()
 
+def constructVote(wojewodztwo, powiat, gmina, candidate, votes):
+    vote = Vote()
+    vote.wojewodztwo = wojewodztwo
+    vote.gmina = gmina
+    vote.powiat = powiat
+    vote.candidate = candidate
+    vote.votes = votes 
+    return vote
+
 def populate():
     cols, rows = parse.read()
 
@@ -29,13 +38,24 @@ def populate():
 
             for i in range(11, 23):
                 candidate, _ = Candidate.objects.get_or_create(name = cols[i])
-                vote = Vote()
-                vote.wojewodztwo = wojewodztwo
-                vote.gmina = gmina
-                vote.powiat = powiat
-                vote.candidate = candidate
-                vote.votes = int(row[i])
+                vote = constructVote(wojewodztwo, powiat, gmina, candidate, row[i])
                 all_votes.append(vote)
+
+            voters = int(row[6])
+            ballots = int(row[7])
+
+            gmina.voters += voters
+            gmina.ballots += ballots
+
+            powiat.voters += voters
+            powiat.ballots += ballots
+
+            wojewodztwo.voters += voters
+            wojewodztwo.ballots += ballots
+
+            gmina.save()
+            powiat.save()
+            wojewodztwo.save()
 
             print(len(all_votes))
 

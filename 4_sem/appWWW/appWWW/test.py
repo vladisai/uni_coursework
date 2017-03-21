@@ -5,4 +5,5 @@ django.setup()
 
 from elections.models import *
 
-print(Vote.objects.all())
+print(Wojewodztwo.objects.all()[0].ballots)
+

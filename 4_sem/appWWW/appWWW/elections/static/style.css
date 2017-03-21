@@ -1,0 +1,74 @@
+body {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 13px;
+}
+
+table, th, td {
+    border-collapse: collapse;
+}
+
+table {
+    width: 100%;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+
+tr:nth-child(even) {background-color: #F1F5FF}
+
+tr:hover {background-color: #CAD3E8}
+
+.chart {
+    padding-left: 80px;
+    display: flex;
+    height: 450px;
+}
+
+.bar {
+    background-color: #193778;
+    margin: 0 12px 0 12px;
+    flex-grow: 1;
+    align-self: flex-end;
+}
+
+.bar_wrap {
+    position: relative;
+    margin-top: 26px;
+    height: 60%;
+    display: flex;
+}
+
+.bar > div {
+    position: relative;
+    bottom: 20px;
+}
+
+.bar_wrap > .legend {
+    transform: rotate(310deg) scale(1) skew(1deg) translate(0px);
+    align-self: flex-end;
+    position: absolute;
+    top: 370px;
+    right: -15px;
+    width: 250px;    
+    text-align: right;
+    white-space: nowrap;
+}
+
+#charts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#map_chart {
+    width: 550px;
+}
+
+h2 {
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+}
