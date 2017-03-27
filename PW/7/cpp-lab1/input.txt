@@ -1,8 +1,0 @@
-i 
-6
-data-txt/burza.txt
-data-txt/komedia-omylek.txt
-data-txt/makbet.txt
-data-txt/poskromienie-zlosnicy.txt
-data-txt/romeo-i-julia.txt
-data-txt/sen-nocy-letniej.txt

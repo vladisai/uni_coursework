@@ -5,5 +5,4 @@ django.setup()
 
 from elections.models import *
 
-print(Wojewodztwo.objects.all()[0].ballots)
-
+from django.template.defaultfilters import slugify

@@ -1,7 +1,0 @@
-main.cpp:54:7: warning: unused variable 'z' [-Wunused-variable]
-        auto z = Mummy<int>(10, 10);
-             ^
-1 warning generated.
-/tmp/main-c8275c.o: In function `SmallTown<Monster<float, (monster)2>, int, 0, 23, Citizen<int, 18, 100, true>, Citizen<int, 18, 100, false>, Citizen<long, 11, 17, false> >::tick(int)':
-main.cpp:(.text._ZN9SmallTownI7MonsterIfL7monster2EEiLi0ELi23EJ7CitizenIiLi18ELi100ELb1EES3_IiLi18ELi100ELb0EES3_IlLi11ELi17ELb0EEEE4tickEi[_ZN9SmallTownI7MonsterIfL7monster2EEiLi0ELi23EJ7CitizenIiLi18ELi100ELb1EES3_IiLi18ELi100ELb0EES3_IlLi11ELi17ELb0EEEE4tickEi]+0x1a): undefined reference to `Fibonacci<int, 23>::numbers'
-clang-3.9: error: linker command failed with exit code 1 (use -v to see invocation)
