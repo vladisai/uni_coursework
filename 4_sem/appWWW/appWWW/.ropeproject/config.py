@@ -1,38 +1,31 @@
-# The default ``config.py``
-# flake8: noqa
+# The default ``config.py`` flake8: noqa
 
 
-def set_prefs(prefs):
-    """This function is called before opening the project"""
+def set_prefs(prefs): """This function is called before opening the project"""
 
-    # Specify which files and folders to ignore in the project.
-    # Changes to ignored resources are not added to the history and
-    # VCSs.  Also they are not returned in `Project.get_files()`.
-    # Note that ``?`` and ``*`` match all characters but slashes.
-    # '*.pyc': matches 'test.pyc' and 'pkg/test.pyc'
-    # 'mod*.pyc': matches 'test/mod1.pyc' but not 'mod/1.pyc'
-    # '.svn': matches 'pkg/.svn' and all of its children
-    # 'build/*.o': matches 'build/lib.o' but not 'build/sub/lib.o'
-    # 'build//*.o': matches 'build/lib.o' and 'build/sub/lib.o'
-    prefs['ignored_resources'] = [
-        '*.pyc', '*~', '.ropeproject', '.hg', '.svn', '_svn',
-        '.git', '.tox', '.env', 'env', 'venv', 'node_modules',
-        'bower_components'
-    ]
+    # Specify which files and folders to ignore in the project.  Changes to
+    # ignored resources are not added to the history and VCSs.  Also they are
+    # not returned in `Project.get_files()`.  Note that ``?`` and ``*`` match
+    # all characters but slashes.  '*.pyc': matches 'test.pyc' and
+    # 'pkg/test.pyc' 'mod*.pyc': matches 'test/mod1.pyc' but not 'mod/1.pyc'
+    # '.svn': matches 'pkg/.svn' and all of its children 'build/*.o': matches
+    # 'build/lib.o' but not 'build/sub/lib.o' 'build//*.o': matches
+    # 'build/lib.o' and 'build/sub/lib.o'
+    prefs['ignored_resources'] = [ '*.pyc', '*~', '.ropeproject', '.hg',
+            '.svn', '_svn', '.git', '.tox', '.env', 'env', 'venv',
+            'node_modules', 'bower_components' ]
 
-    # Specifies which files should be considered python files.  It is
-    # useful when you have scripts inside your project.  Only files
-    # ending with ``.py`` are considered to be python files by
-    # default.
+    # Specifies which files should be considered python files.  It is useful
+    # when you have scripts inside your project.  Only files ending with
+    # ``.py`` are considered to be python files by default.
     #prefs['python_files'] = ['*.py']
 
-    # Custom source folders:  By default rope searches the project
-    # for finding source folders (folders that should be searched
-    # for finding modules).  You can add paths to that list.  Note
-    # that rope guesses project source folders correctly most of the
-    # time; use this if you have any problems.
-    # The folders should be relative to project root and use '/' for
-    # separating folders regardless of the platform rope is running on.
+    # Custom source folders:  By default rope searches the project for finding
+    # source folders (folders that should be searched for finding modules).
+    # You can add paths to that list.  Note that rope guesses project source
+    # folders correctly most of the time; use this if you have any problems.
+    # The folders should be relative to project root and use '/' for separating
+    # folders regardless of the platform rope is running on.
     # 'src/my_source_folder' for instance.
     #prefs.add('source_folders', 'src')
 
@@ -40,16 +33,15 @@ def set_prefs(prefs):
     #prefs.add('python_path', '~/python/')
 
     # Should rope save object information or not.
-    prefs['save_objectdb'] = True
-    prefs['compress_objectdb'] = False
+    prefs['save_objectdb'] = True prefs['compress_objectdb'] = False
 
     # If `True`, rope analyzes each module when it is being saved.
     prefs['automatic_soa'] = True
     # The depth of calls to follow in static object analysis
     prefs['soa_followed_calls'] = 0
 
-    # If `False` when running modules or unit tests "dynamic object
-    # analysis" is turned off.  This makes them much faster.
+    # If `False` when running modules or unit tests "dynamic object analysis"
+    # is turned off.  This makes them much faster.
     prefs['perform_doa'] = True
 
     # Rope can check the validity of its object DB when running.

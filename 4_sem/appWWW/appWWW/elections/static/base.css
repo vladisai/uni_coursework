@@ -1,0 +1,69 @@
+body {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 13px;
+}
+
+table, th, td {
+    border-collapse: collapse;
+}
+
+table {
+    width: 100%;
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+
+tr:nth-child(even) {background-color: #F1F5FF}
+
+tr:hover {background-color: #CAD3E8}
+
+
+.horizontal_bar_chart {
+    width: 250px;
+    display: flex;
+    height: 30px;
+}
+
+.horizontal_bar_tooltip {
+    padding: 5px;
+    position: absolute;
+    top: 35px;
+    visibility: hidden;
+    background-color: #F1F5FF;
+    border-width: 1px;
+    border-color: #193778;
+    border-style: solid;
+    border-radius: 8px;
+    z-index: 1;
+}
+
+.horizontal_bar_element {
+    position: relative;
+}
+
+.horizontal_bar_element:hover .horizontal_bar_tooltip {
+    visibility: visible;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a:hover{
+    color: #2020a0;
+}
+
+.bar {
+    background-color: #193778;
+}
+
+h2 {
+    width: 100%;
+    text-align: center;
+}
+
+

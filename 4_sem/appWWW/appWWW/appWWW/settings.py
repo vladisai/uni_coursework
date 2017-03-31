@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -51,6 +50,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'appWWW.urls'
+
+GEN_MODE = True
+GEN_PATH = './gen'
+GEN_CSS_PATH = './gen/css'
 
 TEMPLATES = [
     {

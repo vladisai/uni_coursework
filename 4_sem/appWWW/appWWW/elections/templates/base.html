@@ -1,11 +1,14 @@
 <!DOCTYPE html>
+{% if css_dir is not defined %}
+{% set css_dir = "/static/" %}
+{% endif %}
 <html>
     <head>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
-        <link href="/static/style.css" media="screen and (min-width: 850px)" rel="stylesheet" type="text/css"/>
-        <link href="/static/style_mobile.css" media="screen and (max-width: 851px)" rel="stylesheet" type="text/css"/>
+        <link href="{{ css_dir }}style.css" media="screen and (min-width: 850px)" rel="stylesheet" type="text/css"/>
+        <link href="{{ css_dir }}style_mobile.css" media="screen and (max-width: 851px)" rel="stylesheet" type="text/css"/>
         <title> Wybory 2000: {{ title }}</title>
     </head>
     <body>

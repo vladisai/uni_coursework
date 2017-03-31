@@ -9,6 +9,8 @@ from functools import reduce
 
 from django.template.loader import render_to_string
 
+from django.conf import settings
+
 def render(tpl_path, context):
     path, filename = os.path.split(tpl_path)
     return jinja2.Environment(
@@ -16,21 +18,30 @@ def render(tpl_path, context):
     ).get_template(filename).render(context)
 
 
-def renderHTML(q, model, unitName, title, json=False):
+def renderHTML(region, title, json=False):
+    q = region.buildQ()
     vals = {'candidates_stats': buildCandidatesStats(q),
-            'regions_data': buildRegionsData(model.objects.filter(q), unitName),
+            'regions_data': buildRegionsData(region.subunit().objects.filter(q)),
+            'region_info': region,
             'title': title,
-            'unit': unitName,
+            'unit': region.subunit_str,
             }
     if json:
         vals['data'] = buildJSONData()
+    if settings.GEN_MODE:
+        vals['css_dir'] = region.css_dir()
 
     return render('elections/templates/stats.html', vals)
 
-def renderSimplifiedHTML(q, title):
+
+def renderSimplifiedHTML(region, title):
+    q = region.buildQ()
     vals = {'candidates_stats': buildCandidatesStats(q),
+            'region_info': region,
             'title': title,
             }
+    if settings.GEN_MODE:
+        vals['css_dir'] = region.css_dir()
 
     return render('elections/templates/stats.html', vals)
 
@@ -64,6 +75,7 @@ def getCandidatesVotes(candidates, q=Q()):
     votes = list(map(lambda c: c / total * 100, votes))
     return votes
 
+
 def getCandidates():
     return Candidate.objects.all().order_by('name')
 
@@ -77,9 +89,11 @@ def buildRow(candidates, q=Q()):
     total = list(map(lambda x: (x[0], x[1], x[1] / mx * 100), total))
     return total
 
+
 def buildCandidatesStats(q=Q()):
     candidates = getCandidates()
     return buildRow(candidates, q)
+
 
 def buildColors():
 
@@ -105,6 +119,7 @@ def buildColors():
 
     return cols
 
+
 def getCandidatesAndVotes(q=Q()):
     candidates = getCandidates()
     votes = getCandidatesVotes(candidates, q)
@@ -114,6 +129,7 @@ def getCandidatesAndVotes(q=Q()):
 
     return total
 
+
 def buildHorizontalBar(q=Q()):
     cols = buildColors()
     votes = getCandidatesAndVotes(q)
@@ -121,6 +137,7 @@ def buildHorizontalBar(q=Q()):
     res = map(lambda x: (str(x[0][0]), x[0][1], x[1]), res)
     res = list(res)
     return res
+
 
 def buildPieChartData(q=Q()):
     getCandidatesAndVotes(q)
@@ -144,12 +161,8 @@ def buildPieChartData(q=Q()):
     json_data = json.dumps(data, sort_keys=True, indent=4)
     return json_data
 
-def buildRegionsData(objects, unitName):
+
+def buildRegionsData(objects):
     for o in objects:
-        o.d = 3
-        kwargs = {unitName.lower() : o}
-        q = Q(**kwargs)
-        o.bar = buildHorizontalBar(q)
+        o.bar = buildHorizontalBar(o.buildQ())
     return objects
-
-

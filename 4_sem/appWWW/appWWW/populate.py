@@ -31,10 +31,10 @@ def populate():
 
         all_votes = []
         for row in rows:
-            wojewodztwo, _ = Wojewodztwo.objects.get_or_create(name = row[0], slug=slugify(row[0]))
-            # okreg = Okreg.objects.get_or_create(row[1])
-            powiat, _ = Powiat.objects.get_or_create(name = row[4], wojewodztwo = wojewodztwo, slug=slugify(row[4]))
-            gmina, _ = Gmina.objects.get_or_create(name = row[3], code = row[2], powiat = powiat, slug=slugify(row[3]))
+            kraj, _ = Kraj.objects.get_or_create(name = 'Polska')
+            wojewodztwo, _ = Wojewodztwo.objects.get_or_create(name = row[0])
+            powiat, _ = Powiat.objects.get_or_create(name = row[4], wojewodztwo = wojewodztwo)
+            gmina, _ = Gmina.objects.get_or_create(name = row[3], code = row[2], powiat = powiat)
 
             for i in range(11, 23):
                 candidate, _ = Candidate.objects.get_or_create(name = cols[i])
@@ -53,9 +53,13 @@ def populate():
             wojewodztwo.voters += voters
             wojewodztwo.ballots += ballots
 
+            kraj.voters += voters
+            kraj.ballots += ballots
+
             gmina.save()
             powiat.save()
             wojewodztwo.save()
+            kraj.save()
 
             print(len(all_votes))
 

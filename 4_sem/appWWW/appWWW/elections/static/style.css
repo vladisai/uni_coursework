@@ -49,3 +49,8 @@
 .desktop_hide {
     display: none;
 }
+
+.general_stats {
+    width: 100%;
+    text-align: center;
+}
