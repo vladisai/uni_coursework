@@ -1,0 +1,14 @@
+Żeby zobaczyć działanie zmienionego bootloader'a, trzeba uruchomić w tej
+kolejności:
+
+make all (kompilacja asm plików)
+vm_setup.sh (tworzy kopię maszyny wirtualnej)
+vm_run.sh (uruchamia maszynę wirtualną)
+upload.sh (przez scp kopiuje potrzebne pliki do maszyny wirtualnej, 'so' w tym
+skrypcie to skrót na root@localhost -p 15881, hasło 'root')
+
+dalej, już na maszynie wirtualnej 
+bash prepare.sh
+reboot
+
+przy następnym uruchomieniu powinno się pojawić 'Enter your name'

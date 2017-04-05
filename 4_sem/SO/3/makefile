@@ -4,7 +4,8 @@ loop: loop.asm
 jumper: jumper.asm
 	nasm -f bin jumper.asm -o jumper 
 
-all: loop jumper
+all: loop jumper 
 
 run:
-	qemu-system-x86_64 -drive format=raw,file=jumper
+	./print_name
+	#qemu-system-x86_64 -drive format=raw,file=jumper

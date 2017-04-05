@@ -14,7 +14,7 @@ SPACE: db 0x20
 
 ENTER: db 0x0d
 
-NAME: TIMES 15 db 0x0
+NAME: TIMES 32 db 0x0
 
 print_char:
     mov ah, 0xe
@@ -119,13 +119,27 @@ start:
     call print_str
 
     xor ax, ax
+    mov bx, NAME
+    mov ah, 0x03
+    mov al, 0x01
+    mov dl, 0x80
+    xor dh, dh
+    mov cx, 0x0008
+    int 0x13 ; write the name to disk
+
+    xor ax, ax
     mov bx, 0x7c00
     mov ah, 0x02
     mov al, 0x01
     mov dl, 0x80
     xor dh, dh
     mov cx, 0x0003
-    int 0x13
+    int 0x13 ; read
+
+    mov cx, 0fh
+    mov dx, 8480h
+    mov ah, 86h
+    int 15h ; sleep
 
     jmp 0x7c00
 
