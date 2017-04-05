@@ -2,7 +2,8 @@
 kolejności:
 
 make all (kompilacja asm plików)
-vm_setup.sh (tworzy kopię maszyny wirtualnej)
+vm_setup.sh (tworzy kopię maszyny wirtualnej, zakłada się że w tym samym
+katalogu jest plik minix.img z obrazem minix'a)
 vm_run.sh (uruchamia maszynę wirtualną)
 upload.sh (przez scp kopiuje potrzebne pliki do maszyny wirtualnej, 'so' w tym
 skrypcie to skrót na root@localhost -p 15881, hasło 'root')
