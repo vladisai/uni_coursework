@@ -29,7 +29,7 @@ start:
     mov cx, 0x0002
     int 0x13
 
-    jmp 0x8000
+    jmp 0:0x8000
 
     times 510 - ($-$$) db 0
     dw 0xaa55

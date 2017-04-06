@@ -102,6 +102,8 @@ end_mem:
 start:
     xor ax, ax
     mov ss, ax     ; po tej instrukcji procesor blokuje przerwania na czas wykonania kolejnej instrukcji
+    mov es, ax
+    mov ds, ax
     mov sp, 0x8000 ; rejestr sp musi być załadowany natychmiast po załadowaniu rejestru ss
 
     mov ax, ENTER_NAME_MSG 
@@ -141,6 +143,6 @@ start:
     mov ah, 86h
     int 15h ; sleep
 
-    jmp 0x7c00
+    jmp 0:0x7c00
 
     times 512 - ($-$$) db 0
