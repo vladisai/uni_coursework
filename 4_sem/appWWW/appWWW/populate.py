@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 from django.db import transaction
 
 import os
@@ -14,6 +16,7 @@ def clean():
     Powiat.objects.all().delete()
     Wojewodztwo.objects.all().delete()
     Candidate.objects.all().delete()
+    Kraj.objects.all().delete()
 
 def constructVote(wojewodztwo, powiat, gmina, candidate, votes):
     vote = Vote()
@@ -32,7 +35,7 @@ def populate():
         all_votes = []
         for row in rows:
             kraj, _ = Kraj.objects.get_or_create(name = 'Polska')
-            wojewodztwo, _ = Wojewodztwo.objects.get_or_create(name = row[0])
+            wojewodztwo, _ = Wojewodztwo.objects.get_or_create(name = row[0], kraj = kraj)
             powiat, _ = Powiat.objects.get_or_create(name = row[4], wojewodztwo = wojewodztwo)
             gmina, _ = Gmina.objects.get_or_create(name = row[3], code = row[2], powiat = powiat)
 
@@ -46,15 +49,6 @@ def populate():
 
             gmina.voters += voters
             gmina.ballots += ballots
-
-            powiat.voters += voters
-            powiat.ballots += ballots
-
-            wojewodztwo.voters += voters
-            wojewodztwo.ballots += ballots
-
-            kraj.voters += voters
-            kraj.ballots += ballots
 
             gmina.save()
             powiat.save()

@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<title>Wyniki</title>
+
+<script language="javascript">
+var gmina_id = "{{ pk }}";
+$(function () {
+    var token = sessionStorage.getItem('token', null)
+    if (token) {
+        $.ajaxSetup({
+            headers : {
+                'Authorization' : 'Token ' + token
+            }
+        });
+    } else {
+        $("#warning").text("You're not logged in");
+    }
+
+    let address = "/api/gmina/" + gmina_id + "/vote_stats/";
+    $.getJSON(address, function(data) {
+        console.log(data);
+        $('<input type="text" value=' + data.ballots + '>').attr('id', 'ballots').prependTo('#target');
+        $('<p>Kart Ważnych</p>').prependTo('#target');
+
+        $('<input type="text" value=' + data.voters + '>').attr('id', 'voters').prependTo('#target');
+        $('<p>Uprawnionych</p>').prependTo('#target');
+        if (data && data.votes_dict) {
+            for (key in data.votes_dict) {
+                console.log(key);
+                var value = data.votes_dict[key];
+                $('<input label="23" type="text" value=' + value + '>').attr('id', key).prependTo('#candidates');
+                $('<p>' + key + '</p>').prependTo('#candidates');
+            }
+        }
+    });
+
+    $('#target').submit(function(e) {
+
+        var data = {votes_dict : {} };
+        data['voters'] = $("#voters").val();
+        data['ballots'] = $("#ballots").val();
+        $("#candidates").find(":input").each(function() {
+            if (this.type === "text") {
+                data.votes_dict[this.id] = $(this).val();
+            }
+        });
+        console.log(data);
+        $.ajax({
+            type: "PUT",
+            url: address,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) { 
+                console.log(data);
+                $("#warning").text("Successfully submitted");
+            },
+            failure: function(errMsg) {
+                console.log(data);
+                $("#warning").text("An error occured");
+            }
+        });
+        e.preventDefault();
+    });
+});
+</script>
+
+</head>
+
+<body>
+{% include "client_render/login_header.html" %}
+
+<form id="target">
+
+    <div id="candidates">
+
+    </div>
+
+    <p id="warning"></p>
+
+    <input type="submit"></input>
+</form>
+
+</body>

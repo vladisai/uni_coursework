@@ -1,0 +1,86 @@
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+        <link href="/static/style.css" media="screen and (min-width: 850px)" rel="stylesheet" type="text/css"/>
+        <link href="/static/style_mobile.css" media="screen and (max-width: 851px)" rel="stylesheet" type="text/css"/>
+        <title> Wybory 2000: Wojewodztwo {{ title }} </title>
+
+        {% include "client_render/templates.html" %}
+
+        <script language="javascript">
+
+var title = "Wojewodztwo {{ title }}";
+var pk = {{ pk }};
+var wojewodztwo_data = null;
+var powiat_set_data = null;
+var path = window.location.pathname;
+
+function checkAndFillPowiatSetData() {
+    if (powiat_set_data) {
+        var context = {'unit': 'Powiat', 'data': powiat_set_data};
+        var html = stats_table_template.render(context);
+        $('#powiat_table_container').html(html);
+    }
+}
+
+function checkAndFillWojewodztwoData() {
+    if (wojewodztwo_data) {
+        var context = {'data' : wojewodztwo_data};
+        var html = general_stats_template.render(context);
+        $('#general_stats_container').html(html);
+    }
+}
+
+function requestDataFromServer() {
+    $.getJSON("/api/wojewodztwo/" + pk, function(data) {
+        wojewodztwo_data = data;
+        localStorage.setItem(path + '_wojewodztwo', JSON.stringify(wojewodztwo_data));
+        checkAndFillWojewodztwoData();
+    });
+    $.getJSON("/api/wojewodztwo/" + pk + "/powiat_set", function(data) {
+        powiat_set_data = data;
+        localStorage.setItem(path + '_powiat_set', JSON.stringify(powiat_set_data));
+        checkAndFillPowiatSetData();
+    });
+}
+
+function checkAndFillAllData() {
+    checkAndFillWojewodztwoData();
+    checkAndFillPowiatSetData();
+}
+
+function restoreCache() {
+    powiat_set_data = JSON.parse(localStorage.getItem(path + '_powiat_set', null));
+    wojewodztwo_data = JSON.parse(localStorage.getItem(path + '_wojewodztwo', null));
+}
+
+$(function() {
+    var context = {title: title};
+    var html    = header_template.render(context);
+    $('#header_container').html(html);
+    restoreCache();
+    checkAndFillAllData();
+    requestDataFromServer();
+});
+
+        </script>
+    </head>
+    <body>
+        {% include "client_render/login_header.html" %}
+        {% include "client_render/search_header.html" %}
+        <div id="header_container">
+        </div>
+
+        <div id="general_stats_container">
+        </div>
+
+        <div id="powiat_table_container">
+        </div>
+    </body>
+</html>

@@ -3,12 +3,17 @@ from django.db.models import *
 from django.template.defaultfilters import slugify
 
 from django.conf import settings
+from django.urls import reverse
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
+import elections.utility as utility
 
 
 class Region(models.Model):
     name = models.CharField(max_length=200)
-    voters = models.IntegerField(default=0)
-    ballots = models.IntegerField(default=0)
     slug = models.CharField(max_length=200)
 
     def save(self, *args, **kwargs):
@@ -17,6 +22,12 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
+
+    def getTurnout(self):
+        return round(self.getBallots() / self.getVoters() * 100, 2)
+
+    def getDistribution(self):
+        return utility.buildVotesDistributionDict(self.buildQ())
 
     class Meta:
         abstract = True
@@ -28,39 +39,47 @@ class Kraj(Region):
     def subunit(self):
         return Wojewodztwo
 
+    def getBallots(self):
+        return Gmina.objects.all().aggregate(Sum('ballots'))['ballots__sum']
+
+    def getVoters(self):
+        return Gmina.objects.all().aggregate(Sum('voters'))['voters__sum']
+
     def buildQ(self):
         return Q()
 
     def path(self):
-        format_str = '/'
-        if settings.GEN_MODE:
-            format_str = './index.html'
-        return format_str
-
-    def css_dir(self):
-        return './'
+        return reverse('elections:kraj')
 
 
 class Wojewodztwo(Region):
     subunit_str = 'Powiat'
+    kraj = models.ForeignKey(Kraj)
 
     def subunit(self):
         return Powiat
+
+    def getBallots(self):
+        p = Powiat.objects.filter(wojewodztwo=self)
+        res = 0
+        for e in p:
+            res += Gmina.objects.filter(powiat=e).aggregate(
+                Sum('ballots'))['ballots__sum']
+        return res
+
+    def getVoters(self):
+        p = Powiat.objects.filter(wojewodztwo=self)
+        res = 0
+        for e in p:
+            res += Gmina.objects.filter(powiat=e).aggregate(
+                Sum('voters'))['voters__sum']
+        return res
 
     def buildQ(self):
         return Q(wojewodztwo=self)
 
     def path(self):
-        format_str = '/{0}/'
-        if settings.GEN_MODE:
-            format_str = './{0}/index.html'
-        return format_str.format(self.slug)
-
-    def file(self):
-        return './gen/{0}/index.html'.format(self.slug)
-    
-    def css_dir(self):
-        return './../'
+        return reverse('elections:wojewodztwo', args=[self.slug])
 
 
 class Powiat(Region):
@@ -71,43 +90,49 @@ class Powiat(Region):
     def subunit(self):
         return Gmina
 
+    def getBallots(self):
+        return Gmina.objects.filter(powiat=self).aggregate(Sum('ballots'))['ballots__sum']
+
+    def getVoters(self):
+        return Gmina.objects.filter(powiat=self).aggregate(Sum('voters'))['voters__sum']
+
     def buildQ(self):
         return Q(powiat=self)
 
     def path(self):
-        if settings.GEN_MODE:
-            return './{0}/index.html'.format(self.slug)
-        else:
-            return '/{0}/{1}/'.format(self.wojewodztwo.slug, self.slug)
-
-    def file(self):
-        return './gen/{0}/{1}/index.html'.format(self.wojewodztwo.slug, self.slug)
-
-    def css_dir(self):
-        return './../../'
+        return reverse('elections:powiat', args=[self.wojewodztwo.slug, self.slug])
 
 
 class Gmina(Region):
     powiat = models.ForeignKey(Powiat)
     code = models.IntegerField()
-
-    def path(self):
-        if settings.GEN_MODE:
-            return './{0}/index.html'.format(self.slug)
-        else:
-            return '/{0}/{1}/{2}/'.format(self.powiat.wojewodztwo.slug, self.powiat.slug, self.slug)
+    ballots = models.IntegerField(default=0)
+    voters = models.IntegerField(default=0)
 
     def buildQ(self):
         return Q(gmina=self)
 
+    def getBallots(self):
+        return self.ballots
+
+    def getVoters(self):
+        return self.voters
+
+    def votes_dict(self):
+        return utility.buildVotesDict(self)
+
     def __str__(self):
         return self.name
 
-    def file(self):
-        return './gen/{0}/{1}/{2}/index.html'.format(self.powiat.wojewodztwo.slug, self.powiat.slug, self.slug)
+    def path(self):
+        return reverse('elections:gmina', args=[self.powiat.wojewodztwo.slug,
+                                                self.powiat.slug,
+                                                self.slug])
 
-    def css_dir(self):
-        return './../../../'
+    def edit_path(self):
+        return reverse('elections:edit_gmina', args=[self.powiat.wojewodztwo.slug,
+                                                     self.powiat.slug,
+                                                     self.slug])
 
 
 class Candidate(models.Model):
@@ -130,3 +155,9 @@ class Vote(models.Model):
                                                                    self.powiat,
                                                                    self.votes,
                                                                    self.candidate)
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

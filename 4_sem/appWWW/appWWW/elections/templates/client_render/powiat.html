@@ -1,0 +1,85 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+        <link href="/static/style.css" media="screen and (min-width: 850px)" rel="stylesheet" type="text/css"/>
+        <link href="/static/style_mobile.css" media="screen and (max-width: 851px)" rel="stylesheet" type="text/css"/>
+        <title> Wybory 2000: {{ title }}</title>
+
+        {% include "client_render/templates.html" %}
+
+        <script language="javascript">
+
+var title = "Powiat {{ title }}";
+var pk = {{ pk }};
+var powiat_data = null;
+var gmina_set_data = null;
+var path = window.location.pathname;
+
+function checkAndFillGminaSetData() {
+    if (gmina_set_data) {
+        var context = {'unit': 'Powiat', 'data': gmina_set_data};
+        var html = stats_table_template.render(context);
+        $('#powiat_table_container').html(html);
+    }
+}
+
+function checkAndFillPowiatData() {
+    if (powiat_data) {
+        var context = {'data' : powiat_data};
+        var html = general_stats_template.render(context);
+        $('#general_stats_container').html(html);
+    }
+}
+
+function requestDataFromServer() {
+    $.getJSON("/api/powiat/" + pk, function(data) {
+        powiat_data = data;
+        localStorage.setItem(path + '_powiat', JSON.stringify(powiat_data));
+        checkAndFillPowiatData();
+    });
+    $.getJSON("/api/powiat/" + pk + "/gmina_set", function(data) {
+        gmina_set_data = data;
+        localStorage.setItem(path + '_gmina_set', JSON.stringify(gmina_set_data));
+        checkAndFillGminaSetData();
+    });
+}
+
+function checkAndFillAllData() {
+    checkAndFillPowiatData();
+    checkAndFillGminaSetData();
+}
+
+function restoreCache() {
+    gmina_set_data = JSON.parse(localStorage.getItem(path + '_gmina_set', null));
+    powiat_data = JSON.parse(localStorage.getItem(path + '_powiat', null));
+}
+
+$(function() {
+    var context = {title: title};
+    var html    = header_template.render(context);
+    $('#header_container').html(html);
+    restoreCache();
+    checkAndFillAllData();
+    requestDataFromServer();
+});
+
+        </script>
+    </head>
+    <body>
+        {% include "client_render/login_header.html" %}
+        {% include "client_render/search_header.html" %}
+        <div id="header_container">
+        </div>
+
+        <div id="general_stats_container">
+        </div>
+
+        <div id="powiat_table_container">
+        </div>
+    </body>
+</html>

@@ -1,0 +1,91 @@
+{% verbatim %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+<script src="/static/jinja.js"></script>
+
+<script id="header_template" type="text/x-handlebars-template">
+    <h2> Wyniki wyborów 2000 roku </h2>
+    <h2> {{ title }} </h2>
+</script>
+
+<script id="general_stats_template" type="text/x-handlebars-template">
+    <div class="general_stats">
+        <p>
+        Uprawnionych: {{ data.voters }}
+        </p>
+        <p>
+        Kart ważnych: {{ data.ballots }}
+        </p>
+        <p>
+        Frekwencja: {{ data.turnout }}%
+        </p>
+    </div>
+
+    <div class="chart">
+        {% for pair in data.distribution %}
+        <div class="bar_wrap">
+            <div class="bar" style="height: {{ pair.votes }}%;">
+                <div>
+                    {{ pair.votes }}%
+                </div>
+            </div>
+            <div class="legend">
+                {{ pair.name }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</script>
+
+<script id="stats_table_template" type="text/x-handlebars-template">
+<table>
+        <tr>
+            <th>
+                {{ unit }}
+            </th>
+            <th class="responsive_hide">
+                Uprawnionych
+            </th>
+            <th class="responsive_hide">
+                Kart ważnych
+            </th>
+            <th>
+                Frekwencja
+            </th>
+        <tr>
+        {% for w in data %}
+        <tr>
+            <td>
+                <a href="{{ w.path }}">{{ w.name }}</a>
+            </td>
+            <td class="responsive_hide">
+                {{ w.voters }}
+            </td>
+            <td class="responsive_hide">
+                {{ w.ballots }}
+            </td>
+            <td>
+                {{ w.turnout }}%
+            </td>
+        </tr>
+        {% endfor %}
+
+</script>
+
+<script language="javascript">
+
+    var header_source = $("#header_template").html();
+    var header_template = jinja.compile(header_source);
+
+    var general_stats_source = $("#general_stats_template").html();
+    var general_stats_template = jinja.compile(general_stats_source);
+
+    //var chart_source = $("#chart_template").html();
+    //var chart_template = jinja.compile(chart_source);
+
+    var stats_table_source = $("#stats_table_template").html();
+    var stats_table_template = jinja.compile(stats_table_source);
+
+</script>
+
+{% endverbatim %}

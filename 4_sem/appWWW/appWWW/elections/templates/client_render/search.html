@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"/>
+        <link href="/static/style.css" media="screen and (min-width: 850px)" rel="stylesheet" type="text/css"/>
+        <link href="/static/style_mobile.css" media="screen and (max-width: 851px)" rel="stylesheet" type="text/css"/>
+
+        {% include "client_render/templates.html" %}
+
+        <script language="javascript">
+$(function() {
+    var pattern = "{{ pattern }}";
+    console.log(pattern);
+    $('h1').text("Searching...");
+    $.getJSON("/api/gmina/search/" + pattern, function(data) {
+        console.log(data);
+        context = {'unit': 'Gmina', 'data' : data};
+        var html = stats_table_template.render(context);
+        $('h1').text('Search results for "' + pattern + '"');
+        $('#results').html(html);
+    });
+});
+
+        </script>
+
+    </head>
+    <body>
+        {% include "client_render/login_header.html" %}
+        {% include "client_render/search_header.html" %}
+        <h1></h1>
+        <div id="results"></div>
+    </body>
+
+</html>

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for result in results %}
+<p>
+<a href="{{ result.path }}">{{result.name}}</a>
+</p>
+{% endfor %}
+
+{% endblock %}

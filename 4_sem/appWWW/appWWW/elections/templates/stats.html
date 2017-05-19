@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% if data is defined %}
+{% if data %}
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type='text/javascript' src='https://www.google.com/jsapi'></script>
@@ -15,22 +15,25 @@ google.setOnLoadCallback(drawMarkersMap);
 
 function slugify(text)
 {
-  str = text.toString().toLowerCase()
-    .replace(/\s+/g, '-')           // Replace spaces with -
-    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
-    .replace(/^-+/, '')             // Trim - from start of text
-    .replace(/-+$/, '');            // Trim - from end of text
+    str = text.toString().toLowerCase()
+        .replace(/\s+/g, '-')           // Replace spaces with -
+        .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+        .replace(/^-+/, '')             // Trim - from start of text
+        .replace('ł', '')               // remove ł
+        .replace(/-+$/, '');            // Trim - from end of text
     // remove accents, swap ñ for n, etc
-  var from = "ąężźóćłśń/_,:;";
-  var to   = "aezzoclsn-----";
-  for (var i=0, l=from.length ; i<l ; i++) {
-    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-  }
+    var from = "ąężźóćłśń/_,:;";
+    var to   = "aezzoclsn-----";
+    for (var i=0, l=from.length ; i<l ; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
     return str;
 }
 
 function drawMarkersMap() {
+    {% autoescape off %}
     var jsonData = `{{ data }}`
+    {% endautoescape %}
 
     var data = new google.visualization.DataTable(jsonData);
 
@@ -50,7 +53,7 @@ function drawMarkersMap() {
     google.visualization.events.addListener(chart, 'select', function () {
         var selection = chart.getSelection();
         if (selection.length > 0) {
-            window.location = './' + slugify(data.getValue(selection[0].row, 0)) + '/index.html';
+            window.location = './' + slugify(data.getValue(selection[0].row, 0));
         }
     });
 
@@ -59,7 +62,6 @@ function drawMarkersMap() {
 
 
 function drawChart() {
-
     var data = new google.visualization.DataTable(jsonData);
 
     var options = {
@@ -73,112 +75,112 @@ function drawChart() {
 
 </script>
 
-{% endif %}
-
-<div class="general_stats">
-    <p>
-    Uprawnionych: {{ region_info.voters }}
-    </p>
-    <p>
-    Kart ważnych: {{ region_info.ballots }}
-    </p>
-    <p>
-    Frekwencja: {{ "%.2f" % (region_info.ballots / region_info.voters * 100) | float }}%
-    </p>
-</div>
-
-<div id="charts">
-
-    {% if data is defined %}
-    <div id="map_chart"></div>
     {% endif %}
 
-
-    <div class="responsive_hide">
-        <div class="chart">
-            {% for stat in candidates_stats %}
-            <div class="bar_wrap">
-                <div class="bar" style="height: {{ stat[2] }}%;">
-                    <div>
-                        {{ "%.2f" % stat[1] | float }}%
-                    </div>
-                </div>
-                <div class="legend">
-                    {{ stat[0] }}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+    <div class="general_stats">
+        <p>
+        Uprawnionych: {{ region_info.getVoters }}
+        </p>
+        <p>
+        Kart ważnych: {{ region_info.getBallots }}
+        </p>
+        <p>
+        Frekwencja: {{ region_info.turnout | floatformat:"-2" }}%
+        </p>
     </div>
 
-    <div class="desktop_hide">
-        <div class="chart">
-            {% for stat in candidates_stats %}
-            <div class="bar_wrap">
-                <div class="bar" style="width: {{ stat[2] }}%;">
-                    <div>
-                        {{ "%.2f" % stat[1] | float }}%
+    <div id="charts">
+
+        {% if data %}
+        <div id="map_chart"></div>
+        {% endif %}
+
+
+        <div class="responsive_hide">
+            <div class="chart">
+                {% for stat in candidates_stats %}
+                <div class="bar_wrap">
+                    <div class="bar" style="height: {{ stat.2 }}%;">
+                        <div>
+                            {{ stat.1 | floatformat:"-2" }}%
+                        </div>
                     </div>
-                </div>
-                <div class="legend">
-                    {{ stat[0] }}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-
-</div>
-
-{% if regions_data is defined %}
-<table>
-    <tr>
-        <th>
-            {{ unit }}
-        </th>
-        <th>
-            Statystyka
-        </th>
-        <th class="responsive_hide">
-            Uprawnionych
-        </th>
-        <th class="responsive_hide">
-            Kart ważnych
-        </th>
-        <th>
-            Frekwencja
-        </th>
-    </tr>
-    {% for w in regions_data %}
-    <tr>
-        <td>
-            <a href="{{ w.path() }}">{{ w.name }}</a>
-        </td>
-        <td>
-            <div class="horizontal_bar_chart">
-                {% for bar in w.bar %}
-                <div class="horizontal_bar_element" style="background-color: {{ bar[2] }}; flex-grow: {{ bar[1] }};">
-                    <div class="horizontal_bar_tooltip">
-                        {{ bar[0] }}
-                        {{ "%.2f" % bar[1] | float }}%
+                    <div class="legend">
+                        {{ stat.0 }}
                     </div>
                 </div>
                 {% endfor %}
             </div>
-        </td>
-        <td class="responsive_hide">
-            {{ w.voters }}
-        </td>
-        <td class="responsive_hide">
-            {{ w.ballots }}
-        </td>
-        <td>
-            {{ "%.2f" % (w.ballots / w.voters * 100) | float }}%
-        </td>
-    </tr>
-    {% endfor %}
+        </div>
 
-</table>
-{% endif %}
+        <div class="desktop_hide">
+            <div class="chart">
+                {% for stat in candidates_stats %}
+                <div class="bar_wrap">
+                    <div class="bar" style="width: {{ stat.2 }}%;">
+                        <div>
+                            {{ stat.1 | floatformat:"-2" }}%
+                        </div>
+                    </div>
+                    <div class="legend">
+                        {{ stat.0 }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
 
-{% endblock %}
+    </div>
+
+    {% if regions_data %}
+    <table>
+        <tr>
+            <th>
+                {{ unit }}
+            </th>
+            <th>
+                Statystyka
+            </th>
+            <th class="responsive_hide">
+                Uprawnionych
+            </th>
+            <th class="responsive_hide">
+                Kart ważnych
+            </th>
+            <th>
+                Frekwencja
+            </th>
+        </tr>
+        {% for w in regions_data %}
+        <tr>
+            <td>
+                <a href="{{ w.path }}">{{ w.name }}</a>
+            </td>
+            <td>
+                <div class="horizontal_bar_chart">
+                    {% for bar in w.bar %}
+                    <div class="horizontal_bar_element" style="background-color: {{ bar.2 }}; flex-grow: {{ bar.1 }};">
+                        <div class="horizontal_bar_tooltip">
+                            {{ bar.0 }}
+                            {{ bar.1 | floatformat:"-2" }}%
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </td>
+            <td class="responsive_hide">
+                {{ w.getVoters }}
+            </td>
+            <td class="responsive_hide">
+                {{ w.getBallots }}
+            </td>
+            <td>
+                {{ w.turnout | floatformat:"-2" }}%
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    {% endif %}
+
+    {% endblock %}

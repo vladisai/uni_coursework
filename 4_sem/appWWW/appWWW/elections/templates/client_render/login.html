@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<title>Logowanie </title>
+
+<script language="javascript">
+$(function() {
+    $("#target").submit(function(e) {
+        var address = "/api/authtoken/";
+        var name = $(this).find('input[name="uname"]').val();
+        var password = $(this).find('input[name="psw"]').val();
+        var data = {"username" : name, "password" : password};
+        console.log(data);
+        $.post(address, data, function(data) {
+            console.log(data);
+            if (data && data.token) {
+                console.log('success');
+                $('#warning').text('Successfully logged in');
+                sessionStorage.setItem("token", data.token);
+                window.location.href = '/';
+            } else {
+                $('#warning').text('wrong credentials');
+            }
+        });
+        e.preventDefault();
+    });
+
+});
+
+</script>
+
+</head>
+
+<body>
+
+<form id="target">
+    <label><b>Username</b></label>
+    <input type="text" placeholder="Enter Username" name="uname" required>
+
+    <label><b>Password</b></label>
+    <input type="password" placeholder="Enter Password" name="psw" required>
+
+    <p id="warning"></p>
+
+    <input type="submit"></input>
+</form>
+
+</body>

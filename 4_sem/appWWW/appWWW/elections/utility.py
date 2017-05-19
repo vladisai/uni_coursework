@@ -1,49 +1,40 @@
 import os
-import jinja2
 import json
 import random
 
-from elections.models import *
-from django.db.models import *
+from elections import models
+from django.db import models as django_models
 from functools import reduce
-
-from django.template.loader import render_to_string
+from django.shortcuts import render
 
 from django.conf import settings
 
-def render(tpl_path, context):
-    path, filename = os.path.split(tpl_path)
-    return jinja2.Environment(
-        loader=jinja2.FileSystemLoader(path or './')
-    ).get_template(filename).render(context)
-
-
-def renderHTML(region, title, json=False):
+def renderHTML(request, region, title, json=False):
     q = region.buildQ()
+    region.turnout = region.getBallots() / region.getVoters() * 100
     vals = {'candidates_stats': buildCandidatesStats(q),
             'regions_data': buildRegionsData(region.subunit().objects.filter(q)),
             'region_info': region,
             'title': title,
             'unit': region.subunit_str,
+            'search_form': forms.SearchForm()
             }
     if json:
         vals['data'] = buildJSONData()
-    if settings.GEN_MODE:
-        vals['css_dir'] = region.css_dir()
 
-    return render('elections/templates/stats.html', vals)
+    return render(request, 'stats.html', vals)
 
 
-def renderSimplifiedHTML(region, title):
+def renderGminaHTML(request, region, title):
     q = region.buildQ()
+    region.turnout = region.getBallots() / region.getVoters() * 100
     vals = {'candidates_stats': buildCandidatesStats(q),
             'region_info': region,
             'title': title,
+            'search_form': forms.SearchForm()
             }
-    if settings.GEN_MODE:
-        vals['css_dir'] = region.css_dir()
 
-    return render('elections/templates/stats.html', vals)
+    return render(request, 'gmina.html', vals)
 
 
 def buildJSONData():
@@ -53,8 +44,8 @@ def buildJSONData():
 
     rows = []
 
-    for w in Wojewodztwo.objects.all():
-        turnout = w.ballots / w.voters * 100
+    for w in models.Wojewodztwo.objects.all():
+        turnout = w.getBallots() / w.getVoters() * 100
         vals = []
         turnout_str = '{0}%'.format(round(turnout, 2))
         vals.append({'v': w.name, 'f': None})
@@ -68,20 +59,25 @@ def buildJSONData():
     return json_data
 
 
-def getCandidatesVotes(candidates, q=Q()):
-    votes = list(map(lambda c: Vote.objects.filter(q).filter(
-        candidate=c).aggregate(Sum('votes'))['votes__sum'], candidates))
+def getCandidatesVotes(candidates, q=django_models.Q()):
+    votes = list(map(lambda c: models.Vote.objects.filter(q).filter(
+        candidate=c).aggregate(django_models.Sum('votes'))['votes__sum'], candidates))
+    return votes
+
+
+def getCandidatesVotesPercentage(candidates, q=django_models.Q()):
+    votes = getCandidatesVotes(candidates, q)
     total = reduce(lambda x, y: x + y, votes)
     votes = list(map(lambda c: c / total * 100, votes))
     return votes
 
 
 def getCandidates():
-    return Candidate.objects.all().order_by('name')
+    return models.Candidate.objects.all().order_by('name')
 
 
-def buildRow(candidates, q=Q()):
-    votes = getCandidatesVotes(candidates, q)
+def buildRow(candidates, q=django_models.Q()):
+    votes = getCandidatesVotesPercentage(candidates, q)
     total = list(zip(candidates, votes))
     total.sort(key=lambda tup: tup[1])
     total = total[::-1]
@@ -90,9 +86,15 @@ def buildRow(candidates, q=Q()):
     return total
 
 
-def buildCandidatesStats(q=Q()):
+def buildCandidatesStats(q=django_models.Q()):
     candidates = getCandidates()
     return buildRow(candidates, q)
+
+
+def buildVotesDistributionDict(q=django_models.Q()):
+    votes = getCandidatesAndVotesPercentage(q)
+    votes = list(map(lambda x: {'name': str(x[0]), 'votes': round(x[1], 2) }, votes))
+    return votes
 
 
 def buildColors():
@@ -120,49 +122,67 @@ def buildColors():
     return cols
 
 
-def getCandidatesAndVotes(q=Q()):
+def getCandidatesAndVotesPercentage(q=django_models.Q()):
     candidates = getCandidates()
-    votes = getCandidatesVotes(candidates, q)
+    votes = getCandidatesVotesPercentage(candidates, q)
     total = list(zip(candidates, votes))
     total.sort(key=lambda tup: tup[1])
     total.reverse()
-
     return total
 
 
-def buildHorizontalBar(q=Q()):
+def getCandidatesAndVotes(q=django_models.Q()):
+    candidates = getCandidates()
+    votes = getCandidatesVotes(candidates, q)
+    total = list(zip(candidates, votes))
+    total.sort(key=lambda tup: tup[0].name)
+    total.reverse()
+    return total
+
+
+def buildHorizontalBar(q=django_models.Q()):
     cols = buildColors()
-    votes = getCandidatesAndVotes(q)
+    votes = getCandidatesAndVotesPercentage(q)
     res = zip(votes, cols)
     res = map(lambda x: (str(x[0][0]), x[0][1], x[1]), res)
     res = list(res)
     return res
 
 
-def buildPieChartData(q=Q()):
-    getCandidatesAndVotes(q)
-
-    data = {}
-    cols = [{'label': 'Kandydat', 'type': 'string'},
-            {'label': 'Procent głosów', 'type': 'number'}]
-
-    rows = []
-
-    for w in total:
-        vals = []
-        turnout_str = '{0}%'.format(round(w[1], 2))
-        vals.append({'v': str(w[0]), 'f': None})
-        vals.append({'v': w[1], 'f': turnout_str})
-        rows.append({'c': vals})
-
-    data['cols'] = cols
-    data['rows'] = rows
-
-    json_data = json.dumps(data, sort_keys=True, indent=4)
-    return json_data
-
-
 def buildRegionsData(objects):
     for o in objects:
         o.bar = buildHorizontalBar(o.buildQ())
+        o.turnout = o.getBallots() / o.getVoters() * 100
     return objects
+
+
+def getGmina(wojewodztwo_slug, powiat_slug, gmina_slug):
+    w = models.Wojewodztwo.objects.get(slug=wojewodztwo_slug)
+    p = models.Powiat.objects.get(slug=powiat_slug, wojewodztwo=w)
+    g = models.Gmina.objects.get(powiat=p, slug=gmina_slug)
+    return g
+
+
+def getPowiat(wojewodztwo_slug, powiat_slug):
+    w = models.Wojewodztwo.objects.get(slug=wojewodztwo_slug)
+    p = models.Powiat.objects.get(slug=powiat_slug, wojewodztwo=w)
+    return p
+
+
+def getWojewodztwo(wojewodztwo_slug):
+    return models.Wojewodztwo.objects.get(slug=wojewodztwo_slug)
+
+
+def buildVotesDict(gmina):
+    q = gmina.buildQ()
+    votes_list = getCandidatesAndVotes(q)
+    votes_list = map(lambda x: (x[0].name, x[1]), votes_list)
+    return dict(votes_list)
+
+def updateVotes(gmina, votes_dict):
+    for key, value in votes_dict.items():
+        candidate = models.Candidate.objects.get(name=key)
+        print(candidate)
+        vote = models.Vote.objects.get(gmina=gmina, candidate=candidate)
+        vote.votes = value
+        vote.save()

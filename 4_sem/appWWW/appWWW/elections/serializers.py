@@ -1,15 +1,17 @@
 from elections.models import *
+from elections import utility
 from rest_framework import serializers
 
 
 class CandidateSerializer(serializers.ModelSerializer):
-    
+
     url = serializers.HyperlinkedIdentityField(view_name='elections:candidate-detail',
                                                read_only=True)
 
     class Meta:
         model = Candidate
         fields = ['url', 'name']
+
 
 class VoteSerializer(serializers.ModelSerializer):
 
@@ -27,17 +29,14 @@ class VoteSerializer(serializers.ModelSerializer):
 class GminaStatsSerializer(serializers.Serializer):
     voters = serializers.IntegerField()
     ballots = serializers.IntegerField()
-    votes_dict = serializers.IntegerField()
-
-    def end_object(self, obj):
-        self._votes_dict = buildVotesDict(self.instance)
-        self.objects.append(self._votes_dict)
+    votes_dict = serializers.DictField(child=serializers.IntegerField())
 
     def update(self, instance, validated_data):
         instance.voters = validated_data.get('voters', instance.voters)
         instance.ballots = validated_data.get('ballots', instance.ballots)
-        votes_dict = validated_data.get('votes_dict', {})
-        updateVotes(instance, candidate_name, votes_dict)
+        votes_dict = self.validated_data.get('votes_dict', {})
+        utility.updateVotes(instance, votes_dict)
+        instance.save()
         return instance
 
 
@@ -51,13 +50,14 @@ class GminaSerializer(serializers.ModelSerializer):
     voters = serializers.FloatField(source='getVoters')
     ballots = serializers.FloatField(source='getBallots')
     turnout = serializers.FloatField(source='getTurnout')
-    distribution = serializers.DictField(
-        child=serializers.FloatField(), source='getDistribution')
+    distribution = serializers.ListField(
+        child=serializers.DictField(child=serializers.StringRelatedField()), source='getDistribution')
 
     class Meta:
         model = Gmina
-        fields = ['url', 'name', 'code',
+        fields = ['url', 'path', 'name', 'code',
                   'powiat', 'voters', 'ballots', 'turnout', 'distribution']
+
 
 class GminaVoteStatsSerializer(serializers.ModelSerializer):
     votes = serializers.DictField(child=serializers.IntegerField())
@@ -80,12 +80,12 @@ class PowiatSerializer(serializers.HyperlinkedModelSerializer):
     voters = serializers.FloatField(source='getVoters')
     ballots = serializers.FloatField(source='getBallots')
     turnout = serializers.FloatField(source='getTurnout')
-    distribution = serializers.DictField(
-        child=serializers.FloatField(), source='getDistribution')
+    distribution = serializers.ListField(
+        child=serializers.DictField(child=serializers.StringRelatedField()), source='getDistribution')
 
     class Meta:
         model = Powiat
-        fields = ['url', 'name', 'wojewodztwo', 'gmina_set', 'voters',
+        fields = ['url', 'path' ,'name', 'wojewodztwo', 'gmina_set', 'voters',
                   'ballots', 'turnout', 'distribution']
 
 
@@ -99,10 +99,26 @@ class WojewodztwoSerializer(serializers.HyperlinkedModelSerializer):
     voters = serializers.FloatField(source='getVoters')
     ballots = serializers.FloatField(source='getBallots')
     turnout = serializers.FloatField(source='getTurnout')
-    distribution = serializers.DictField(
-        child=serializers.FloatField(), source='getDistribution')
+    distribution = serializers.ListField(
+        child=serializers.DictField(child=serializers.StringRelatedField()), source='getDistribution')
 
     class Meta:
         model = Wojewodztwo
-        fields = ['url', 'name', 'powiat_set', 'voters',
+        fields = ['url', 'path', 'name', 'powiat_set', 'voters',
+                  'ballots', 'turnout', 'distribution']
+
+
+class KrajSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='elections:kraj-detail',
+                                               read_only=True)
+
+    voters = serializers.FloatField(source='getVoters')
+    ballots = serializers.FloatField(source='getBallots')
+    turnout = serializers.FloatField(source='getTurnout')
+    distribution = serializers.ListField(
+        child=serializers.DictField(child=serializers.StringRelatedField()), source='getDistribution')
+
+    class Meta:
+        model = Wojewodztwo
+        fields = ['url', 'path', 'name', 'voters',
                   'ballots', 'turnout', 'distribution']

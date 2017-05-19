@@ -1,6 +1,1 @@
-Żeby zgenerować strony, trzeba odpalić generate.sh. 
-Jako parameter należy podać ścieżkę do python3 który umie django oraz jinja2.
-Jeśli nie podajemy porametra, używa /usr/bin/env/python.
-
-Wszystkie pliki będą w katalogu gen.
-Odpalenie skryptu może trochę potrwać, bo użyłem sqlite.
+Dla populacji bazy trzeba uruchomić populate.py

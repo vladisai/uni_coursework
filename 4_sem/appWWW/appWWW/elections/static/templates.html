@@ -1,0 +1,103 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+
+<script id="header_template" type="text/x-handlebars-template">
+    <h2> Wyniki wyborów 2000 roku </h2>
+    <h2> {{ title }} </h2>
+    <p> {{ body }} </p>
+</script>
+
+<script id="general_stats_template" type="text/x-handlebars-template">
+    <div class="general_stats">
+        <p>
+        Uprawnionych: {{ region_info.getVoters }}
+        </p>
+        <p>
+        Kart ważnych: {{ region_info.getBallots }}
+        </p>
+        <p>
+        Frekwencja: {{ region_info.turnout }}%
+        </p>
+    </div>
+</script>
+
+<script id="chart_template" type="text/x-handlebars-template">
+    {% for stat in candidates_stats %}
+    <div class="bar_wrap">
+        <div class="bar" style="width: {{ stat.2 }}%;">
+            <div>
+                {{ stat.1 | floatformat:"-2" }}%
+            </div>
+        </div>
+        <div class="legend">
+            {{ stat.0 }}
+        </div>
+    </div>
+    {% endfor %}
+</script>
+
+<script id="stats_table_template" type="text/x-handlebars-template">
+<table>
+        <tr>
+            <th>
+                {{ unit }}
+            </th>
+            <th>
+                Statystyka
+            </th>
+            <th class="responsive_hide">
+                Uprawnionych
+            </th>
+            <th class="responsive_hide">
+                Kart ważnych
+            </th>
+            <th>
+                Frekwencja
+            </th>
+        </tr>
+        {% for w in regions_data %}
+        <tr>
+            <td>
+                <a href="{{ w.path }}">{{ w.name }}</a>
+            </td>
+            <td>
+                <div class="horizontal_bar_chart">
+                    {% for bar in w.bar %}
+                    <div class="horizontal_bar_element" style="background-color: {{ bar.2 }}; flex-grow: {{ bar.1 }};">
+                        <div class="horizontal_bar_tooltip">
+                            {{ bar.0 }}
+                            {{ bar.1 | floatformat:"-2" }}%
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </td>
+            <td class="responsive_hide">
+                {{ w.getVoters }}
+            </td>
+            <td class="responsive_hide">
+                {{ w.getBallots }}
+            </td>
+            <td>
+                {{ w.turnout | floatformat:"-2" }}%
+            </td>
+        </tr>
+        {% endfor %}
+
+</script>
+
+<script language="javascript">
+
+    var header_source = $("#header_template").html();
+    var header_template = Handlebars.compile(header_source);
+
+    var general_stats_source = $("#general_stats_template").html();
+    var general_stats_template = Handlebars.compile(general_stats_source);
+
+    var chart_source = $("#chart_template").html();
+    var chart_template = Handlebars.compile(chart_source);
+
+    var stats_table_source = $("#stats_table_template").html();
+    var stats_table_template = Handlebars.compile(stats_table_source);
+
+</script>

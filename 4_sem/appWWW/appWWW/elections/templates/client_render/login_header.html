@@ -1,0 +1,27 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script language="javascript">
+function reloadLink() {
+    $("#login_header").html("");
+    if (window.sessionStorage) {
+        token = sessionStorage.getItem("token", null);
+        console.log(token);
+        if (token === null) {
+            $('<a href="/api/login">log in</a>').appendTo('#login_header');
+        } else {
+            var link = $('<a id="logout" href=".">log out</a>').appendTo('#login_header');
+            link.click(function() {
+                sessionStorage.removeItem("token");
+                reloadLink();
+            });
+        }
+    }
+}
+
+$(function() {
+    reloadLink();
+});
+
+</script>
+
+<div id="login_header"></div>
