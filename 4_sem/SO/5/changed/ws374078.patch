@@ -1,0 +1,170 @@
+Binary files minix/servers/sched_old/main.o and minix/servers/sched/main.o differ
+Binary files minix/servers/sched_old/sched and minix/servers/sched/sched differ
+diff -rupN minix/servers/sched_old/schedproc.h minix/servers/sched/schedproc.h
+--- minix/servers/sched_old/schedproc.h	2014-09-13 23:56:50.000000000 +0200
++++ minix/servers/sched/schedproc.h	2017-05-22 16:47:57.000000000 +0200
+@@ -30,6 +30,8 @@ EXTERN struct schedproc {
+ 	unsigned priority;		/* the process' current priority */
+ 	unsigned time_slice;		/* this process's time slice */
+ 	unsigned cpu;		/* what CPU is the process running on */
++    unsigned last_check;
++    int tokens;
+ 	bitchunk_t cpu_mask[BITMAP_CHUNKS(CONFIG_MAX_CPUS)]; /* what CPUs is the
+ 								process allowed
+ 								to run on */
+diff -rupN minix/servers/sched_old/schedule.c minix/servers/sched/schedule.c
+--- minix/servers/sched_old/schedule.c	2014-09-13 23:56:50.000000000 +0200
++++ minix/servers/sched/schedule.c	2017-05-22 16:47:57.000000000 +0200
+@@ -19,9 +19,18 @@ static unsigned balance_timeout;
+ 
+ #define BALANCE_TIMEOUT	5 /* how often to balance queues in seconds */
+ 
++#define MAX_TOKENS 6
++#define SCHED_FACTOR 0.5
++
++clock_t last_refill;
++unsigned update_time_afer_refill();
++
+ static int schedule_process(struct schedproc * rmp, unsigned flags);
+ static void balance_queues(minix_timer_t *tp);
+ 
++void refill_tokens();
++int get_sys_time(struct schedproc *rmp);
++
+ #define SCHEDULE_CHANGE_PRIO	0x1
+ #define SCHEDULE_CHANGE_QUANTUM	0x2
+ #define SCHEDULE_CHANGE_CPU	0x4
+@@ -89,9 +98,11 @@ static void pick_cpu(struct schedproc *
+ 
+ int do_noquantum(message *m_ptr)
+ {
++
+ 	register struct schedproc *rmp;
+ 	int rv, proc_nr_n;
+ 
++
+ 	if (sched_isokendpt(m_ptr->m_source, &proc_nr_n) != OK) {
+ 		printf("SCHED: WARNING: got an invalid endpoint in OOQ msg %u.\n",
+ 		m_ptr->m_source);
+@@ -99,6 +110,14 @@ int do_noquantum(message *m_ptr)
+ 	}
+ 
+ 	rmp = &schedproc[proc_nr_n];
++    rmp->tokens -= get_sys_time(rmp);
++    //printf("SODBG: set tokens %d\n", rmp->endpoint);
++
++    if (rmp->tokens < 0) {
++        //printf("SODBG: tokens < 0 for %d\n", rmp->endpoint);
++        return OK;
++    }
++
+ 	if (rmp->priority < MIN_USER_Q) {
+ 		rmp->priority += 1; /* lower priority */
+ 	}
+@@ -106,6 +125,7 @@ int do_noquantum(message *m_ptr)
+ 	if ((rv = schedule_process_local(rmp)) != OK) {
+ 		return rv;
+ 	}
++    refill_tokens();
+ 	return OK;
+ }
+ 
+@@ -142,6 +162,7 @@ int do_stop_scheduling(message *m_ptr)
+  *===========================================================================*/
+ int do_start_scheduling(message *m_ptr)
+ {
++
+ 	register struct schedproc *rmp;
+ 	int rv, proc_nr_n, parent_nr_n;
+ 	
+@@ -159,6 +180,10 @@ int do_start_scheduling(message *m_ptr)
+ 		return rv;
+ 	}
+ 	rmp = &schedproc[proc_nr_n];
++    
++    /* tokens */
++    rmp->tokens = MAX_TOKENS;
++    get_sys_time(rmp);
+ 
+ 	/* Populate process slot */
+ 	rmp->endpoint     = m_ptr->m_lsys_sched_scheduling_start.endpoint;
+@@ -335,6 +360,7 @@ static int schedule_process(struct sched
+ 
+ void init_scheduling(void)
+ {
++    update_time_afer_refill();
+ 	balance_timeout = BALANCE_TIMEOUT * sys_hz();
+ 	init_timer(&sched_timer);
+ 	set_timer(&sched_timer, balance_timeout, balance_queues, 0);
+@@ -351,6 +377,7 @@ void init_scheduling(void)
+  */
+ static void balance_queues(minix_timer_t *tp)
+ {
++    refill_tokens();
+ 	struct schedproc *rmp;
+ 	int proc_nr;
+ 
+@@ -365,3 +392,61 @@ static void balance_queues(minix_timer_t
+ 
+ 	set_timer(&sched_timer, balance_timeout, balance_queues, 0);
+ }
++
++unsigned update_time_afer_refill() {
++    int proc = 0;
++    clock_t current;
++    sys_times(proc, 0, 0, &current, 0);
++    //printf("%lu time after refill\n", current - last_refill);
++    unsigned res = current - last_refill;
++    last_refill = current;
++    return res;
++}
++
++void refill_tokens_proc(struct schedproc *rmp, unsigned *tokens_pool) {
++    //printf("refilling for %d, currently = %d\n", rmp->endpoint, rmp->tokens);
++    int left = MAX_TOKENS - rmp->tokens;
++    int to_add = MIN(left, *tokens_pool);
++    rmp->tokens += to_add;
++    *tokens_pool -= to_add;
++    //printf("refilled for %d, now = %d\n", rmp->endpoint, rmp->tokens);
++}
++
++struct schedproc* get_next() {
++    static int last = 0;
++    struct schedproc *ret = 0;
++    while (1) {
++        struct schedproc* rmp = &(schedproc[last++]);
++        last %= NR_PROCS;
++        if (rmp->flags & IN_USE) {
++            ret = rmp;
++            break;
++        }
++    }
++    return ret;
++}
++
++void refill_tokens() {
++   //printf("SODBG: refill_tokens called\n");
++   unsigned tokens_pool = update_time_afer_refill() * SCHED_FACTOR;
++   //printf("tokens pool = %u\n", tokens_pool);
++   int proc_nr;
++   struct schedproc *st = get_next();
++   refill_tokens_proc(st, &tokens_pool);
++   while (tokens_pool > 0) {
++       struct schedproc *rmp = get_next();
++       if (!rmp || st == rmp) {
++           break;
++       }
++       refill_tokens_proc(rmp, &tokens_pool);
++   }
++}
++
++int get_sys_time(struct schedproc *rmp) {
++    clock_t s, current;
++    sys_times(rmp->endpoint, 0, &current, 0, 0);
++    int res = current - rmp->last_check;
++    rmp->last_check = current;
++    //printf("process %d sys time determined to be %d\n", rmp->endpoint, res);
++    return res;
++}
+Binary files minix/servers/sched_old/schedule.o and minix/servers/sched/schedule.o differ
+Binary files minix/servers/sched_old/utility.o and minix/servers/sched/utility.o differ

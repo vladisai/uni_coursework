@@ -1,0 +1,76 @@
+diff -rupN minix/fs/mfs_/read.c minix/fs/mfs/read.c
+--- minix/fs/mfs_/read.c	2014-09-13 23:56:50.000000000 +0200
++++ minix/fs/mfs/read.c	2017-05-17 11:10:41.000000000 +0200
+@@ -259,6 +259,8 @@ int *completed;			/* number of bytes cop
+ 	assert(ino != VMC_NO_INODE);
+   }
+ 
++  int skip_write = 1;
++
+   if (!block_spec && b == NO_BLOCK) {
+ 	if (rw_flag == READING) {
+ 		/* Reading from a nonexistent block.  Must read as all zeros.*/
+@@ -268,12 +270,25 @@ int *completed;			/* number of bytes cop
+ 			printf("MFS: sys_safememset failed\n");
+ 		}
+ 		return r;
+-	} else {
++    } else {
+ 		/* Writing to or peeking a nonexistent block.
+ 		 * Create and enter in inode.
+ 		 */
+-		if ((bp = new_block(rip, (off_t) ex64lo(position))) == NULL)
+-			return(err_code);
++        char* c = (char*)malloc(chunk);
++        int rm = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
++                     (vir_bytes)c, (size_t) chunk);
++        for (int i = 0; i < chunk; i++) {
++            if (c[i]) {
++                skip_write = 0;
++            }
++        }
++        free(c);
++
++        if (!skip_write) {
++            if ((bp = new_block(rip, (off_t) ex64lo(position))) == NULL) {
++                return(err_code);
++            }
++        }
+ 	}
+   } else if (rw_flag == READING || rw_flag == PEEKING) {
+ 	/* Read and read ahead if convenient. */
+@@ -297,10 +312,12 @@ int *completed;			/* number of bytes cop
+   }
+ 
+   /* In all cases, bp now points to a valid buffer. */
+-  assert(bp != NULL);
++  if (!skip_write) {
++      assert(bp != NULL);
++  }
+   
+   if (rw_flag == WRITING && chunk != block_size && !block_spec &&
+-      (off_t) ex64lo(position) >= rip->i_size && off == 0) {
++      (off_t) ex64lo(position) >= rip->i_size && off == 0 && !skip_write) {
+ 	zero_block(bp);
+   }
+ 
+@@ -308,13 +325,13 @@ int *completed;			/* number of bytes cop
+ 	/* Copy a chunk from the block buffer to user space. */
+ 	r = sys_safecopyto(VFS_PROC_NR, gid, (vir_bytes) buf_off,
+ 			   (vir_bytes) (b_data(bp)+off), (size_t) chunk);
+-  } else if(rw_flag == WRITING) {
+-	/* Copy a chunk from user space to the block buffer. */
+-	r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
+-			     (vir_bytes) (b_data(bp)+off), (size_t) chunk);
+-	MARKDIRTY(bp);
++  } else if(rw_flag == WRITING && !skip_write) {
++        /* Copy a chunk from user space to the block buffer. */
++        r = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
++                     (vir_bytes) (b_data(bp)+off), (size_t) chunk);
++        MARKDIRTY(bp);
+   }
+-  
++
+   n = (off + chunk == block_size ? FULL_DATA_BLOCK : PARTIAL_DATA_BLOCK);
+   put_block(bp, n);
+ 

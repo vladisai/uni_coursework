@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <title>Systemy operacyjne, zadanie 5</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<body>
+<div class="container">
+
+<h2>Zadanie 5</h2>
+
+<h3>Wprowadzenie</h3>
+
+<p>Algorytm szeregowania MINIX-a faworyzuje procesy nastawione na wejście-wyjście (np. programy interakcyjne). Priorytet procesów obliczeniowych jest szybko obniżany, przez co system nie traci responsywności nawet wtedy, gdy dużo obliczeń odbywa się w tle. Jednak jeśli w systemie działa wiele procesów, które intensywnie korzystają z wejścia-wyjścia (np. wykonują operacje na dużej liczbie plików), to responsywność systemu obniża się.
+</p>
+
+<h3>Przykład</h3>
+
+<p>Wykonajmy pierwszy test na nieobciążonym systemie:
+</p>
+
+<pre>
+# time grep size_t /usr/src/minix/servers/*/*c > /dev/null
+       0.06 real       0.01 user       0.05 sys
+</pre>
+
+<p>Teraz obciążymy system 4 procesami:
+</p>
+
+<pre>
+# grep -Rs size_t /usr/ > /dev/null &
+# grep -Rs size_t /usr/ > /dev/null &
+# grep -Rs size_t /usr/ > /dev/null &
+# grep -Rs size_t /usr/ > /dev/null &
+</pre>
+
+<p>I zobaczymy jak wpływa to na wynik:
+</p>
+
+<pre>
+# time grep size_t /usr/src/minix/servers/*/*c > /dev/null
+       0.41 real       0.01 user       0.06 sys
+</pre>
+
+<p> Widzimy wyraźne spowolnienie. Zauważmy, że czas <code>user</code>, czyli czas, jaki proces spędził na obliczeniach, jest bliski zeru. Oznacza to, że gdy program <code>grep</code> dostał już dane z dysku, to pozostałą pracę wykonał bardzo szybko.
+</p>
+
+<p> Czas <code>sys</code> równy 0,05 s reprezentuje czas odczytu danych z dysku. Jest on najkosztowniejszą częścią wykonania polecenia. Całość zajęła jednak 0,41 s.
+Dlaczego <code>user + sys != real</code>? Ponieważ równocześnie wykonywało się kilka innych intensywnych procesów i przez część czasu obserwowany proces czekał.
+</p>
+
+<h3>Zadanie</h3>
+
+<p> Celem zadania jest zaimplementowanie eksperymentalnej strategii szeregowania, która bierze pod
+uwagę nie tylko to, ile pracy wykonuje sam proces, ale również to, jak wpływa on na działanie
+innych procesów. 
+</p>
+
+<p> Należy zmodyfikować domyślny serwer <code>sched</code> w taki sposób, aby ograniczał wykonywanie procesów zużywających dużo czasu systemowego. Nie wystarczy jednak obniżyć priorytet takich procesów, ponieważ przez większość czasu nie ma ich w kolejce procesów gotowych (są zablokowane na operacjach wejścia-wyjścia), ale należy dawać takim procesom mniej kwantów czasu.
+<p>
+
+<p> Serwer powinien dla każdego procesu przechowywać pulę żetonów. Gdy proces wyczerpie kwant czasu, należy obliczyć czas systemowy zużyty od ostatniego sprawdzenia i odjąć jego wartość z puli żetonów. Może ona wtedy stać się ujemna. Nowy kwant serwer przydziela tylko wtedy, gdy pula jest dodatnia.
+</p>
+
+<p> Przez żeton będziemy rozumieli jednostkę, w której naliczany jest czas systemowy. Dla każdego procesu jądro przechowuje wykorzystany czas systemowy na zmiennej <code>clock_t p_sys_time</code>.
+</p>
+
+<p> Uzyskanie dobrej responsywności systemu będzie zależało od polityki uzupełniania puli żetonów przypisanych procesom. Nowy proces dostaje <code>MAX_TOKENS</code> żetonów w momencie uruchomienia (przykładowa wartość to 6, co jest odpowiednikiem 0,1 s czasu systemu), co da mu przewagę nad procesami działającymi od dawna. Chcemy ograniczyć ilość żetonów, jakie może zgromadzić każdy proces, aby zgromadzoną pulą nie był w stanie zdominować innych procesów. Za górne ograniczenie przyjmujemy również <code>MAX_TOKENS</code>.
+</p>
+
+<p> Przydzielanie żetonów odbywa się zgodnie z poniższymi regułami:
+</p>
+
+<ul>
+  <li>Uzupełnianie robimy w momencie przydziału kwantu (w funkcji <code>do_noquantum()</code>) i co 5 s (w funkcji  <code>balance_queues()</code>).
+  <li>Uzupełniamy żetony kolejnych procesów, zaczynając od procesu następnego względem tego, na którym ostatnio skończyliśmy.
+  <li>Uzupełniamy pule procesu co najwyżej do maksymalnej wartości.
+  <li>Kończymy, gdy wrócimy do procesu, od którego zaczęliśmy lub gdy wyczerpiemy nowe żetony.
+  <li>Liczba nowych żetonów to czas jak minął od ostatniego uzupełnienia pomnożony przez stałą
+    <code>SCHED_FACTOR</code> mniejszą od 1 (przykładowa wartość to 0,5).
+</ul>
+
+<p> Mnożenie nowych żetonów przez stałą jest potrzebne, aby w systemie nie było zbyt dużo żetonów. Gdyby żetonów było za dużo, to nowy proces musiałby czekać, pomimo że na starcie dostaje maksymalną pulę. Redukcja liczby przyznawanych żetonów rozwiązuje ten problem kosztem zmniejszenia przepustowości całego systemu. W rozwiązaniu produkcyjnym należałoby precyzyjnie dobrać lub dynamicznie zarządzać wartością <code>SCHED_FACTOR</code>.
+</p>
+
+<h3>Wskazówki</h3>
+
+<ul>
+  <li>Przy obliczeniu czasu systemowego wykorzystanego przez proces a także czasu, jaki
+    minął od czasu ostatniego sprawdzania, pomocna jest funkcja <code>sys_times()</code>.
+
+  <li>Nie trzeba pisać nowego serwera. Wystarczy zmodyfikować domyślny serwer <code>sched</code>.
+
+  <li>Wartości opisanych stałych są przykładowe. Zachęcamy do własnych eksperymentów.
+
+  <li>Aby nowy algorytm szeregowania zaczął działać, należy wykonać <code>make; make install</code> w katalogu <code>/usr/src/minix/servers/sched</code>. Następnie trzeba zbudować nowy obraz jądra, czyli
+wykonać <code>make do-hdboot</code> w katalogu <code>/usr/src/releasetools</code> i zrestartować system.
+    Gdyby obraz nie chciał się załadować (<code>kernel panic</code>), należy wybrać opcję 6 przy starcie systemu, która załaduje oryginalne jądro.
+
+  <li>Przykładowy skrypt testujący <code>test0.sh</code> wykonuje testy podobne do opisanych wyżej. Należy go uruchomić na niezmienionym jądrze oraz na jądrze z nową implementacją algorytmu szeregowania.
+
+</ul>
+
+<h3>Rozwiązanie</h3>
+
+<p> Należy przygotować łatkę (ang. <em>patch</em>) ze zmianami w katalogu <code>/usr/src/minix</code>. Plik o
+nazwie <code>ab123456.patch</code> uzyskujemy za pomocą polecenia <code>diff -rupN /usr/src/minix moje-rozwiazanie > ab123456.patch</code>, gdzie katalog <code>/usr/src/minix</code> zawiera niezmienione źródła systemu, a katalog <code>moje-rozwiazanie</code> wersję z implementacją nowego algorytmu szeregowania.
+</p>
+
+<p> W repozytorium, w katalogu <code>studenci/ab123456/zadanie5</code> należy umieścić:
+</p>
+
+<ul>
+  <li>patch ze zmianami,
+
+  <li>plik <code>output-clean</code> zawierający wyniki testu <code>test0.sh</code> na niezmienionym systemie,
+
+  <li>plik <code>output-new</code> zawierający wyniki testu <code>test0.sh</code> systemu z nowym algorytmem szeregowania,
+
+  <li>dodatkowe testy i ich wyniki (opcjonalnie),
+
+  <li>plik <code>README</code> (opcjonalnie).
+</ul>
+
+<p>Ostateczny termin umieszczenia rozwiązań w repozytorium to <strong>25 maja 2017, godz. 20.00</strong>.</p>
+
+<p> Uwaga: nie przyznajemy punktów za rozwiązanie, w którym patch nie nakłada się poprawnie, które nie kompiluje się lub powoduje
+<code>kernel panic</code> podczas uruchamiania lub przy próbie wykonania poleceń
+<code>find / > /dev/null</code> czy <code>grep -R size_t / > /dev/null</code>.
+</p>
+
+</div>
+</body>
+</html>

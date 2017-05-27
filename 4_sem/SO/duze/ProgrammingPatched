@@ -1,0 +1,58 @@
+Patched
+
+##programming
+
+real 16.142
+user 0.673
+sys  0.460
+
+on disk 107M
+219328
+4194296
+
+##penny dreadful
+
+real 2m32.435s
+user 0m10.343s
+sys 0m3.067s
+
+on disk
+4029608 blocks
+
+##documents
+real  0m11.973s
+user  0.m0550s
+sys   0m0.200s
+
+on disk
+248920
+
+Clean
+
+##programming
+
+real 16.226
+user 0.620
+sys 0.503
+
+on disk 107M
+219792
+4194296
+
+##penny dreadful
+
+real 2m12.663s
+user 0m10.077s
+sys 0m2.930s
+
+on disk
+4029608 blocks
+
+documents
+
+real 0m10.542s
+user 0m0.530s
+sys 0m0.170s
+
+on disk
+249072

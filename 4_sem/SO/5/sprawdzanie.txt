@@ -1,0 +1,32 @@
+Rozwiązanie można przetestować, korzystając z automatycznej sprawdzarki, która
+znajduje się pod adresem http://students.mimuw.edu.pl:15554.
+
+Po odebraniu rozwiązania sprawdzarka nałoży łatkę i skompiluje system za pomocą
+następujących poleceń:
+
+cd /usr/src/
+patch -p0 < ab123456.patch
+cd /usr/src/minix/servers/sched
+make && make install
+cd /usr/src/minix/kernel
+make && make install
+cd /usr/src/releasetools
+make do-hdboot
+reboot
+
+Następnie wykona 4 zestawy testów i odeśle wynik mailem na adres
+ab123456@students.mimuw.edu.pl.
+
+Zadaniem sprawdzarki jest przetestowanie, czy łatka nakłada się poprawnie,
+czy system kompiluje się i czy po restarcie nie występuje „kernel panic”.
+
+Przy ocenianiu nie będą brane wyniki czasowe uzyskane na maszynie students.
+Testy wydajnościowe będą wykonywane w stabilniejszym środowisku.
+
+Sprawdzarka nie pozwala na wysyłanie rozwiązania, jeśli w kolejce
+znajduje się już rozwiązanie o takiej samej nazwie.
+Nie można usuwać rozwiązań z kolejki zadań.
+Przeciętny czas sprawdzania jednego zadania to około 10 minut.
+Jeśli testy przekroczą 20 minut, to zadanie zostanie usunięte.
+
+08.05.2017  poprawka: stosujemy patch -p0 zamiast patch -p3
