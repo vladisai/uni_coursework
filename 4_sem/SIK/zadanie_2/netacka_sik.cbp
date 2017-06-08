@@ -1,0 +1,1093 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="netacka_sik"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="test">
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 test"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="netacka_GTest">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/netacka_GTest" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 netacka_GTest"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="netacka_GTest/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/netacka_GTest" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 netacka_GTest/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 client"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="client/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/client" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 client/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SerializerTests">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libSerializerTests.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 SerializerTests"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="SerializerTests/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libSerializerTests.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 SerializerTests/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="GameOverEvent">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libGameOverEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 GameOverEvent"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="GameOverEvent/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libGameOverEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 GameOverEvent/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PixelEvent">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libPixelEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 PixelEvent"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PixelEvent/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libPixelEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 PixelEvent/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Game">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libGame.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Game"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Game/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libGame.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Game/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Utility">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libUtility.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Utility"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Utility/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libUtility.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Utility/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ClientConfig">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClientConfig.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ClientConfig"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ClientConfig/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClientConfig.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ClientConfig/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="NewGameEvent">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libNewGameEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 NewGameEvent"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="NewGameEvent/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libNewGameEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 NewGameEvent/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ClientMessage">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClientMessage.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ClientMessage"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ClientMessage/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClientMessage.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ClientMessage/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 server"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="server/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/server" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 server/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PlayerEliminatedEvent">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libPlayerEliminatedEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 PlayerEliminatedEvent"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="PlayerEliminatedEvent/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libPlayerEliminatedEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 PlayerEliminatedEvent/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerMessage">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libServerMessage.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ServerMessage"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerMessage/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libServerMessage.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ServerMessage/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Serializer">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libSerializer.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Serializer"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Serializer/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libSerializer.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Serializer/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Event">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Event"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Event/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libEvent.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Event/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="GUIConnection">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libGUIConnection.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 GUIConnection"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="GUIConnection/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libGUIConnection.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 GUIConnection/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Client">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClient.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Client"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Client/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClient.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Client/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Position">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libPosition.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Position"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Position/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libPosition.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 Position/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerConfig">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libServerConfig.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ServerConfig"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerConfig/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libServerConfig.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ServerConfig/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ClientConnection">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClientConnection.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ClientConnection"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ClientConnection/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libClientConnection.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ClientConnection/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerConnection">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libServerConnection.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ServerConnection"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="ServerConnection/fast">
+				<Option output="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/libServerConnection.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/x86_64-pc-linux-gnu"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/../../../../include/c++/7.1.1/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-pc-linux-gnu/7.1.1/include-fixed"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 ServerConnection/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Client.cpp">
+			<Option target="Client"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Client.h">
+			<Option target="Client"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ClientConfig.cpp">
+			<Option target="ClientConfig"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ClientConfig.h">
+			<Option target="ClientConfig"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ClientConnection.cpp">
+			<Option target="ClientConnection"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ClientConnection.h">
+			<Option target="ClientConnection"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ClientMain.cpp">
+			<Option target="client"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ClientMessage.cc">
+			<Option target="ClientMessage"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ClientMessage.h">
+			<Option target="ClientMessage"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Event.cc">
+			<Option target="Event"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Event.h">
+			<Option target="Event"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/GUIConnection.cpp">
+			<Option target="GUIConnection"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/GUIConnection.h">
+			<Option target="GUIConnection"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Game.cpp">
+			<Option target="Game"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Game.h">
+			<Option target="Game"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/GameOverEvent.cc">
+			<Option target="GameOverEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/GameOverEvent.h">
+			<Option target="GameOverEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/NewGameEvent.cc">
+			<Option target="NewGameEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/NewGameEvent.h">
+			<Option target="NewGameEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/PixelEvent.cc">
+			<Option target="PixelEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/PixelEvent.h">
+			<Option target="PixelEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/PlayerEliminatedEvent.cc">
+			<Option target="PlayerEliminatedEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/PlayerEliminatedEvent.h">
+			<Option target="PlayerEliminatedEvent"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Position.cpp">
+			<Option target="Position"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Position.h">
+			<Option target="Position"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Serializer.cc">
+			<Option target="Serializer"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Serializer.h">
+			<Option target="Serializer"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/SerializerTests.cpp">
+			<Option target="SerializerTests"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ServerConfig.cpp">
+			<Option target="ServerConfig"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ServerConfig.h">
+			<Option target="ServerConfig"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ServerConnection.cc">
+			<Option target="ServerConnection"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ServerConnection.h">
+			<Option target="ServerConnection"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ServerMain.cpp">
+			<Option target="server"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ServerMessage.cc">
+			<Option target="ServerMessage"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/ServerMessage.h">
+			<Option target="ServerMessage"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Utility.cc">
+			<Option target="Utility"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/Utility.h">
+			<Option target="Utility"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/test.cc">
+			<Option target="netacka_GTest"/>
+		</Unit>
+		<Unit filename="/home/vlad/studia/uni_coursework/4_sem/SIK/zadanie_2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
