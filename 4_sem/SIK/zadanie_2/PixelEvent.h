@@ -23,6 +23,8 @@ class PixelEvent : public Event {
 
     bool operator == (const PixelEvent &other) const;
 
+    virtual bool isConsistent(Event::SharedPtr event) override;
+
   private:
     unsigned x;
     unsigned y;

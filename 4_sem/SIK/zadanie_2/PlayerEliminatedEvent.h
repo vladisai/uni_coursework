@@ -17,6 +17,8 @@ class PlayerEliminatedEvent : public Event {
 
     bool operator == (const PlayerEliminatedEvent &other) const;
 
+    virtual bool isConsistent(Event::SharedPtr event) override;
+
   private:
     char playerNumber;
 };

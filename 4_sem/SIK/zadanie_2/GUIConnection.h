@@ -6,6 +6,7 @@
 
 #include <string>
 #include <mutex>
+#include <thread>
 
 class GUIConnection {
 public:
@@ -24,6 +25,8 @@ private:
     std::string host, port;
     int sock;
     std::mutex m;
+    std::thread messageLoop;
+    bool shouldStop = false;
 
     Position::TurnDirection currentDirection;
 

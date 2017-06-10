@@ -47,9 +47,11 @@ void Serializer::add(char *value, uint32_t len) {
     copy(value, value + len, back_inserter(data));
 }
 
-void Serializer::add(const std::string &str) {
+void Serializer::add(const std::string &str, bool addZero) {
     copy(str.begin(), str.end(), back_inserter(data));
-    data.push_back((char)0);
+    if (addZero) {
+        data.push_back((char) 0);
+    }
 }
 
 void Serializer::add(const RawData &data) {
@@ -134,7 +136,9 @@ std::string Serializer::popString() {
         it++;
     }
     std::string ret = popString(clen);
-    eraseFront(1); // 0 character
+    if (!data.empty() && data.front() == 0) {
+        eraseFront(1); // 0 character
+    }
     return ret;
 }
 

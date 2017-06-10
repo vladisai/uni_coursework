@@ -6,6 +6,7 @@
 #include "PixelEvent.h"
 #include "PlayerEliminatedEvent.h"
 #include "ServerMessage.h"
+#include "Utility.h"
 
 std::shared_ptr<NewGameEvent> constructTestNewGameEvent() {
     uint32_t event_no = 1343123555;
@@ -140,4 +141,30 @@ TEST(SerializerTest, PushPopTest) {
     EXPECT_EQ(val2, ret2);
     EXPECT_EQ(val3, ret3);
     EXPECT_EQ(val4, ret4);
+}
+
+TEST(Serializer, EmptyDataTest) {
+    try {
+        Event::deserialize({});
+        FAIL() << "exception expected";
+    } catch (...) {}
+}
+
+TEST(Utility, CompressMessagesTest) {
+    uint32_t event_no = 1343123555;
+    uint32_t maxx = 10;
+    uint32_t maxy = 14;
+    std::vector<std::string> playerNames({"Vladoasdfaoisdhfaosdhfoisdhfas",
+                                          "dfasdfdspasdhofaisdhfoisdhfohat",
+                                          "dfasdfdspasdhofaisdhfoisdhfohat",
+                                          "dfasdfdspasdhofaisdhfoisdhfohat",
+                                          "dfasdfdspasdhofaisdhfoisdhfohat",
+                                          "dfd"});
+    auto e = std::make_shared<NewGameEvent>(event_no, maxx, maxy, playerNames);
+    std::vector<Event::SharedPtr> events = {e, e, e, e, constructTestNewGameEvent()};
+    auto v = compressMessages(1, events);
+    EXPECT_GT(v.size(), 1);
+    for (auto &e : v) {
+        EXPECT_LE(e.size(), ServerConfig::maxMessageLen);
+    }
 }

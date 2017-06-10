@@ -13,7 +13,7 @@ RawData ClientMessage::serialize()const {
     s.add(session_id);
     s.add(turn_direction);
     s.add(next_expected_event_no);
-    s.add(playerName);
+    s.add(playerName, false);
     return s.getData();
 }
 
@@ -21,8 +21,11 @@ ClientMessage ClientMessage::deserialize(RawData data) {
     Serializer s(std::move(data));
     uint64_t session_id = s.popUInt64();
     char turn_direction = s.popChar();
-    unsigned int next_expected_event_no = s.popUInt32();
+    uint32_t next_expected_event_no = s.popUInt32();
     std::string playerName = s.popString();
+    if (turn_direction > 1 || turn_direction < -1) {
+        throw BadMessageDataException();
+    }
     if (!checkName(playerName)) {
         throw BadMessageDataException();
     }

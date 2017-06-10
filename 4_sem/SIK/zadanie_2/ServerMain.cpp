@@ -1,4 +1,5 @@
 #include <iostream>
+#include <csignal>
 
 #include "ServerConnection.h"
 #include "ServerConfig.h"
@@ -7,6 +8,15 @@
 
 using namespace std;
 
+
+GameManager::SharedPtr manager;
+
+void interrupt(int)
+{
+    std::cerr << "stopping" << std::endl;
+    manager->stop();
+}
+
 int main(int argc, char **argv) {
     ServerConfig::loadFromArgs(argc, argv);
     RandomGenerator::init();
@@ -14,12 +24,17 @@ int main(int argc, char **argv) {
     ServerConnection::SharedPtr
             connection(std::make_shared<ServerConnection>(ServerConfig::portNumber));
 
-    auto manager = std::make_shared<GameManager>(connection);
-    if (!connection->connect()) {
-        std::cerr << "Server: error connecting\n";
-        return 1;
-    }
+    manager = std::make_shared<GameManager>(connection);
+    connection->connect();
 
+    if (signal(SIGINT, interrupt) == SIG_ERR) {
+        failSysErrorExit("Unable to change signal handler");
+    }
     manager->run();
+
+    std::cerr << "closing connections" << std::endl;
+    connection->disconnect();
+    std::cerr << "exiting" << std::endl;
+
     return 0;
 }

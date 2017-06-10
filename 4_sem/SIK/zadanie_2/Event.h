@@ -32,6 +32,7 @@ class Event {
     char getEventType() const;
 
     virtual bool operator==(const Event &other) const;
+    virtual bool isConsistent(Event::SharedPtr event);
 
     virtual std::string toString(const std::vector<std::string> &names) const = 0;
     virtual std::string toString() const;

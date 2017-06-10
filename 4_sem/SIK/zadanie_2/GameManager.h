@@ -3,6 +3,7 @@
 
 #include <mutex>
 #include <chrono>
+#include <thread>
 
 #include "Client.h"
 #include "Game.h"
@@ -22,6 +23,10 @@ public:
 
     void run();
 
+    void stop();
+
+    bool shouldTerminate();
+
 private:
     std::mutex bufferMutex;
     std::vector<ServerConnection::ClientAddressMessagePair> messagesBuffer;
@@ -29,8 +34,10 @@ private:
     Game::SharedPtr currentGame;
     Clock::time_point lastIterationTime;
     ServerConnection::SharedPtr connection;
+    std::thread messageThread;
 
     bool isGameGoing;
+    bool isStopping;
 
     void cleanDisconnectedClients();
 

@@ -27,7 +27,7 @@ void GameManager::cleanDisconnectedClients() {
 }
 
 void GameManager::processMessages() {
-    std::cerr << "got " << messagesBuffer.size() << " messages" << std::endl;
+    std::cerr << "GameManager: got " << messagesBuffer.size() << " messages" << std::endl;
     std::lock_guard <std::mutex> lock(bufferMutex);
     for (auto &messageAddressPair : messagesBuffer) {
         processMessage(messageAddressPair);
@@ -38,7 +38,7 @@ void GameManager::processMessages() {
 void GameManager::processMessage(const ServerConnection::ClientAddressMessagePair &addressMessagePair) {
     ServerConnection::ClientAddress address = addressMessagePair.first;
     ClientMessage message = addressMessagePair.second;
-    std::cerr << "processing message " << message.toString() << std::endl;
+    std::cerr << "GameManager: processing message " << message.toString() << std::endl;
     auto client = std::find_if(connectedClients.begin(), connectedClients.end(),
                                [address](Client::SharedPtr ptr) { return address == ptr->getAddress(); });
     if (client == connectedClients.end()) {
@@ -71,7 +71,7 @@ void GameManager::processMessage(const ServerConnection::ClientAddressMessagePai
 
     (*client)->updateActiveTime();
     if (!isGameGoing && message.getTurnDirection() != Position::TurnDirection::Straight) {
-        std::cerr << "TURN!" << std::endl;
+        std::cerr << "GameManager: turn registered!" << std::endl;
         (*client)->setIsReady(true);
     }
     if (currentGame) {
@@ -83,7 +83,7 @@ void GameManager::processMessage(const ServerConnection::ClientAddressMessagePai
 }
 
 void GameManager::tryStartGame() {
-    std::cerr << "trying to start" << std::endl;
+    std::cerr << "GameManager: trying to start" << std::endl;
     if (canStartGame()) {
         isGameGoing = true;
         std::vector <Client::SharedPtr> players;
@@ -94,12 +94,16 @@ void GameManager::tryStartGame() {
             e->setIsReady(false);
             e->setIsAlive(true);
         }
+        sort(players.begin(), players.end(), [](const Client::SharedPtr &p1,
+                                                const Client::SharedPtr &p2) {
+            return p1->getName() < p2->getName();
+        });
         auto me = shared_from_this();
         currentGame = std::make_shared<Game>(players, me);
         currentGame->start();
-        std::cerr << "game started!" << std::endl;
+        std::cerr << "GameManager: game started!" << std::endl;
     } else {
-        std::cerr << "coudn't start" << std::endl;
+        std::cerr << "GameManager: couldn't start" << std::endl;
     }
 }
 
@@ -108,7 +112,7 @@ bool GameManager::canStartGame() {
         return false;
     }
     int count = 0;
-    std::cerr << "cc size = " << connectedClients.size() << std::endl;
+    std::cerr << "GameManager: connected clients number: " << connectedClients.size() << std::endl;
     for (auto client : connectedClients) {
         if (!client->getName().empty() && !client->isReady()) {
             return false;
@@ -124,14 +128,14 @@ bool GameManager::canStartGame() {
 }
 
 void GameManager::mainLoop() {
-    while (true) {
+    while (!isStopping) {
         waitUntilNextIteration();
-        std::cerr << "main loop iteration started" << std::endl;
+        std::cerr << "GameManager: main loop iteration started" << std::endl;
         markIterationTime();
         cleanDisconnectedClients();
         processMessages();
         if (isGameGoing) {
-            std::cerr << "Game going!" << std::endl;
+            std::cerr << "GameManager: Game going!" << std::endl;
             currentGame->runOneTick();
         } else {
             tryStartGame();
@@ -168,12 +172,11 @@ void GameManager::onNewEvent(Event::SharedPtr event) {
 void GameManager::sendEvents(ServerConnection::ClientAddress address,
                              std::vector<Event::SharedPtr> events) {
     if (events.size() > 0) {
-        std::cerr << "seding events " << events.size() << std::endl;
+        std::cerr << "GameManager: seding events " << events.size() << std::endl;
         auto rawMessages = compressMessages(currentGame->getGameId(), events);
         for (auto &e : events) {
             std::cerr << e->toString() << std::endl;
         }
-        std::cerr << "raw " << rawMessages.size() << std::endl;
         for (auto &e : rawMessages) {
             connection->send(address, e);
         }
@@ -181,6 +184,15 @@ void GameManager::sendEvents(ServerConnection::ClientAddress address,
 }
 
 void GameManager::run() {
-    MessageLoops::runReceiverLoop(shared_from_this(), connection);
+    messageThread = MessageLoops::runReceiverLoop(shared_from_this(), connection);
     mainLoop();
+}
+
+void GameManager::stop() {
+    isStopping = true;
+    messageThread.join();
+}
+
+bool GameManager::shouldTerminate() {
+    return isStopping;
 }

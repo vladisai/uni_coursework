@@ -2,14 +2,14 @@
 
 #include <thread>
 
-void MessageLoops::runReceiverLoop(GameManager::SharedPtr manager,
+std::thread MessageLoops::runReceiverLoop(GameManager::SharedPtr manager,
                             ServerConnection::SharedPtr connection) {
-    std::thread([=]() {
-        while (true) {
+    return std::thread([=]() {
+        while (!manager->shouldTerminate()) {
             try {
                 auto e = connection->receive();
                 manager->addMessage(e);
             } catch (...) {}
         }
-    }).detach();
+    });
 }

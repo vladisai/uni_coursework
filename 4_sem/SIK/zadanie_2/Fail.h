@@ -14,6 +14,8 @@ void failWrongUsageClient();
 
 void failWrongUsageServer();
 
+void failErrorExit(const std::string& error);
+
 void failSysError(const std::string& error);
 
 void failSysErrorExit(const std::string& error);

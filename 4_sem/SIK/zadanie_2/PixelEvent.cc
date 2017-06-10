@@ -1,5 +1,6 @@
 #include <sstream>
 #include "PixelEvent.h"
+#include "NewGameEvent.h"
 
 PixelEvent::PixelEvent(unsigned event_no, char playerNumber, unsigned x,
                        unsigned y)
@@ -59,4 +60,14 @@ std::string PixelEvent::toString(const std::vector<std::string> &names) const {
     std::stringstream ss;
     ss << "PIXEL " << x << " " << y << " " << names[playerNumber] << std::endl;
     return ss.str();
+}
+
+bool PixelEvent::isConsistent(Event::SharedPtr event) {
+    if (event->getEventType() != EventType::NewGame) {
+        return false;
+    }
+    auto e = std::static_pointer_cast<NewGameEvent>(event);
+    return e->getPlayerNames().size() > playerNumber
+           && x <= e->getMaxX()
+            && y <= e->getMaxY();
 }

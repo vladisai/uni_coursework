@@ -29,6 +29,14 @@ bool ServerConnection::connect() {
     if (bind(sock, addr_result->ai_addr, addr_result->ai_addrlen) < 0) {
         failSysErrorExit("ServerConnection: bind failed");
     }
+
+    timeval tv;
+    tv.tv_sec = 2;
+    tv.tv_usec = 0; // timeout for socket
+    if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0) {
+        failSysErrorExit("ClientConnection: couldn't set socket timeout");
+    }
+
     return true;
 }
 
@@ -48,7 +56,7 @@ std::pair<ServerConnection::ClientAddress, RawData> ServerConnection::receiveDat
     ssize_t len = recvfrom(sock, buffer, sizeof(buffer), flags,
                        (sockaddr *)&client_address, &rcva_len);
     if (len < 0) {
-        failSysError("ServerConnection: recvfrom failed");
+        failSysError("ServerConnection: recvfrom failed or timed out");
         return {};
     }
     return {client_address, RawData(buffer, buffer + len)};
@@ -80,4 +88,3 @@ bool ServerConnection::send(ClientAddress client_address, const ServerMessage& m
 {
     return send(client_address, message.serialize());
 }
-

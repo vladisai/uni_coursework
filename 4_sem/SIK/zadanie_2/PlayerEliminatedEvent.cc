@@ -1,5 +1,6 @@
 #include <sstream>
 #include "PlayerEliminatedEvent.h"
+#include "NewGameEvent.h"
 
 PlayerEliminatedEvent::PlayerEliminatedEvent(unsigned event_no,
                                              char playerNumber)
@@ -51,4 +52,12 @@ std::string PlayerEliminatedEvent::toString(const std::vector<std::string> &name
     std::stringstream ss;
     ss << "PLAYER_ELIMINATED " << names[playerNumber] << std::endl;
     return ss.str();
+}
+
+bool PlayerEliminatedEvent::isConsistent(Event::SharedPtr event) {
+    if (event->getEventType() != EventType::NewGame) {
+        return false;
+    }
+    auto e = std::static_pointer_cast<NewGameEvent>(event);
+    return e->getPlayerNames().size() > playerNumber;
 }

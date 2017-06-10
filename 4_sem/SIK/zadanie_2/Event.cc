@@ -58,3 +58,7 @@ std::string Event::toString() const {
     ss << "EVENT(event_no = " << event_no << ", event_type = " << (int)event_type << ")";
     return ss.str();
 }
+
+bool Event::isConsistent(Event::SharedPtr event) {
+    return true;
+}

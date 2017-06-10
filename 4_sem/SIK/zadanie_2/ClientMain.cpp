@@ -3,6 +3,7 @@
 #include <atomic>
 #include <set>
 #include <bitset>
+#include <csignal>
 
 #include "ClientConnection.h"
 #include "ClientConfig.h"
@@ -10,6 +11,7 @@
 #include "NewGameEvent.h"
 #include "Fail.h"
 #include "Utility.h"
+#include "CommonConfig.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-noreturn"
@@ -21,6 +23,8 @@ uint64_t session_id = to_milliseconds(Clock::now().time_since_epoch());
 uint32_t last_event = 0;
 uint64_t game_id = 0;
 bool isGameActive = false;
+NewGameEvent::SharedPtr lastGame;
+bool stop = false;
 
 const int MX_EVENTS = 1e7;
 bitset<MX_EVENTS> used;
@@ -31,9 +35,15 @@ void updateLast() {
     }
 }
 
+void interrupt(int)
+{
+    stop = true;
+    std::cerr << "stopping" << std::endl;
+}
+
 void keyboardEventSender(GUIConnection *guiConnection, ClientConnection *clientConnection) {
     auto last = Clock::now();
-    while (true) {
+    while (!stop) {
         sleepUntil(last + ClientConfig::messageFrequency);
         last = Clock::now();
         try {
@@ -58,18 +68,18 @@ int main(int argc, const char **argv) {
         failWrongUsageClient();
     }
     GUIConnection guiConnection(ClientConfig::guiHost, ClientConfig::guiPortNumber);
-    if (guiConnection.connect()) {
-        failSysError("Couldn't connect to gui");
-    }
+    guiConnection.connect();
 
     ClientConnection clientConnection(ClientConfig::serverHost, ClientConfig::serverPortNumber);
-    if (!clientConnection.connect()) {
-        failSysError("Couldn't connect to server");
+    clientConnection.connect();
+
+    if (signal(SIGINT, interrupt) == SIG_ERR) {
+        failSysErrorExit("Unable to change signal handler");
     }
 
-    std::thread(keyboardEventSender, &guiConnection, &clientConnection).detach();
+    auto keyboardThread = std::thread(keyboardEventSender, &guiConnection, &clientConnection);
 
-    while (true) {
+    while (!stop) {
         cerr << "receiving from server" << endl;
         try {
             ServerMessage m = clientConnection.receiveMessage();
@@ -84,6 +94,13 @@ int main(int argc, const char **argv) {
                     if (e->getEventType() == EventType::NewGame) {
                         if (!isGameActive) {
                             auto n = dynamic_pointer_cast<NewGameEvent>(e);
+                            if (n->getPlayerNames().size() < CommonConfig::minPlayersNumber)
+                                continue;
+                            if (n->getMaxX() == 0)
+                                continue;
+                            if (n->getMaxY() == 0)
+                                continue;
+                            lastGame = n;
                             isGameActive = true;
                             names = n->getPlayerNames();
                             game_id = m.getGameID();
@@ -99,6 +116,10 @@ int main(int argc, const char **argv) {
                             isGameActive = false;
                             // not sending, gui doesn't know game over
                         } else {
+                            if (!e->isConsistent(lastGame)) {
+                                failErrorExit("Bad event received");
+                                break;
+                            }
                             guiConnection.send(e->toString(names));
                         }
                         used[e->getEventNo()] = 1;
@@ -113,6 +134,13 @@ int main(int argc, const char **argv) {
             continue;
         }
     }
+
+    keyboardThread.join();
+
+    cerr << "closing connection" << endl;
+    guiConnection.close();
+    clientConnection.disconnect();
+
     return 0;
 }
 

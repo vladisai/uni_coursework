@@ -35,6 +35,13 @@ bool ClientConnection::connect() {
         failSysErrorExit("ClientConnection: couldn't open a socket");
     }
 
+    timeval tv;
+    tv.tv_sec = 2;
+    tv.tv_usec = 0; // timeout for socket
+    if (setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) < 0) {
+        failSysErrorExit("ClientConnection: couldn't set socket timeout");
+    }
+
     return true;
 }
 
@@ -60,7 +67,7 @@ RawData ClientConnection::receiveData() {
     size_t len = (size_t) sizeof(buffer);
     ssize_t rcv_len = recvfrom(sock, buffer, len, flags, 0, 0);
     if (rcv_len < 0) {
-        failSysError("couldn't receive");
+        failSysError("ClientConnection: recvfrom failed or timed out");
         return {};
     }
     return RawData(buffer, buffer + rcv_len);

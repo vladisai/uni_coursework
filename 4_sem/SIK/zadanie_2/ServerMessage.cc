@@ -1,4 +1,5 @@
 #include "ServerMessage.h"
+#include "ServerConfig.h"
 
 ServerMessage::ServerMessage(uint32_t game_id) :
         ServerMessage(game_id, std::vector<std::shared_ptr<Event>>()) {}
@@ -14,7 +15,7 @@ std::vector<std::shared_ptr<Event>> ServerMessage::getEvents() const {
     return events;
 }
 
-RawData ServerMessage::serialize()const {
+RawData ServerMessage::serialize() const {
     Serializer s;
     s.add(game_id);
     for (auto e : events) {
@@ -24,6 +25,9 @@ RawData ServerMessage::serialize()const {
 }
 
 ServerMessage ServerMessage::deserialize(const RawData &data) {
+    if (data.size() > ServerConfig::maxMessageLen) {
+        throw BadMessageDataException();
+    }
     Serializer s(data);
     uint32_t game_id = s.popUInt32();
     std::vector<std::shared_ptr<Event>> events;

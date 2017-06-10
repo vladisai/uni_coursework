@@ -19,7 +19,7 @@ class Serializer {
     void add(uint64_t value);
     void add(char value);
     void add(char *value, uint32_t len);
-    void add(const std::string &str);
+    void add(const std::string &str, bool addZero = true);
     void add(const RawData &data);
     void add(const std::shared_ptr<Event> event);
 

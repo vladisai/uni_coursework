@@ -32,3 +32,8 @@ void failSysErrorExit(const std::string& error)
     exit(EXIT_FAILURE);
 }
 
+void failErrorExit(const std::string &error) {
+    std::cerr << error << std::endl;
+    exit(EXIT_FAILURE);
+}
+
