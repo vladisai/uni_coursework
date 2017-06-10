@@ -2,18 +2,24 @@
 
 #include "ServerConnection.h"
 #include "ServerConfig.h"
+#include "NewGameEvent.h"
+#include "GameManager.h"
 
-int main(int arg, char **argv) {
-    ServerConnection connection(ServerConfig::portNumber);
-    if (!connection.connect()) {
-        std::cerr << "error conncting\n";
+using namespace std;
+
+int main(int argc, char **argv) {
+    ServerConfig::loadFromArgs(argc, argv);
+    RandomGenerator::init();
+
+    ServerConnection::SharedPtr
+            connection(std::make_shared<ServerConnection>(ServerConfig::portNumber));
+
+    auto manager = std::make_shared<GameManager>(connection);
+    if (!connection->connect()) {
+        std::cerr << "Server: error connecting\n";
+        return 1;
     }
 
-    for (int i = 0; i < 10; i++) {
-        auto e = connection.receiveData();
-        connection.send(e.first, RawData({'d', 'e', 'f', 'e'}));
-        for (auto c : e.second) {
-            std::cerr << c << " " << int(c) << std::endl;
-        }
-    }
+    manager->run();
+    return 0;
 }

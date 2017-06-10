@@ -22,6 +22,8 @@ public:
 
     std::string getPlayerName();
 
+    std::string toString();
+
     bool operator==(const ClientMessage &other) const;
 
 private:

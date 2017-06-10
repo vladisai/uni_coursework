@@ -1,6 +1,6 @@
 #include "GameOverEvent.h"
 
-GameOverEvent::GameOverEvent(unsigned event_no) :
+GameOverEvent::GameOverEvent(uint32_t event_no) :
     Event(event_no, EventType::GameOver) {}
 
 RawData GameOverEvent::serialize(bool noCRC) {

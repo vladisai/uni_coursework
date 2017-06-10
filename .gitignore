@@ -62,3 +62,11 @@ build
 # svn
 grupa2
 common
+
+# tar
+*.tar
+
+# log
+*.log
+
+*.img

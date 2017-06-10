@@ -9,40 +9,71 @@ import {
     AppRegistry,
     StyleSheet,
     Text,
+    Alert,
     View,
     Image,
     Button,
+    TouchableOpacity,
 } from 'react-native';
 
 class CircleComponent extends Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {isTapped: false};
+        this.c = randomHole();
+        this.topOffset = this.props.topOffset;
+    }
 
     render() {
-        c = randomHole()
-        topOffset = parseInt(this.props.topOffset)
         return (
-            <View style={[styles.circle, {left: c.offset, top: topOffset}]}>
-            { (c.character !== 'None') ? 
-                    <Image style={{width: 80, height: 80}} source={c.character}/>
-             : null }
-            </View>
+            <TouchableOpacity onPress={() => {this.onPress() }}>
+                <View style={[styles.circle, {left: this.c.offset, top: this.topOffset}]}>
+                { (this.c.character !== 'none') ? 
+                        <Image style={[this.opacityStyle(), {width: 80, height: 80}]} source={this.c.character}/>
+                 : null }
+                </View>
+            </TouchableOpacity>
         );
+    }
+
+    opacityStyle() {
+        dict = {
+            opacity: 1,
+        }
+        if (this.state.isTapped)
+            dict.opacity = 0 
+        return dict
+    }
+    
+    onPress() {
+        this.setState({isTapped: true})
     }
 }
 
                     // <Image style={{width: 80, height: 80}} source={require('./alien.png')}/>
 export default class HelloWorldRn extends Component {
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         return (
             <View style={styles.container}>
-                <CircleComponent topOffset='90' />
-                <CircleComponent topOffset='190' />
-                <CircleComponent topOffset='290' />
-                <CircleComponent topOffset='390' />
-                <Button title="Reset"/>
+                <CircleComponent topOffset={90} />
+                <CircleComponent topOffset={190} />
+                <CircleComponent topOffset={290} />
+                <CircleComponent topOffset={390} />
+                <Button title="Reset" onPress={() => this.onPress()}/>
             </View>
         );
     }
+
+    onPress() {
+        this.forceUpdate();
+    }
 }
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -65,7 +96,10 @@ let randomIntegerBetween = (min, max) => {
 }
 
 let randomElementOf = (items) => {
-    return items[randomIntegerBetween(0, items.length - 1)];
+    for (int i = 0; i < 20; i++) {
+        Alert.alert(randomIntegerBetween(0, 5).toString());
+    }
+    return items[randomIntegerBetween(0, items.length)];
 }
 
 let astronaut = require('./astronaut.png')

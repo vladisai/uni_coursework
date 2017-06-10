@@ -10,6 +10,8 @@
 
 class ServerConnection {
 public:
+    using SharedPtr = std::shared_ptr<ServerConnection>;
+
     using ClientAddress = sockaddr_in6;
     using ClientAddressMessagePair = std::pair<ClientAddress, ClientMessage>;
 

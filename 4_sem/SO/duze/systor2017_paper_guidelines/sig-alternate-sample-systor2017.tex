@@ -19,11 +19,11 @@
 \isbn{123-4567-24-567/08/06}
 
 %Conference
-\conferenceinfo{SYSTOR '17}{May 22--24, 2017, Haifa, Israel}
+\conferenceinfo{SOMIMUW '17}{May 22--June 1, 2017, Haifa, Israel}
 
 %
 % --- Author Metadata here ---
-\conferenceinfo{SYSTOR}{'17 Haifa, Israel}
+\conferenceinfo{SOMIMUW}{'17 Warsaw, Poland}
 %\CopyrightYear{2007} % Allows default copyright year (20XX) to be over-ridden - IF NEED BE.
 %\crdata{0-12345-67-8/90/01}  % Allows default copyright data (0-89791-88-6/97/05) to be over-ridden - IF NEED BE.
 % --- End of Author Metadata ---
@@ -48,25 +48,26 @@ Uladzislau Sobal\\
 
 \section{Introduction}
 
-About Minix File System and ext.
-Both Minix File System and 
-
 Some files contain a lot of zeroes, so a natural question to ask would be if we can be more efficient
 around these zeroes. To answer this question, let's get our hands dirty with the workings of MFS 
-(and ext, since it's similar).
+(and ext, since they are similar).
 
 \section{Minix File System}
-Both MFS and ext use i-nodes. I-nodes is a structure used to store data. It's basically an array of pointers.
+Both MFS and ext use i-nodes. I-node is a structure used to store data. It's basically an array of pointers.
 The first 12 pointers are direct pointers to data.
 The next 256 pointers are pointers to pointers to data (indirect blocks).
 After that there are doubly indirect blocks (pointers to pointers to pointers)
 and trebly indirect blocks (pointers to pinters to pointers to pointers).
-What's interesting is if we are trying to read one of these blocks and it's no initialised, the system
+What's interesting is if we are trying to read one of these blocks and it's not initialised
+(the pointer is equal to 0), the system
 just acts as if it was filled with zeroes. You can test this behaviour by creating a file, and 
 dd'ing into it some random numbers with huge seek. 
 Something like:
-dd if=/dev/random bs=512 count=1 of=somefile seek=100000000
-You will get a huge file that isn't even supposed to fit on the hard drive.
+
+dd if=/dev/random bs=512 of=out seek=100000000
+
+You will get a huge file that isn't even supposed to fit on the hard drive, and first $10^8$ blocks
+will be filled with zeroes.
 
 However, the system doesn't do anything of the kind when 
 writing zeroes, it simply initialises a block and writes zeros. 
@@ -75,17 +76,52 @@ This is what I changed.
 \section{Changing MFS source code}
 
 To test the optimisation I altered standard MFS implementation.
-The file that I changed was /usr/src/minix/fs/mfs/read.c.
+The file that I changed was /fs/mfs/read.c.
 There is a huge multi-purpose function called rw\_chunk. I altered so that
 it first checks the data it is about to write, and, if the data is all zeroes,
-doesn't create the block.
+doesn't create the block. Implementation is very simple, and the diff is only a couple
+of dozens of lines long.
 
 \section{Optimisation results}
 
-To check how much we gain from this optimisation, I did 3 tests on different types of data -
-code, books and movies. I copied to a clean mfs and the patched one a folder containing code in
-different languages, a folder containing pdf, epub and doc books and documents, and a folder 
-containing several episodes of a TV-series. Here are the results:
+To check how much we gain from this optimisation, I did 4 tests on different types of data -
+code, books, films and minix image. 
+I copied to a clean mfs and the patched one a folder containing code in
+different languages, a folder with books and documents, a folder 
+containing several episodes of a TV-series and .img file of a cloned system. Here are the results:
+
+\begin{table}[ht]
+\caption{Time}
+\vspace{0.25cm}
+\begin{tabular}{|l|c|c|}
+    \hline
+    Data type & Time without patch & Time with patch \\ 
+    \hline
+    Code & 16.226s & 16.142s \\
+    TV series & 2m12.663s & 2m32.435s \\
+    Documents & 10.542s & 11.973s \\
+    minix.img & 9.593s & 13.733s \\
+    \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\caption{Size}
+    \vspace{0.25cm}
+\begin{tabular}{|l|c|c|}
+    \hline
+    Data type & Size without patch & Size with patch \\
+    \hline
+    Code & 219792 & 219328 \\
+    TV series & 4029608 & 4029608 \\
+    Documents & 249072 & 248920 \\
+    minix.img & 373344 & 371408 \\
+    \hline
+\end{tabular}
+\end{table}
+
+All tests were run on a machine with CPU Intel i7-4510U, SSD.
+Virtual machines were run with kvm enabled.
 
 \section{Conclusion}
 

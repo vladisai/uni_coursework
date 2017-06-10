@@ -4,7 +4,7 @@
 #include "Event.h"
 
 struct GameOverEvent : public Event {
-    GameOverEvent(unsigned event_no);
+    GameOverEvent(uint32_t event_no);
 
     virtual RawData serialize(bool noCRC = false) override;
 

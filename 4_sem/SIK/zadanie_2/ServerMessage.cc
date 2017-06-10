@@ -28,9 +28,15 @@ ServerMessage ServerMessage::deserialize(const RawData &data) {
     uint32_t game_id = s.popUInt32();
     std::vector<std::shared_ptr<Event>> events;
     while (!s.isEmpty()) {
-        auto event = s.popEvent();
-        events.push_back(event);
+        try {
+            auto event = s.popEvent();
+            events.push_back(event);
+        } catch (std::exception &e) {
+            break;
+        }
     }
+    if (events.size() == 0)
+        throw BadMessageDataException();
     return ServerMessage(game_id, events);
 }
 

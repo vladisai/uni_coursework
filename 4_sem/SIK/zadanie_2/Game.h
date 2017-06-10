@@ -6,16 +6,25 @@
 #include "Client.h"
 #include "Position.h"
 
+class GameEventListener {
+public:
+    using SharedPtr = std::shared_ptr<GameEventListener>;
+    virtual void onGameEnded() = 0;
+    virtual void onNewEvent(Event::SharedPtr event) = 0;
+};
+
 class Game {
 public:
     using SharedPtr = std::shared_ptr<Game>;
-    Game(std::vector<Client::SharedPtr> clients);
+    Game(std::vector<Client::SharedPtr> clients, GameEventListener::SharedPtr listener);
 
     std::vector<std::shared_ptr<Event>> getEvents(uint32_t nextId = 0);
 
     uint32_t getGameId();
 
     void runOneTick();
+
+    void start();
 
     void turn(Client::SharedPtr client, Position::TurnDirection turn);
 
@@ -34,6 +43,9 @@ private:
     std::vector<Client::SharedPtr> clients;
     std::vector<std::pair<Client::SharedPtr, Position>> clientPositions;
     uint32_t eventNumber;
+    uint32_t playersLeft;
+
+    GameEventListener::SharedPtr listener;
 
     uint32_t getNextEventNumber();
 

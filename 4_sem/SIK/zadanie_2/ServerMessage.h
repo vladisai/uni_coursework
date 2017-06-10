@@ -1,3 +1,6 @@
+#ifndef SERVER_MESSAGE_H
+#define SERVER_MESSAGE_H
+
 #include <vector>
 #include <cstdint>
 
@@ -25,3 +28,5 @@ class ServerMessage {
 
     std::vector<Event::SharedPtr> events;
 };
+
+#endif // SERVER_MESSAGE_H

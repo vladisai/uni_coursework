@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Event.h"
 
 #include "GameOverEvent.h"
@@ -50,4 +51,10 @@ bool Event::operator==(const Event &other) const {
             && event_type == other.event_type
             && crc32 == other.crc32
             && iscrc32Ready == other.iscrc32Ready);
+}
+
+std::string Event::toString() const {
+    std::stringstream ss;
+    ss << "EVENT(event_no = " << event_no << ", event_type = " << (int)event_type << ")";
+    return ss.str();
 }

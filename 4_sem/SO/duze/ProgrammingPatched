@@ -27,6 +27,14 @@ sys   0m0.200s
 on disk
 248920
 
+## minix
+real 0m13.733s
+user 0m0.576s
+sys  0m0.173s
+
+on disk
+371408
+
 Clean
 
 ##programming
@@ -56,3 +64,11 @@ sys 0m0.170s
 
 on disk
 249072
+
+## minix
+real 0m9.593s
+user 0m0.567s
+sys 0m0.143s
+
+on disk
+373344

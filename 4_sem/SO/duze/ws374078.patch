@@ -5,7 +5,7 @@ diff -rupN minix/fs/mfs_/read.c minix/fs/mfs/read.c
  	assert(ino != VMC_NO_INODE);
    }
  
-+  int skip_write = 1;
++  int skip_write = 0;
 +
    if (!block_spec && b == NO_BLOCK) {
  	if (rw_flag == READING) {
@@ -24,6 +24,7 @@ diff -rupN minix/fs/mfs_/read.c minix/fs/mfs/read.c
 +        char* c = (char*)malloc(chunk);
 +        int rm = sys_safecopyfrom(VFS_PROC_NR, gid, (vir_bytes) buf_off,
 +                     (vir_bytes)c, (size_t) chunk);
++        skip_write = 1;
 +        for (int i = 0; i < chunk; i++) {
 +            if (c[i]) {
 +                skip_write = 0;

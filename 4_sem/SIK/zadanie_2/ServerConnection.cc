@@ -4,24 +4,30 @@
 #include <zconf.h>
 #include <thread>
 
-#include "fail.h"
+#include "Fail.h"
 #include "ServerConfig.h"
 
 bool ServerConnection::connect() {
-    sockaddr_in6 server_address;
-    sock = socket(AF_INET6, SOCK_DGRAM, 0);
-    if (sock < 0) {
-        failSysErrorExit("socket failed");
+    addrinfo addr_hints;
+    addrinfo *addr_result;
+
+    memset(&addr_hints, 0, sizeof(addrinfo));
+    addr_hints.ai_family = AF_INET6;
+    addr_hints.ai_socktype = SOCK_DGRAM;
+    addr_hints.ai_protocol = IPPROTO_UDP;
+    addr_hints.ai_flags = AI_PASSIVE;
+
+    if (getaddrinfo(NULL, std::to_string(port).c_str(), &addr_hints, &addr_result)) {
+        failSysErrorExit("ServerConnection: getaddrinfo");
     }
-    memset(&server_address, 0, sizeof(server_address));
 
-    server_address.sin6_family = AF_INET6;
-    server_address.sin6_addr = in6addr_any;
-    server_address.sin6_port = htons((uint16_t)port);
+    sock = socket(addr_result->ai_family, addr_result->ai_socktype, addr_result->ai_protocol);
+    if (sock < 0) {
+        failSysErrorExit("ServerConnection: socket failed");
+    }
 
-    if (bind(sock, (struct sockaddr *)&server_address,
-             (socklen_t)sizeof(server_address)) < 0) {
-        failSysErrorExit("bind failed");
+    if (bind(sock, addr_result->ai_addr, addr_result->ai_addrlen) < 0) {
+        failSysErrorExit("ServerConnection: bind failed");
     }
     return true;
 }
@@ -33,7 +39,7 @@ ServerConnection::ClientAddressMessagePair ServerConnection::receive() {
 
 std::pair<ServerConnection::ClientAddress, RawData> ServerConnection::receiveData() {
     if (sock == -1) {
-        failSysError("receive() called before connect()"); 
+        failSysErrorExit("ServerConnection: receive() called before connect()");
     }
     sockaddr_in6 client_address;
     socklen_t rcva_len = (socklen_t)sizeof(client_address);
@@ -41,12 +47,16 @@ std::pair<ServerConnection::ClientAddress, RawData> ServerConnection::receiveDat
     char buffer[ServerConfig::bufferSize];
     ssize_t len = recvfrom(sock, buffer, sizeof(buffer), flags,
                        (sockaddr *)&client_address, &rcva_len);
+    if (len < 0) {
+        failSysError("ServerConnection: recvfrom failed");
+        return {};
+    }
     return {client_address, RawData(buffer, buffer + len)};
 }
 
 bool ServerConnection::disconnect() {
     if (close(sock) == -1) {
-        failSysErrorExit("couldn't close the socket");
+        failSysErrorExit("ServerConnection: couldn't close the socket");
     }
     sock = -1;
     return true;
@@ -54,10 +64,15 @@ bool ServerConnection::disconnect() {
 
 bool ServerConnection::send(ClientAddress clientAddress, const RawData &data)
 {
+    std::cerr << "ServerConnection: sending" << std::endl;
     int flags = 0;
     socklen_t snda_len = (socklen_t)sizeof(clientAddress);
-    sendto(sock, &data[0], data.size(), flags,
+    ssize_t len = sendto(sock, &data[0], data.size(), flags,
                             (struct sockaddr*)&clientAddress, snda_len);
+    if (len < 0) {
+        failSysError("ServerConnection: sendto failed");
+        return false;
+    }
     return true;
 }
 
@@ -65,3 +80,4 @@ bool ServerConnection::send(ClientAddress client_address, const ServerMessage& m
 {
     return send(client_address, message.serialize());
 }
+

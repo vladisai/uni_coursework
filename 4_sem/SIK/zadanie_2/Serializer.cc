@@ -1,11 +1,9 @@
 #include "Serializer.h"
 
 #include <arpa/inet.h>
-#include <string.h>
+#include "Fail.h"
 
-Serializer::Serializer(RawData data) : data(data) {
-
-}
+Serializer::Serializer(RawData data) : data(data) { }
 
 uint64_t Serializer::htonll(uint64_t value) {
     if (htonl(42) == 42) {
@@ -63,6 +61,8 @@ void Serializer::add(const std::shared_ptr<Event> event) {
 }
 
 uint32_t Serializer::readUInt32() {
+    if (data.size() < sizeof(uint32_t))
+        throw DeserializeError();
     uint32_t value;
     memcpy(&value, &data[0], sizeof(uint32_t));
     value = ntohl(value);
@@ -70,6 +70,8 @@ uint32_t Serializer::readUInt32() {
 }
 
 uint64_t Serializer::readUInt64() {
+    if (data.size() < sizeof(uint64_t))
+        throw DeserializeError();
     uint64_t value;
     memcpy(&value, &data[0], sizeof(uint64_t));
     value = ntohll(value);
@@ -77,11 +79,15 @@ uint64_t Serializer::readUInt64() {
 }
 
 char Serializer::readChar() {
+    if (data.size() < sizeof(char))
+        throw DeserializeError();
     return data[0];
 }
 
 std::shared_ptr<Event> Serializer::readEvent() {
     uint32_t len = readUInt32() + 8;
+    if (data.size() < len)
+        throw DeserializeError();
     return Event::deserialize(RawData(data.begin(), data.begin() + len));
 }
 
@@ -113,6 +119,8 @@ char Serializer::popChar() {
 }
 
 std::string Serializer::popString(size_t len) {
+    if (data.size() < len)
+        throw DeserializeError();
     std::string res(data.begin(), data.begin() + len);
     eraseFront(len);
     return res;
@@ -138,6 +146,7 @@ std::shared_ptr<Event> Serializer::popEvent() {
 }
 
 void Serializer::eraseFront(size_t count) {
-    assert(count <= data.size());
+    if (data.size() < count)
+        throw DeserializeError();
     data.erase(data.begin(), data.begin() + count);
 }

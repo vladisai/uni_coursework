@@ -1,14 +1,7 @@
-#ifndef FAIL_H
-#define FAIL_H
+#include "Fail.h"
 
-#include <cstring>
-#include <iostream>
-#include <string>
-#include <cstdlib>
-#include <errno.h>
-
-const std::string usageClient = "Usage: ./client timestamp character host port.";
-const std::string usageServer = "Usage: ./server port file.";
+const std::string usageClient = "Usage: ./siktacka-client player_name game_server_host[:port] [ui_server_host[:port]]";
+const std::string usageServer = "Usage: ./siktacka-server [-W n] [-H n] [-p n] [-s n] [-t n] [-r n]";
 
 void failWrongUsageClient()
 {
@@ -24,10 +17,13 @@ void failWrongUsageServer()
 
 void failSysError(const std::string& error)
 {
+    std::cerr << std::endl;
+    std::cerr << "-------------------------------" << std::endl;
     std::cerr << error << std::endl;
     std::cerr << errno << std::endl;
     std::cerr << strerror(errno) << std::endl;
-    exit(EXIT_FAILURE);
+    std::cerr << "-------------------------------" << std::endl;
+    std::cerr << std::endl;
 }
 
 void failSysErrorExit(const std::string& error)
@@ -36,4 +32,3 @@ void failSysErrorExit(const std::string& error)
     exit(EXIT_FAILURE);
 }
 
-#endif // FAIL_H

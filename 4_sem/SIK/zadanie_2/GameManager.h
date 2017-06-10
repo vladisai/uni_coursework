@@ -2,26 +2,33 @@
 #define NETACKA_SIK_GAMEMANAGER_H
 
 #include <mutex>
+#include <chrono>
 
 #include "Client.h"
 #include "Game.h"
 #include "ServerConnection.h"
+#include "Utility.h"
 
-class GameManager {
+class GameManager
+        : public std::enable_shared_from_this<GameManager>,
+          public GameEventListener
+{
 public:
-    GameManager();
+    using SharedPtr = std::shared_ptr<GameManager>;
 
-    void onGameEnd();
+    GameManager(ServerConnection::SharedPtr connection);
 
-    void onNewEvent();
+    void addMessage(ServerConnection::ClientAddressMessagePair message);
 
-    void addMessage(ClientAddressMessagePair message);
+    void run();
 
 private:
     std::mutex bufferMutex;
-    std::vector<ClientAddressMessagePair> messagesBuffer;
+    std::vector<ServerConnection::ClientAddressMessagePair> messagesBuffer;
     std::vector<Client::SharedPtr> connectedClients;
-    std::shared_ptr<Game> currentGame;
+    Game::SharedPtr currentGame;
+    Clock::time_point lastIterationTime;
+    ServerConnection::SharedPtr connection;
 
     bool isGameGoing;
 
@@ -29,7 +36,7 @@ private:
 
     void processMessages();
 
-    void processMessage(const ClientAddressMessagePair &messagePair);
+    void processMessage(const ServerConnection::ClientAddressMessagePair &addressMessagePair);
 
     void tryStartGame();
 
@@ -37,7 +44,16 @@ private:
 
     void markIterationTime();
 
-    bool shouldStartNextIteration();
+    void waitUntilNextIteration();
+
+    void mainLoop();
+
+    void sendEvents(ServerConnection::ClientAddress address,
+                                 std::vector<Event::SharedPtr> events);
+
+    virtual void onGameEnded() override;
+
+    virtual void onNewEvent(Event::SharedPtr event) override;
 
 };
 

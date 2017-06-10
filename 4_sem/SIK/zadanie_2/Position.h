@@ -16,9 +16,9 @@ public:
     std::pair<int, int> round();
 
     enum TurnDirection {
-        Left = -1,
+        Left = 1,
         Straight = 0,
-        Right = 1
+        Right = -1
     };
 
     void setCurrentTurn(TurnDirection direction);

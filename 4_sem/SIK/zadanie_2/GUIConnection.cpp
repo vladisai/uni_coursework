@@ -1,11 +1,8 @@
 #include "GUIConnection.h"
-#include "fail.h"
+#include "Fail.h"
 
-#include <iostream>
 #include <netdb.h>
 #include <unistd.h>
-#include <cstring>
-#include <sys/socket.h>
 #include <thread>
 #include <future>
 
@@ -15,7 +12,7 @@ const std::string GUIConnection::RIGHT_KEY_DOWN_MSG = "RIGHT_KEY_DOWN";
 const std::string GUIConnection::RIGHT_KEY_UP_MSG = "RIGHT_KEY_UP";
 
 GUIConnection::GUIConnection(const std::string &host, const std::string &port) :
-        host(host), port(port) {
+        host(host), port(port), currentDirection(Position::TurnDirection::Straight) {
 }
 
 bool GUIConnection::connect() {
@@ -50,10 +47,8 @@ Position::TurnDirection GUIConnection::getCurrentDirection() {
 bool GUIConnection::close() {
 }
 
-void GUIConnection::send(Event::SharedPtr event) {
-    const std::string &s = event->toString({}) + '\0';
-    char str[] = "PIXEL_EVENT 1 1 p1\n";
-    ssize_t ret = write(sock, str, sizeof(str));
+void GUIConnection::send(const std::string &s) {
+    ssize_t ret = write(sock, s.c_str(), s.size());
     if (ret < 0) {
         failSysError("send");
     }
@@ -64,6 +59,9 @@ void GUIConnection::receiveLoop(int sock, GUIConnection *connection) {
         char buf[100];
         int status = read(sock, buf, 100);
         std::string message(buf);
+        if (message.find("\n") != -1) {
+            message.erase(message.find("\n"));
+        }
         if (status < 0) {
             failSysError("recv");
         }
@@ -71,10 +69,11 @@ void GUIConnection::receiveLoop(int sock, GUIConnection *connection) {
             connection->setCurrentDirection(Position::TurnDirection::Left);
         } else if (message == RIGHT_KEY_DOWN_MSG) {
             connection->setCurrentDirection(Position::TurnDirection::Right);
-        } else {
+        } else if (message == RIGHT_KEY_UP_MSG || message == LEFT_KEY_UP_MSG){
             connection->setCurrentDirection(Position::TurnDirection::Straight);
+        } else {
+            std::cerr << "unknown gui messsage <" << buf << ">" << std::endl;
         }
-        std::cerr << buf << std::endl;
     }
 }
 

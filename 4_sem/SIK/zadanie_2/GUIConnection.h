@@ -18,7 +18,7 @@ public:
 
     bool close();
 
-    void send(Event::SharedPtr event);
+    void send(const std::string &str);
 
 private:
     std::string host, port;

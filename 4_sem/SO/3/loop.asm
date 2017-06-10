@@ -1,4 +1,4 @@
-org 0x8000 
+org 0x9001
 
 jmp 0:start
 

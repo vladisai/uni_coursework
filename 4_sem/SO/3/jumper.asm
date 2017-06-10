@@ -21,15 +21,15 @@ end:
 
 start:
     xor ax, ax
-    mov bx, 0x8000
-    mov ah, 0x02
-    mov al, 0x01
+    mov bx, 0x9001
+    mov ah, 2
+    mov al, 1
     mov dl, 0x80
     xor dh, dh
-    mov cx, 0x0002
+    mov cx, 2
     int 0x13
 
-    jmp 0:0x8000
+    jmp 0:0x9001
 
     times 510 - ($-$$) db 0
     dw 0xaa55

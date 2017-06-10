@@ -10,7 +10,7 @@
 
 class ClientConnection {
 public:
-    ClientConnection(const std::string& host, int port);
+    ClientConnection(const std::string& host, std::string& port);
 
     bool connect();
 
@@ -28,7 +28,7 @@ private:
     sockaddr *my_address;
     socklen_t my_address_len;
     std::string host;
-    int port;
+    std::string port;
     int sock;
 };
 

@@ -3,6 +3,9 @@
 #include <exception>
 #include <sstream>
 
+#include "Utility.h"
+#include "CommonConfig.h"
+
 using namespace std;
 
 RawData NewGameEvent::serialize(bool noCRC) {
@@ -36,6 +39,8 @@ std::shared_ptr<NewGameEvent> NewGameEvent::deserialize(RawData data) {
     char event_type = s.popChar();
     unsigned maxx = s.popUInt32();
     unsigned maxy = s.popUInt32();
+    if (maxx < 1) throw BadEventDataException();
+    if (maxy < 1) throw BadEventDataException();
     len -= sizeof(event_no);
     len -= sizeof(event_type);
     len -= sizeof(maxx);
@@ -43,21 +48,34 @@ std::shared_ptr<NewGameEvent> NewGameEvent::deserialize(RawData data) {
     std::vector<std::string> names;
     while (len > 0) {
         std::string next = s.popString();
+        if (!checkName(next))
+            throw BadEventDataException();
         len -= next.size() + 1; // + 1 for the \0 at the end
         names.push_back(next);
     }
+    if (names.size() < CommonConfig::minPlayersNumber) {
+        throw BadEventDataException();
+    }
     unsigned crc32 = s.popUInt32();
-    NewGameEvent ret(event_no, maxx, maxy, names);
-    if (ret.getCRC32() != crc32) {
+    auto ret = std::make_shared<NewGameEvent>(event_no, maxx, maxy, names);
+    if (ret->getCRC32() != crc32) {
         throw BadCRC32Exception();
     }
-    return std::make_shared<NewGameEvent>(ret);
+    return ret;
 }
 
 NewGameEvent::NewGameEvent(unsigned event_no, unsigned maxx, unsigned maxy,
                            std::vector<std::string> playerNames)
     : Event(event_no, EventType::NewGame), maxx(maxx), maxy(maxy),
-      playerNames(playerNames) {}
+      playerNames(playerNames) {
+    if (playerNames.size() < CommonConfig::minPlayersNumber) {
+        throw BadEventDataException();
+    }
+    for (auto &e : playerNames) {
+        if (!checkName(e))
+            throw BadEventDataException();
+    }
+}
 
 unsigned NewGameEvent::getMaxX() const { return maxx; }
 
