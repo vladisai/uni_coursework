@@ -10,7 +10,7 @@ using namespace std;
 
 RawData NewGameEvent::serialize(bool noCRC) {
     Serializer s;
-    unsigned len = 0;
+    uint32_t len = 0;
     len += sizeof(event_no);
     len += sizeof(event_type);
     len += sizeof(maxx);
@@ -34,11 +34,11 @@ RawData NewGameEvent::serialize(bool noCRC) {
 
 std::shared_ptr<NewGameEvent> NewGameEvent::deserialize(RawData data) {
     Serializer s(data);
-    unsigned len = s.popUInt32();
-    unsigned event_no = s.popUInt32();
+    uint32_t len = s.popUInt32();
+    uint32_t event_no = s.popUInt32();
     char event_type = s.popChar();
-    unsigned maxx = s.popUInt32();
-    unsigned maxy = s.popUInt32();
+    uint32_t maxx = s.popUInt32();
+    uint32_t maxy = s.popUInt32();
     if (maxx < 1) throw BadEventDataException();
     if (maxy < 1) throw BadEventDataException();
     len -= sizeof(event_no);
@@ -56,7 +56,7 @@ std::shared_ptr<NewGameEvent> NewGameEvent::deserialize(RawData data) {
     if (names.size() < CommonConfig::minPlayersNumber) {
         throw BadEventDataException();
     }
-    unsigned crc32 = s.popUInt32();
+    uint32_t crc32 = s.popUInt32();
     auto ret = std::make_shared<NewGameEvent>(event_no, maxx, maxy, names);
     if (ret->getCRC32() != crc32) {
         throw BadCRC32Exception();
@@ -64,7 +64,7 @@ std::shared_ptr<NewGameEvent> NewGameEvent::deserialize(RawData data) {
     return ret;
 }
 
-NewGameEvent::NewGameEvent(unsigned event_no, unsigned maxx, unsigned maxy,
+NewGameEvent::NewGameEvent(uint32_t event_no, uint32_t maxx, uint32_t maxy,
                            std::vector<std::string> playerNames)
     : Event(event_no, EventType::NewGame), maxx(maxx), maxy(maxy),
       playerNames(playerNames) {
@@ -77,9 +77,9 @@ NewGameEvent::NewGameEvent(unsigned event_no, unsigned maxx, unsigned maxy,
     }
 }
 
-unsigned NewGameEvent::getMaxX() const { return maxx; }
+uint32_t NewGameEvent::getMaxX() const { return maxx; }
 
-unsigned NewGameEvent::getMaxY() const { return maxy; }
+uint32_t NewGameEvent::getMaxY() const { return maxy; }
 
 std::vector<std::string> NewGameEvent::getPlayerNames() const {
     return playerNames;

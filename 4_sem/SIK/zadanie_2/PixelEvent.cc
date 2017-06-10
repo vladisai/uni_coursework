@@ -2,14 +2,14 @@
 #include "PixelEvent.h"
 #include "NewGameEvent.h"
 
-PixelEvent::PixelEvent(unsigned event_no, char playerNumber, unsigned x,
-                       unsigned y)
+PixelEvent::PixelEvent(uint32_t event_no, char playerNumber, uint32_t x,
+                       uint32_t y)
     : Event(event_no, EventType::Pixel), playerNumber(playerNumber), x(x),
       y(y) {}
 
 RawData PixelEvent::serialize(bool noCRC) {
     Serializer s;
-    unsigned len = 0;
+    uint32_t len = 0;
     len += sizeof(event_no);
     len += sizeof(event_type);
     len += sizeof(playerNumber);
@@ -29,13 +29,13 @@ RawData PixelEvent::serialize(bool noCRC) {
 
 std::shared_ptr<PixelEvent> PixelEvent::deserialize(RawData data) {
     Serializer s(data);
-    unsigned len = s.popUInt32();
-    unsigned event_no = s.popUInt32();
+    uint32_t len = s.popUInt32();
+    uint32_t event_no = s.popUInt32();
     char event_type = s.popChar();
     char playerNumber = s.popChar();
-    unsigned x = s.popUInt32();
-    unsigned y = s.popUInt32();
-    unsigned crc32 = s.popUInt32();
+    uint32_t x = s.popUInt32();
+    uint32_t y = s.popUInt32();
+    uint32_t crc32 = s.popUInt32();
     PixelEvent ret(event_no, playerNumber, x, y);
     if (ret.getCRC32() != crc32) {
         throw BadCRC32Exception();
@@ -43,9 +43,9 @@ std::shared_ptr<PixelEvent> PixelEvent::deserialize(RawData data) {
     return std::make_shared<PixelEvent>(ret);
 }
 
-unsigned PixelEvent::getX() { return x; }
+uint32_t PixelEvent::getX() { return x; }
 
-unsigned PixelEvent::getY() { return y; }
+uint32_t PixelEvent::getY() { return y; }
 
 char PixelEvent::getPlayerNumber() { return playerNumber; }
 

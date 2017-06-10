@@ -5,7 +5,7 @@
 
 class PlayerEliminatedEvent : public Event {
   public:
-    PlayerEliminatedEvent(unsigned event_no, char playerNumber);
+    PlayerEliminatedEvent(uint32_t event_no, char playerNumber);
 
     virtual RawData serialize(bool noCRC = false) override;
 

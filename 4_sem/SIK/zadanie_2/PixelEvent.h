@@ -7,7 +7,7 @@
 
 class PixelEvent : public Event {
   public:
-    PixelEvent(unsigned event_no, char playerNumber, unsigned x, unsigned y);
+    PixelEvent(uint32_t event_no, char playerNumber, uint32_t x, uint32_t y);
 
     virtual RawData serialize(bool noCRC = false) override;
 
@@ -15,9 +15,9 @@ class PixelEvent : public Event {
 
     static std::shared_ptr<PixelEvent> deserialize(RawData data);
 
-    unsigned getX();
+    uint32_t getX();
 
-    unsigned getY();
+    uint32_t getY();
 
     char getPlayerNumber();
 
@@ -26,8 +26,8 @@ class PixelEvent : public Event {
     virtual bool isConsistent(Event::SharedPtr event) override;
 
   private:
-    unsigned x;
-    unsigned y;
+    uint32_t x;
+    uint32_t y;
     char playerNumber;
 };
 

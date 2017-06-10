@@ -19,7 +19,7 @@ enum EventType {
 class Event {
   public:
     using SharedPtr = std::shared_ptr<Event>;
-    Event(uint32_t unsigned event_no, char event_type);
+    Event(uint32_t event_no, char event_type);
 
     virtual RawData serialize(bool noCRC = false) = 0;
 
@@ -38,9 +38,9 @@ class Event {
     virtual std::string toString() const;
 
  protected:
-    unsigned event_no;
+    uint32_t event_no;
     char event_type;
-    unsigned crc32;
+    uint32_t crc32;
     bool iscrc32Ready;
 };
 

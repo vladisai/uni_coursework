@@ -27,12 +27,16 @@ void GameManager::cleanDisconnectedClients() {
 }
 
 void GameManager::processMessages() {
-    std::cerr << "GameManager: got " << messagesBuffer.size() << " messages" << std::endl;
-    std::lock_guard <std::mutex> lock(bufferMutex);
-    for (auto &messageAddressPair : messagesBuffer) {
+    decltype(messagesBuffer) bufferCopy;
+    {
+        std::lock_guard<std::mutex> lock(bufferMutex);
+        std::cerr << "GameManager: got " << messagesBuffer.size() << " messages" << std::endl;
+        bufferCopy = messagesBuffer;
+        messagesBuffer.clear();
+    }
+    for (auto &messageAddressPair : bufferCopy) {
         processMessage(messageAddressPair);
     }
-    messagesBuffer.clear();
 }
 
 void GameManager::processMessage(const ServerConnection::ClientAddressMessagePair &addressMessagePair) {

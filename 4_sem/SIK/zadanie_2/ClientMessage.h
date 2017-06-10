@@ -7,7 +7,7 @@
 
 class ClientMessage {
 public:
-    ClientMessage(uint64_t session_id, char turn_direction, unsigned int next_expected_event_no,
+    ClientMessage(uint64_t session_id, char turn_direction, uint32_t next_expected_event_no,
             std::string playerName);
 
     RawData serialize()const;
@@ -29,7 +29,7 @@ public:
 private:
     uint64_t session_id;
     char turn_direction;
-    unsigned int next_expected_event_no;
+    uint32_t next_expected_event_no;
     std::string playerName;
 
 };

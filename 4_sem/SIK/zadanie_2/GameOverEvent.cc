@@ -5,7 +5,7 @@ GameOverEvent::GameOverEvent(uint32_t event_no) :
 
 RawData GameOverEvent::serialize(bool noCRC) {
     Serializer s;
-    unsigned len = 0;
+    uint32_t len = 0;
     len += sizeof(event_no);
     len += sizeof(event_type);
     s.add(len);
@@ -19,10 +19,10 @@ RawData GameOverEvent::serialize(bool noCRC) {
 
 std::shared_ptr<GameOverEvent> GameOverEvent::deserialize(RawData data) {
     Serializer s(data);
-    unsigned len = s.popUInt32();
-    unsigned event_no = s.popUInt32();
+    uint32_t len = s.popUInt32();
+    uint32_t event_no = s.popUInt32();
     char event_type = s.popChar();
-    unsigned crc32 = s.popUInt32();
+    uint32_t crc32 = s.popUInt32();
     GameOverEvent ret(event_no);
     if (ret.getCRC32() != crc32) {
         throw BadCRC32Exception();

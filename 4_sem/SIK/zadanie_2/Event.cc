@@ -9,10 +9,10 @@
 #include "Serializer.h"
 #include "Utility.h"
 
-Event::Event(unsigned event_no, char event_type)
+Event::Event(uint32_t event_no, char event_type)
     : event_no(event_no), event_type(event_type), iscrc32Ready(false) {}
 
-unsigned Event::getCRC32() {
+uint32_t Event::getCRC32() {
     if (iscrc32Ready) {
         return crc32;
     } else {
@@ -42,7 +42,7 @@ std::shared_ptr<Event> Event::deserialize(RawData data) {
     }
 }
 
-unsigned Event::getEventNo() const { return event_no; }
+uint32_t Event::getEventNo() const { return event_no; }
 
 char Event::getEventType() const { return event_type; }
 

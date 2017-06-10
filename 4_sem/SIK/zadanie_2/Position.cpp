@@ -21,11 +21,12 @@ bool Position::move() {
 }
 
 void Position::turn() {
-    auto d = int(currentTurn) * double(ServerConfig::turningSpeed);
+    auto d = int(currentTurn) * double(ServerConfig::turningSpeed % 360);
     direction += d;
-    direction -= (int(direction) / 360) * 360;
+    if (direction > 360)
+        direction -= 360;
     if (direction < 0)
-        direction = 360 - direction;
+        direction += 360;
     currentTurn = TurnDirection::Straight;
 }
 

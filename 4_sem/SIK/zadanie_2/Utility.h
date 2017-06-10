@@ -13,7 +13,7 @@ bool operator==(const ServerConnection::ClientAddress &a1, const ServerConnectio
 
 uint32_t computeCRC32(RawData data);
 
-uint32_t reverse(unsigned x);
+uint32_t reverse(uint32_t x);
 
 namespace RandomGenerator {
     extern uint64_t next;

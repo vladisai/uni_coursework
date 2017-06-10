@@ -3,7 +3,7 @@
 #include "Utility.h"
 
 ClientMessage::ClientMessage(uint64_t session_id, char turn_direction,
-                             unsigned int next_expected_event_no,
+                             uint32_t next_expected_event_no,
                              std::string playerName)
     : session_id(session_id), turn_direction(turn_direction),
       next_expected_event_no(next_expected_event_no), playerName(playerName) {}

@@ -88,12 +88,14 @@ set(ALL_TESTS
         SerializerTests)
 
 enable_testing()
-find_package(GTest REQUIRED)
+find_package(GTest QUIET)
 include_directories(${GTEST_INCLUDE_DIR})
 
 # Specify include dir
 set(TARGET netacka)
-set(GTEST_TARGET ${TARGET}_GTest)
+if(GTest_FOUND)
+    set(GTEST_TARGET ${TARGET}_GTest)
+endif()
 
 set(TARGET_SERVER server)
 add_executable(${TARGET_SERVER} ServerMain.cpp)
@@ -103,6 +105,7 @@ set(TARGET_CLIENT client)
 add_executable(${TARGET_CLIENT} ClientMain)
 target_link_libraries(${TARGET_CLIENT} ${ALL_LIBS})
 
-add_executable(${GTEST_TARGET} test.cc)
-target_link_libraries(${GTEST_TARGET} ${ALL_LIBS} ${GTEST_LIBRARY} ${ALL_TESTS})
-
+if(GTest_FOUND)
+    add_executable(${GTEST_TARGET} test.cc)
+    target_link_libraries(${GTEST_TARGET} ${ALL_LIBS} ${GTEST_LIBRARY} ${ALL_TESTS})
+endif()

@@ -5,7 +5,7 @@
 
 class NewGameEvent : public Event {
   public:
-    NewGameEvent(unsigned event_no, unsigned maxx, unsigned maxy,
+    NewGameEvent(uint32_t event_no, uint32_t maxx, uint32_t maxy,
                  std::vector<std::string> names);
 
 
@@ -15,15 +15,15 @@ class NewGameEvent : public Event {
 
     static std::shared_ptr<NewGameEvent> deserialize(RawData data);
 
-    unsigned getMaxX() const;
-    unsigned getMaxY() const;
+    uint32_t getMaxX() const;
+    uint32_t getMaxY() const;
     std::vector<std::string> getPlayerNames() const;
 
     bool operator == (const NewGameEvent &other) const;
 
   private:
-    unsigned maxx;
-    unsigned maxy;
+    uint32_t maxx;
+    uint32_t maxy;
     std::vector<std::string> playerNames;
 };
 
