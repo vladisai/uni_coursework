@@ -18,7 +18,11 @@ void interrupt(int)
 }
 
 int main(int argc, char **argv) {
-    ServerConfig::loadFromArgs(argc, argv);
+    try {
+        ServerConfig::loadFromArgs(argc, argv);
+    } catch (...) {
+        failWrongUsageServer();
+    }
     RandomGenerator::init();
 
     ServerConnection::SharedPtr

@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.7)
+cmake_minimum_required(VERSION 3.0)
 project(netacka_sik)
 
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/out/library)
+set(CMAKE_CXX_FLAGS "-std=c++14")
 
 add_library(Serializer Serializer.cc)
 
@@ -83,17 +84,16 @@ set(ALL_LIBS
     pthread
 )
 
-add_library(SerializerTests SerializerTests.cpp)
-set(ALL_TESTS
-        SerializerTests)
-
 enable_testing()
 find_package(GTest QUIET)
-include_directories(${GTEST_INCLUDE_DIR})
 
 # Specify include dir
 set(TARGET netacka)
 if(GTest_FOUND)
+    add_library(SerializerTests SerializerTests.cpp)
+    set(ALL_TESTS
+            SerializerTests)
+    include_directories(${GTEST_INCLUDE_DIR})
     set(GTEST_TARGET ${TARGET}_GTest)
 endif()
 
