@@ -80,6 +80,13 @@ TEST(SerializerTest, ClientMessageTest) {
 }
 
 TEST(SerializerTest, NewGameEventTest) {
+    uint32_t event_no = 12;
+    uint32_t maxx = 5;
+    uint32_t maxy = 9;
+    std::vector<std::string> playerNames({"a", "b"});
+    auto e = std::make_shared<NewGameEvent>(event_no, maxx, maxy, playerNames);
+    RawData dd = e->serialize();
+
     auto e1 = constructTestNewGameEvent();
 
     RawData data = e1->serialize();

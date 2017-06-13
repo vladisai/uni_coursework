@@ -17,7 +17,6 @@ uint32_t Event::getCRC32() {
         return crc32;
     } else {
         RawData d = this->serialize(true);
-        d.erase(d.end() - 4, d.end()); // remove the crc at the end
         iscrc32Ready = true;
         return crc32 = computeCRC32(d);
     }
@@ -25,8 +24,8 @@ uint32_t Event::getCRC32() {
 
 std::shared_ptr<Event> Event::deserialize(RawData data) {
     Serializer s(data);
-    s.popUInt32(); // len
-    s.popUInt32(); // event_no
+    uint32_t len = s.popUInt32(); // len
+    uint32_t no = s.popUInt32(); // event_no
     char event_type = s.popChar();
     switch (event_type) {
     case EventType::NewGame:

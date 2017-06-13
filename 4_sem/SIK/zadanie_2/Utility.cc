@@ -3,21 +3,20 @@
 #include "Utility.h"
 #include "ServerConfig.h"
 #include "CommonConfig.h"
+#include <zlib.h>
 
 uint32_t computeCRC32(RawData data) {
-    int i, j;
     uint32_t byte, crc;
-
-    i = 0;
+    size_t i, j;
     crc = 0xFFFFFFFF;
-    for (size_t i = 0; i < data.size(); i++) {
-        byte = data[i];            // Get next byte.
-        byte = reverse(byte);         // 32-bit reversal.
-        for (j = 0; j <= 7; j++) {    // Do eight times.
+    for (i = 0; i < data.size(); i++) {
+        byte = (uint32_t) data[i];
+        byte = reverse(byte);
+        for (j = 0; j <= 7; j++) {
             if ((int)(crc ^ byte) < 0)
                 crc = (crc << 1) ^ 0x04C11DB7;
             else crc = crc << 1;
-            byte = byte << 1;          // Ready next msg bit.
+            byte = byte << 1;
         }
     }
     return reverse(~crc);

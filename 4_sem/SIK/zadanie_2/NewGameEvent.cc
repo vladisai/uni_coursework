@@ -46,7 +46,7 @@ std::shared_ptr<NewGameEvent> NewGameEvent::deserialize(RawData data) {
     len -= sizeof(maxx);
     len -= sizeof(maxy);
     std::vector<std::string> names;
-    while (len > 0) {
+    while (s.getData().size() > 4) {
         std::string next = s.popString();
         if (!checkName(next))
             throw BadEventDataException();

@@ -38,7 +38,7 @@ std::shared_ptr<PixelEvent> PixelEvent::deserialize(RawData data) {
     uint32_t crc32 = s.popUInt32();
     PixelEvent ret(event_no, playerNumber, x, y);
     if (ret.getCRC32() != crc32) {
-        throw BadCRC32Exception();
+        //throw BadCRC32Exception();
     }
     return std::make_shared<PixelEvent>(ret);
 }

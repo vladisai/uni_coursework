@@ -58,6 +58,7 @@ target_link_libraries(ServerMessage Serializer)
 target_link_libraries(Utility ServerConfig)
 target_link_libraries(NewGameEvent CommonConfig)
 
+find_package(ZLIB REQUIRED)
 
 set(ALL_LIBS
     Client
@@ -82,7 +83,9 @@ set(ALL_LIBS
     Utility
     fail
     pthread
+    ${ZLIB_LIBRARIES}
 )
+
 
 enable_testing()
 find_package(GTest QUIET)

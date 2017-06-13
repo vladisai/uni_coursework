@@ -3,10 +3,8 @@
 #include <iostream>
 
 #include "GameManager.h"
-#include "ServerConfig.h"
 #include "CommonConfig.h"
 #include "MessageLoops.h"
-#include "CommonConfig.h"
 
 GameManager::GameManager(ServerConnection::SharedPtr connection) : connection(connection), isGameGoing(false) {
 
@@ -78,7 +76,7 @@ void GameManager::processMessage(const ServerConnection::ClientAddressMessagePai
         std::cerr << "GameManager: turn registered!" << std::endl;
         (*client)->setIsReady(true);
     }
-    if (currentGame) {
+    if (isGameGoing) {
         sendEvents(address, currentGame->getEvents(message.getNextExpectedEventNo()));
     }
     if ((*client)->isPlaying()) {
