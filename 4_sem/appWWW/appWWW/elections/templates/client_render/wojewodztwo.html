@@ -15,6 +15,14 @@
 
         <script language="javascript">
 
+function initSockets() {
+    socket = new WebSocket("ws://" + window.location.host + "/");
+    socket.onmessage = function(e) {
+        requestDataFromServer();
+    }
+    if (socket.readyState == WebSocket.OPEN) socket.onopen();
+}
+
 var title = "Wojewodztwo {{ title }}";
 var pk = {{ pk }};
 var wojewodztwo_data = null;
@@ -67,6 +75,7 @@ $(function() {
     restoreCache();
     checkAndFillAllData();
     requestDataFromServer();
+    initSockets();
 });
 
         </script>

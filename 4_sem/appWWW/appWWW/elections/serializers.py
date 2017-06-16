@@ -37,6 +37,7 @@ class GminaStatsSerializer(serializers.Serializer):
         votes_dict = self.validated_data.get('votes_dict', {})
         utility.updateVotes(instance, votes_dict)
         instance.save()
+        utility.notifyWebSockets(instance)
         return instance
 
 

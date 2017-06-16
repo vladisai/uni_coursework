@@ -8,6 +8,7 @@ from functools import reduce
 from django.shortcuts import render
 
 from django.conf import settings
+from channels.channel import Group
 
 def renderHTML(request, region, title, json=False):
     q = region.buildQ()
@@ -97,31 +98,6 @@ def buildVotesDistributionDict(q=django_models.Q()):
     return votes
 
 
-def buildColors():
-
-    h = 320
-    l = 20
-    s = 80
-
-    h_step = -10
-    l_step = 3
-    s_step = -3
-
-    cols = []
-
-    for i in range(12):
-        col = 'hsl({0}, {1}%, {2}%)'.format(h, s, l)
-        if i % 2 == 0:
-            cols.append(col)
-        cols.insert(0, col)
-
-        h += h_step
-        l += l_step
-        s += s_step
-
-    return cols
-
-
 def getCandidatesAndVotesPercentage(q=django_models.Q()):
     candidates = getCandidates()
     votes = getCandidatesVotesPercentage(candidates, q)
@@ -186,3 +162,11 @@ def updateVotes(gmina, votes_dict):
         vote = models.Vote.objects.get(gmina=gmina, candidate=candidate)
         vote.votes = value
         vote.save()
+
+def notifyGroup(name):
+    message = {'text': 'update'};
+    g = Group(name)
+    g.send(message)
+
+def notifyWebSockets(gmina):
+    notifyGroup('votes-updates')

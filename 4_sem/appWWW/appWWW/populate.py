@@ -2,10 +2,11 @@
 
 from django.db import transaction
 
-import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "appWWW.settings")
-import django
-django.setup()
+if __name__ == "__main__":
+    import os
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "appWWW.settings")
+    import django
+    django.setup()
 
 from elections.models import *
 import parse
@@ -27,12 +28,15 @@ def constructVote(wojewodztwo, powiat, gmina, candidate, votes):
     vote.votes = votes 
     return vote
 
-def populate():
+def populate(limit=-1):
     cols, rows = parse.read()
 
     with transaction.atomic():
-
         all_votes = []
+
+        if limit != -1:
+            rows = rows[:limit]
+
         for row in rows:
             kraj, _ = Kraj.objects.get_or_create(name = 'Polska')
             wojewodztwo, _ = Wojewodztwo.objects.get_or_create(name = row[0], kraj = kraj)
@@ -55,11 +59,8 @@ def populate():
             wojewodztwo.save()
             kraj.save()
 
-            print(len(all_votes))
-
         Vote.objects.bulk_create(all_votes)
 
-    print(Vote.objects.all())
-
-clean()
-populate()
+if __name__ == "__main__":
+    clean()
+    populate()

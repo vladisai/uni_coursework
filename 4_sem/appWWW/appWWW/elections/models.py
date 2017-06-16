@@ -7,7 +7,12 @@ from django.urls import reverse
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from rest_framework.authtoken.models import Token
+
+from channels.binding import Binding
+from channels.channel import Group
+
 
 import elections.utility as utility
 
@@ -22,6 +27,12 @@ class Region(models.Model):
 
     def __str__(self):
         return self.name
+
+    def getBallots(self):
+        pass
+
+    def getVoters(self):
+        pass
 
     def getTurnout(self):
         return round(self.getBallots() / self.getVoters() * 100, 2)
@@ -80,7 +91,6 @@ class Wojewodztwo(Region):
 
     def path(self):
         return reverse('elections:wojewodztwo', args=[self.slug])
-
 
 class Powiat(Region):
     wojewodztwo = models.ForeignKey(Wojewodztwo)
@@ -155,7 +165,6 @@ class Vote(models.Model):
                                                                    self.powiat,
                                                                    self.votes,
                                                                    self.candidate)
-
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

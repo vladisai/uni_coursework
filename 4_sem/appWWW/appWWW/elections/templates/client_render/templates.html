@@ -11,10 +11,10 @@
 <script id="general_stats_template" type="text/x-handlebars-template">
     <div class="general_stats">
         <p>
-        Uprawnionych: {{ data.voters }}
+        Uprawnionych: <span id="header_voters">{{ data.voters }}</span>
         </p>
         <p>
-        Kart ważnych: {{ data.ballots }}
+        Kart ważnych: <span id="header_ballots">{{ data.ballots }}</span>
         </p>
         <p>
         Frekwencja: {{ data.turnout }}%

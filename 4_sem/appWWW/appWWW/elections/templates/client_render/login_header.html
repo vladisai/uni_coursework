@@ -7,7 +7,7 @@ function reloadLink() {
         token = sessionStorage.getItem("token", null);
         console.log(token);
         if (token === null) {
-            $('<a href="/api/login">log in</a>').appendTo('#login_header');
+            $('<a id="login_link" href="/api/login">log in</a>').appendTo('#login_header');
         } else {
             var link = $('<a id="logout" href=".">log out</a>').appendTo('#login_header');
             link.click(function() {

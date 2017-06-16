@@ -1,0 +1,76 @@
+@import url("/static/base.css");
+
+.responsive_hide {
+    display: none;
+}
+
+body {
+    font-family: 'Roboto', sans-serif; 
+    font-size: 15px;
+    margin: 0;
+}
+
+.horizontal_bar_chart {
+    width: 100%;
+    max-width: 250px;
+    margin: auto;
+    display: flex;
+    height: 30px;
+}
+
+#map_chart {
+    width: 100%;
+    display: flex;
+}
+
+th {
+    text-align: center;
+}
+
+td {
+    padding: 5px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    text-align: left;
+}
+
+tr > th:last-of-type {
+    text-align: right;
+}
+
+tr > td:last-of-type {
+    text-align: right;
+}
+
+.bar {
+    height: 15px;
+}
+
+.bar_wrap {
+    width: 90%;
+    margin: auto;
+    padding-top: 25px;
+    padding-bottom: 15px;
+}
+
+.bar > div {
+    position: relative;
+    bottom: 20px;
+}
+
+.bar_wrap > .legend {
+    margin-top: 5px;
+}
+
+.chart {
+    margin-top: 16px;
+
+}
+
+#charts {
+    width: 100%;
+}
+
+td:nth-child(2) { 
+    width: 100%; 
+}

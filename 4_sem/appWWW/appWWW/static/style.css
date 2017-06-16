@@ -1,0 +1,56 @@
+@import url("/static/base.css");
+
+.chart {
+    padding-left: 80px;
+    display: flex !important;
+    height: 450px;
+}
+
+.bar {
+    margin: 0 12px 0 12px;
+    flex-grow: 1;
+    align-self: flex-end;
+}
+
+.bar_wrap {
+    position: relative;
+    margin-top: 26px;
+    height: 60%;
+    display: flex;
+}
+
+.bar > div {
+    position: relative;
+    bottom: 20px;
+}
+
+.bar_wrap > .legend {
+    transform: rotate(310deg) scale(1) skew(1deg) translate(0px);
+    align-self: flex-end;
+    position: absolute;
+    top: 370px;
+    right: -15px;
+    width: 250px;    
+    text-align: right;
+    white-space: nowrap;
+}
+
+#charts {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+#map_chart {
+    width: 550px;
+}
+
+.desktop_hide {
+    display: none;
+}
+
+.general_stats {
+    width: 100%;
+    text-align: center;
+}
